@@ -59,9 +59,9 @@ export const upload = asyncHandler(async (req: Request, res: Response) => {
 
   const uploadedImage = await uploadFile(
     "demo",
-    name,
-    file.mimetype,
-    file.buffer,
+    name as string,
+    file.mimetype as string,
+    file.buffer as Buffer,
   );
 
   const image = await imageService.createImageRecord({
@@ -98,7 +98,7 @@ export const renameImage = asyncHandler(async (req: Request, res: Response) => {
   if (!imageId) {
     throw new AppError(400, "imageId is required");
   }
-  const name = req.body.name as string | undefined;
+  const name = (Array.isArray(req.body.name) ? req.body.name[0] : req.body.name) as string | undefined;
   if (!name) {
     throw new AppError(400, "name is required");
   }
