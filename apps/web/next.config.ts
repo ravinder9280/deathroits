@@ -7,7 +7,7 @@ import type { NextConfig } from "next";
 const monorepoRoot = path.join(path.dirname(fileURLToPath(import.meta.url)), "../..");
 
 const nextConfig: NextConfig = {
-  transpilePackages: ["@monorepo/ui","@monorepo/types"],
+  transpilePackages: ["@monorepo/ui", "@monorepo/types", "@monorepo/auth"],
   outputFileTracingRoot: monorepoRoot,
   
   webpack: (config) => {

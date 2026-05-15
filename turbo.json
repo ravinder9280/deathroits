@@ -1,5 +1,8 @@
 {
   "$schema": "https://turbo.build/schema.json",
+  "globalEnv": [
+    "DATABASE_URL"
+  ],
   "globalDependencies": [
     "**/.env.*local"
   ],
@@ -10,11 +13,21 @@
       ]
     },
     "build": {
+      "env": [
+        "DIRECT_URL",
+        "BETTER_AUTH_API_KEY",
+        "BETTER_AUTH_SECRET",
+        "BETTER_AUTH_URL",
+        "GOOGLE_CLIENT_ID",
+        "GOOGLE_CLIENT_SECRET"
+      ],
       "dependsOn": [
-        "^build"
+        "^build",
+        "^db:generate"
       ],
       "outputs": [
         "dist/**",
+        
         ".next/**",
         "!.next/cache/**"
       ]
@@ -41,6 +54,7 @@
     },
     "check-types": {},
     "dev": {
+      "dependsOn": ["^db:generate"], 
       "cache": false,
       "persistent": true
     },
@@ -50,6 +64,15 @@
       ]
     },
     "clean": {
+      "cache": false
+    },
+    "db:generate": {
+      "cache": false
+    },
+    "db:migrate": {
+      "cache": false
+    },
+    "db:deploy": {
       "cache": false
     }
   }

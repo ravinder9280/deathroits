@@ -2,6 +2,8 @@
   "extends": "@monorepo/tsconfig/express.json",
   "compilerOptions": {
     "outDir": "./dist",
+    "skipLibCheck": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "paths": {
       "@/*": ["./*"]
     }

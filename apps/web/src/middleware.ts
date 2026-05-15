@@ -1,24 +1,20 @@
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+import { headers } from "next/headers";
+import { auth } from "@monorepo/auth/server";
 
-const PRIVATE_ROUTES = ["/dashboard", "/profile", "/settings"];
+export async function middleware(request: NextRequest) {
+    const session = await auth.api.getSession({
+        headers: await headers()
+    })
 
-export function middleware(request: NextRequest) {
-    const { pathname } = request.nextUrl;
-
-    const token = request.cookies.get("drive_token")?.value;
-
-
-    const isPrivate = PRIVATE_ROUTES.some((route) =>
-        pathname.startsWith(route)
-    
-    );
-
-    if (isPrivate && !token) {
-        return NextResponse.redirect(new URL("/login", request.url));
+    if (!session) {
+        return NextResponse.redirect(new URL("/sign-in", request.url));
     }
-
-
 
     return NextResponse.next();
 }
+
+export const config = {
+    runtime: "nodejs", // Required for auth.api calls
+    matcher: ["/dashboard"], // Specify the routes the middleware applies to
+};

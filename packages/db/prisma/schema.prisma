@@ -1,0 +1,286 @@
+// This is your Prisma schema file
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            String    @id
+  name          String
+  email         String
+  emailVerified Boolean   @default(false)
+  image         String?
+
+  // Gaming Fields
+  ign           String?
+  gameUid       String?   @unique
+  upiId         String?
+
+  role          UserRole  @default(PLAYER)
+  isBanned      Boolean   @default(false)
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  sessions      Session[]
+  accounts      Account[]
+
+  // Relations
+  entries       TournamentEntry[]
+  submissions   MatchSubmission[]
+  payments      Payment[]
+  payouts       PrizePayout[]
+
+  @@unique([email])
+  @@map("user")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+
+  userId    String
+  user      User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String   @id
+  accountId             String
+  providerId            String
+
+  userId                String
+  user                  User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+
+  scope                 String?
+  password              String?
+
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
+}
+
+model Tournament {
+  id                  String   @id @default(cuid())
+
+  title               String
+  description         String?
+
+  game                String   @default("FREE_FIRE")
+
+  entryFee            Float
+  prizePool           Float
+
+  maxPlayers          Int
+  joinedPlayersCount  Int      @default(0)
+
+  roomSize            Int      @default(12)
+
+  startTime           DateTime
+
+  rules               String?
+
+  status              TournamentStatus @default(DRAFT)
+
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  entries             TournamentEntry[]
+  matches             Match[]
+  payouts             PrizePayout[]
+}
+
+model TournamentEntry {
+  id              String   @id @default(cuid())
+
+  userId          String
+  tournamentId    String
+
+  paymentId       String?
+
+  status          EntryStatus @default(PENDING_PAYMENT)
+
+  joinedAt        DateTime @default(now())
+
+  user            User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  tournament      Tournament @relation(fields: [tournamentId],references: [id],onDelete: Cascade)
+
+  @@unique([userId, tournamentId])
+}
+
+model Match {
+  id                    String   @id @default(cuid())
+
+  tournamentId          String
+
+  roomId                String?
+  roomPassword          String?
+
+  roundNumber           Int
+
+  scheduledAt           DateTime
+
+  credentialsVisibleAt  DateTime?
+
+  status                MatchStatus @default(UPCOMING)
+
+  createdAt             DateTime @default(now())
+
+  tournament            Tournament @relation(fields: [tournamentId],references: [id],onDelete: Cascade)
+
+  submissions           MatchSubmission[]
+}
+
+model MatchSubmission {
+  id                    String   @id @default(cuid())
+
+  userId                String
+  matchId               String
+
+  submittedKills        Int
+  submittedPlacement    Int
+
+  verifiedKills         Int?
+  verifiedPlacement     Int?
+
+  screenshotUrl         String
+
+  status                SubmissionStatus @default(PENDING)
+
+  rejectionReason       String?
+
+  verifiedByAdminId     String?
+
+  submittedAt           DateTime @default(now())
+  verifiedAt            DateTime?
+
+  user                  User @relation(fields: [userId],references: [id],onDelete: Cascade )
+
+  match                 Match @relation(fields: [matchId],references: [id],onDelete: Cascade)
+
+  @@unique([userId, matchId])
+}
+
+model Payment {
+  id                    String   @id @default(cuid())
+
+  userId                String
+  tournamentId          String
+
+  razorpayOrderId       String
+  razorpayPaymentId     String?
+
+  amount                Float
+
+  status                PaymentStatus @default(CREATED)
+
+  createdAt             DateTime @default(now())
+
+  user                  User @relation(fields: [userId],references: [id],onDelete: Cascade)
+}
+
+model PrizePayout {
+  id                String   @id @default(cuid())
+
+  userId            String
+  tournamentId      String
+
+  amount            Float
+
+  upiId             String
+
+  transactionRef    String?
+
+  status            PayoutStatus @default(PENDING)
+
+  paidAt            DateTime?
+
+  createdAt         DateTime @default(now())
+
+  user              User @relation(fields: [userId],references: [id],onDelete: Cascade)
+
+  tournament        Tournament @relation(fields: [tournamentId],references: [id],onDelete: Cascade)
+}
+
+enum UserRole {
+  PLAYER
+  ADMIN
+}
+
+enum TournamentStatus {
+  DRAFT
+  REGISTRATION_OPEN
+  FULL
+  ONGOING
+  COMPLETED
+  CANCELLED
+}
+
+enum EntryStatus {
+  PENDING_PAYMENT
+  CONFIRMED
+  CANCELLED
+  REFUNDED
+}
+
+enum MatchStatus {
+  UPCOMING
+  LIVE
+  COMPLETED
+}
+
+enum SubmissionStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum PaymentStatus {
+  CREATED
+  SUCCESS
+  FAILED
+  REFUNDED
+}
+
+enum PayoutStatus {
+  PENDING
+  PAID
+  FAILED
+}

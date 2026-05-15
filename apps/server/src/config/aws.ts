@@ -34,10 +34,7 @@ export async function uploadFile(folder: string, fileName: string, mimetype: str
   const command = new PutObjectCommand(uploadParams);
   const response = await s3Client.send(command);
   const uploadedFileUrl =
-    `https://${bucketName}.s3.${region}.amazonaws.com/${key}`.replaceAll(
-      " ",
-      "+",
-    );
+    `https://${bucketName}.s3.${region}.amazonaws.com/${key}`.replace(/ /g, "+");
 
   return { ...response, Location: uploadedFileUrl, key };
 }
