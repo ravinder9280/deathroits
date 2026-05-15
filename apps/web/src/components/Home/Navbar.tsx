@@ -126,13 +126,13 @@ const Navbar = () => {
           <div className="container mx-auto px-4 py-4">
             <nav className="flex flex-col space-y-4">
               {NavbarItems.map((item) => (
-                <button
+                <Link href={item.link}
                   className=" hover:text-foreground transition-colors py-2 text-left"
                   key={item.label}
                   onClick={() => scrollToSection(item.link)}
                 >
                   {item.label}
-                </button>
+                </Link>
               ))}
               {session ? (
                 <UserProfile />
