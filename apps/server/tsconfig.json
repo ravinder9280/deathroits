@@ -2,6 +2,7 @@
   "extends": "@monorepo/tsconfig/express.json",
   "compilerOptions": {
     "outDir": "./dist",
+    "rootDir": "./src",
     "skipLibCheck": true,
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "paths": {
@@ -9,5 +10,5 @@
     }
   },
   "include": ["src/**/*.ts", "eslint.config.mjs"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "dist"]
 }

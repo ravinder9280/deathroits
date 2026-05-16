@@ -14,7 +14,8 @@
     "lint:fix": "turbo lint --continue -- --apply",
     "clean": "turbo clean",
     "prepare": "husky",
-    "test": "turbo test"
+    "test": "turbo test",
+    "db:generate":"cd packages/db && pnpm db:generate"
   },
   "dependencies": {
     "@changesets/changelog-github": "^0.5.1",

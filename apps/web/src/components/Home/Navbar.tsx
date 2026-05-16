@@ -138,10 +138,10 @@ const Navbar = () => {
                 <UserProfile />
               ) : (
                 <>
-                  <Button asChild className="w-full" variant={"outline"}>
+                  <Button asChild className="w-full" variant={"outline"} onClick={() => setIsOpen(false)} >
                     <Link href="/sign-in">Login</Link>
                   </Button>
-                  <Button asChild className="w-full">
+                  <Button asChild className="w-full" onClick={() => setIsOpen(false)} >
                     <Link href="/sign-up">Sign Up</Link>
                   </Button>
                 </>

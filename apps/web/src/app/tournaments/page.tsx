@@ -1,8 +1,11 @@
 import { prisma } from "@monorepo/db";
 import { Badge } from "@monorepo/ui/components/badge";
 import { Button } from "@monorepo/ui/components/button";
-import { Card, CardHeader, CardTitle } from "@monorepo/ui/components/card";
+import { Progress } from "@monorepo/ui/components/progress";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@monorepo/ui/components/card";
 import React from "react";
+import Image from "next/image";
+
 const TournamentsPage = async () => {
   const tournaments = await prisma.tournament.findMany();
   return (
@@ -17,59 +20,89 @@ const TournamentsPage = async () => {
             register.
           </p>
         </div>
-        <div className=" pt-10 grid grid-cols-1 md:grid-cols-3 gap-3">
+        <div className=" pt-10 grid grid-cols-1 md:grid-cols-3 gap-8">
+
           {tournaments.map((t) => {
             return (
               <Card
                 className="p-0 overflow-hidden border-white/10 backdrop-blur-xl bg-card/50 gap-0 hover:border-white/50 cursor-pointer"
                 key={t.id}
+
               >
-                <CardHeader className="border-b border-white/10 space-y-3">
-                  <CardTitle className="text-lg">{t.title}</CardTitle>
+                <CardContent className="p-0 aspect-square max-h-[300px] relative bg-muted">
 
-                  <Badge className="capitalize text-xs w-fit" >
-                    {t.status.toLowerCase()}
-                  </Badge>
-                </CardHeader>
+                  <img
+                    alt={""}
+                    className="absolute inset-0 cursor-pointer relative size-full object-cover"
+                    src={"/game3.png"}
+                  />
+                  <div className="absolute left-0 bottom-4 bg-red-300 p-1 rounded-r-xl text-sm">
+                    Open
 
-                <div className="grid grid-cols-2 gap-3 text-sm p-6">
-                  <div className="space-y-1">
-                    <p className="text-muted-foreground">Entry Fee</p>
-                    <p className="font-semibold">₹{t.entryFee}</p>
                   </div>
 
-                  <div className="space-y-1">
-                    <p className="text-muted-foreground">Prize Pool</p>
-                    <p className="font-semibold text-green-400">₹{t.prizePool}</p>
+
+                </CardContent>
+                <div className="  border-t flex flex-col border-t border-white/10 gap-2 ">
+                  <div className="border-b p-4">
+
+                    <div className=" flex items-center justify-between text-sm ">
+
+                      <p className="font-medium text-muted-foreground">
+                        {new Date(t.startTime).toLocaleString("en-IN", {
+                          dateStyle: "medium",
+                          timeStyle: "short",
+                        })}
+                      </p>
+                      <Badge variant={'secondary'}  >
+                        in 2 days
+                      </Badge>
+                    </div>
+                    <div className=" font-semibold">
+                      {t.title}
+                    </div>
                   </div>
 
-                  <div className="space-y-1">
-                    <p className="text-muted-foreground">Players</p>
-                    <p className="font-semibold">
-                      {t.joinedPlayersCount}/{t.maxPlayers}
-                    </p>
+
+
+                  <div className="grid grid-cols-3 gap-3 text-sm border-b p-4 ">
+                    <div className="space-y-1 flex items-center flex-col">
+                      <p className="text-muted-foreground">Game</p>
+                      <p className="font-semibold ">Free Fire</p>
+                    </div>
+                    <div className="space-y-1 flex items-center flex-col">
+                      <p className="text-muted-foreground">Prize Pool</p>
+                      <p className="font-semibold text-green-400">₹{t.prizePool}</p>
+                    </div>
+                    <div className="space-y-1 flex items-center flex-col">
+                      <p className="text-muted-foreground">Entry Fee</p>
+                      <p className="font-semibold">₹{t.entryFee}</p>
+                    </div>
+
+
+
+                  </div>
+                  <div className=" border-b p-4">
+                    <div className="flex items-center justify-between leading-relaxed text-muted-foreground">
+                      <span>Players</span>
+                      <span> {t.joinedPlayersCount}/{t.maxPlayers}</span>
+                    </div>
+                    {/* <Progress value={(t.joinedPlayersCount / t.maxPlayers) * 100} /> */}
+                    <Progress value={20} />
                   </div>
 
-                  <div className="space-y-1">
-                    <p className="text-muted-foreground">Room Size</p>
-                    <p className="font-semibold">{t.roomSize}</p>
-                  </div>
+
+
+
                 </div>
+                <Button className=" rounded-t-none rounded-b-xl" size={"xl"}>
+                  Join Now
+                </Button>
 
-                <div className="border-t border-white/10 p-6 text-sm">
-                  <p className="text-muted-foreground mb-1">Starts At</p>
-
-                  <p className="font-medium">
-                    {new Date(t.startTime).toLocaleString("en-IN", {
-                      dateStyle: "medium",
-                      timeStyle: "short",
-                    })}
-                  </p>
-                  <Button className="w-full mt-4">Join Tournament </Button>
-                </div>
               </Card>
             );
           })}
+
         </div>
       </div>
 

@@ -107,6 +107,7 @@ model Tournament {
   entryFee            Float
   prizePool           Float
 
+  bannerImage         String?    
   maxPlayers          Int
   joinedPlayersCount  Int      @default(0)
 

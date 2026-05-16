@@ -37,7 +37,7 @@ const UserProfile = ({ isMobile = false }: { isMobile?: boolean }) => {
           </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuLabel>{session?.user.email}</DropdownMenuLabel>
+        <DropdownMenuLabel>{session?.user.name}</DropdownMenuLabel>
         <DropdownMenuSeparator />
 
         <DropdownMenuItem

@@ -18,6 +18,7 @@
     "react-dom": "^19.2.4"
   },
   "devDependencies": {
+    "@monorepo/ui": "workspace:*",
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4.2.1",
     "@types/node": "^25.5.0",

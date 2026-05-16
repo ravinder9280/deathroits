@@ -7,6 +7,13 @@ const authOptions: BetterAuthOptions = {
   baseURL: process.env.BETTER_AUTH_URL, // Express server URL
   database: prismaAdapter(prisma, { provider: "postgresql" }),
   emailAndPassword: { enabled: true },
+  user:{
+
+    additionalFields:{
+      
+
+    }
+  },
   plugins: [
     emailOTP({
       async sendVerificationOTP({ email: _email, otp: _otp, type }) {
