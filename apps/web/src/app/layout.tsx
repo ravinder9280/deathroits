@@ -25,6 +25,9 @@ const jetbrains_mono = JetBrains_Mono({
 export const metadata: Metadata = {
   description: "Deathroit",
   title: "Deathroit",
+  icons:{
+    icon:"/fevicon.svg"
+  }
 };
 
 export default function RootLayout({

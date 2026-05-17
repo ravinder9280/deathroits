@@ -75,10 +75,21 @@ const Navbar = () => {
           : "bg-transparent border-transparent",
       )}
     >
-      <div className="container mx-auto px-4 py-4">
+      <div className="container mx-auto px-6 py-3">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <Image alt="" height={40} src={"/logo.svg"} width={150} className="" />
+          <div className="flex items-center gap-2">
+          <button
+            className="md:hidden cursor-pointer"
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            {isOpen ? <X className="size-6 " /> : <Menu className="size-6 " />}
+          </button>
+
+          <Link className="" href={'/'} >
+          <img alt="" height={24} src={"/logo.svg"} width={150} className="h-[24px] w-auto" />
+          </Link>
+          </div>
 
           {/* Desktop Navigation */}
           <nav className=" hidden md:flex items-center justify-between gap-8">
@@ -92,11 +103,11 @@ const Navbar = () => {
             ))}
           </nav>
           {session ? (
-            <div className="hidden md:block">
+            <div className="">
               <UserProfile />
             </div>
           ) : (
-            <div className="flex items-center space-x-4 hidden md:block">
+            <div className="flex items-center gap-4 ">
               <Button
                 className=" font-semibold"
                 size={"lg"}
@@ -104,19 +115,14 @@ const Navbar = () => {
               >
                 <Link href={"/sign-in"}>Login</Link>
               </Button>
-              <Button className=" font-semibold" size={"lg"}>
+              <Button className=" font-semibold hidden md:block" size={"lg"}>
                 <Link href={"/sign-up"}>Sign Up</Link>
               </Button>
             </div>
           )}
 
           {/* Mobile Toggle */}
-          <button
-            className="md:hidden cursor-pointer"
-            onClick={() => setIsOpen(!isOpen)}
-          >
-            {isOpen ? <X className="size-6 " /> : <Menu className="size-6 " />}
-          </button>
+         
         </div>
       </div>
 
