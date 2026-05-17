@@ -2,13 +2,13 @@ import { prisma } from '@monorepo/db'
 import { Button } from '@monorepo/ui/components/button'
 import React from 'react'
 
-const TournamentDetailpage = async ({ params }: {
-    params: {
-        id: string
-    }
+const TournamentDetailpage = async({ params }: {
+   params: Promise<{ id: string }>
+   
 }) => {
 
-    const tournament = await prisma.tournament.findUnique({ where: { id: params.id } })
+    const {id} = await params;
+    const tournament = await prisma.tournament.findUnique({ where: { id: id } })
     return (
         <main className={' bg-custom-dark min-h-screen relative '}>
             <div className='py-20'>
