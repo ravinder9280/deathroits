@@ -1,12 +1,10 @@
 {
-  "extends": "@monorepo/tsconfig/base.json",
-  "compilerOptions": {
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "declaration": true,
-    "noEmit": false,
-    "emitDeclarationOnly": false
-  },
-  "include": ["src/**/*.ts"],
-  "exclude": ["node_modules", "dist"]
+  "extends": "@monorepo/tsconfig/types.json",
+  "include": [
+      "**/*.ts",
+      "eslint.config.mjs"
+  ],
+  "exclude": [
+    "node_modules"
+  ],
 }

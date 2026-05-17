@@ -7,8 +7,8 @@
         "db:migrate": "prisma migrate dev",
         "db:deploy": "prisma migrate deploy"
     },
-    "main": "./src/index.js",
-    "types": "./src/index.d.ts",
+    "main": "./src/index.ts",
+    "types": "./src/index.ts",
     "devDependencies": {
         "prisma": "^7.8.0",
         "@monorepo/tsconfig": "workspace:*",
@@ -23,9 +23,6 @@
         "pg": "^8.20.0"
     },
 "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
-    }
+          ".": "./src/index.ts"
   }
 }
