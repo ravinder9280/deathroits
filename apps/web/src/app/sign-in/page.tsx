@@ -6,9 +6,39 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { authClient } from "@/lib/auth-client";
+import { useState } from "react";
+import { toast } from "sonner";
 export default function Page() {
+  const [loading, setLoading] = useState(false)
+
+  const handleSignIn = async () => {
+
+    try {
+      setLoading(true)
+
+
+      const { data, error } = await authClient.signIn.social({
+        callbackURL: process.env.NEXT_PUBLIC_AUTH_CALLBACK_URL,
+
+        provider: "google",
+      })
+
+      if (error) {
+        toast.error(error.message)
+        return;
+      }
+
+    } catch (error) {
+      toast.error("some error occured")
+
+    }
+    finally {
+      setLoading(false)
+    }
+
+  }
   return (
-    <div className="min-h-screen w-full flex items-center justify-center ">
+    <div className="min-h-screen w-full bg-background flex items-center justify-center ">
       <div className="max-w-[450px] w-full px-2">
         <div className="flex items-center justify-center mb-4">
           <h2 className="text-xl font-bold text-center">
@@ -37,16 +67,17 @@ export default function Page() {
           </div>
           <Button
             className=""
-            onClick={() =>
-              authClient.signIn.social({
-                callbackURL: process.env.NEXT_PUBLIC_AUTH_CALLBACK_URL,
+            disabled={loading}
 
-                provider: "google",
-              })
+            onClick={() =>
+              handleSignIn()
             }
             size={"lg"}
             variant={"outline"}
           >
+            {
+
+            }
             <Image alt="" height={16} src={"/google-logo.svg"} width={16} />
             Continue with Google
           </Button>

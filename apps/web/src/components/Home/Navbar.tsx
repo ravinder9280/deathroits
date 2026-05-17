@@ -75,7 +75,7 @@ const Navbar = () => {
           : "bg-transparent border-transparent",
       )}
     >
-      <div className="container mx-auto px-6 py-3">
+      <div className="container mx-auto px-4 md:px-6 py-3">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center gap-2">
@@ -140,18 +140,7 @@ const Navbar = () => {
                   {item.label}
                 </Link>
               ))}
-              {session ? (
-                <UserProfile />
-              ) : (
-                <>
-                  <Button asChild className="w-full" variant={"outline"} onClick={() => setIsOpen(false)} >
-                    <Link href="/sign-in">Login</Link>
-                  </Button>
-                  <Button asChild className="w-full" onClick={() => setIsOpen(false)} >
-                    <Link href="/sign-up">Sign Up</Link>
-                  </Button>
-                </>
-              )}
+              
             </nav>
           </div>
         </div>

@@ -1,10 +1,10 @@
 import { prisma } from "@monorepo/db";
 import { Badge } from "@monorepo/ui/components/badge";
 import { Button } from "@monorepo/ui/components/button";
-import { Progress } from "@monorepo/ui/components/progress";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@monorepo/ui/components/card";
+import { Progress } from "@monorepo/ui/components/progress";
+import Link from "next/link";
 import React from "react";
-import Image from "next/image";
 
 const TournamentsPage = async () => {
   const tournaments = await prisma.tournament.findMany();
@@ -20,10 +20,10 @@ const TournamentsPage = async () => {
             register.
           </p>
         </div>
-        <div className=" pt-10 grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className=" pt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-8">
 
           {tournaments.map((t) => {
-            return (
+            return (<Link href={`/tournaments/${t.id}`}>
               <Card
                 className="p-0 overflow-hidden border-white/10 backdrop-blur-xl bg-card/50 gap-0 hover:border-white/50 cursor-pointer"
                 key={t.id}
@@ -87,8 +87,7 @@ const TournamentsPage = async () => {
                       <span>Players</span>
                       <span> {t.joinedPlayersCount}/{t.maxPlayers}</span>
                     </div>
-                    {/* <Progress value={(t.joinedPlayersCount / t.maxPlayers) * 100} /> */}
-                    <Progress value={20} />
+                    <Progress value={(t.joinedPlayersCount / t.maxPlayers) * 100} />
                   </div>
 
 
@@ -100,6 +99,7 @@ const TournamentsPage = async () => {
                 </Button>
 
               </Card>
+            </Link>
             );
           })}
 
@@ -109,5 +109,6 @@ const TournamentsPage = async () => {
     </main>
   );
 };
+export const dynamic = "force-dynamic";
 
 export default TournamentsPage;

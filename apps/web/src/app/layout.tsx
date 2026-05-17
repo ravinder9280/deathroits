@@ -1,6 +1,6 @@
 import "@monorepo/ui/globals.css";
 import Navbar from "@/components/Home/Navbar";
-
+import { Toaster } from 'sonner';
 import type { Metadata } from "next";
 
 import { JetBrains_Mono, Space_Grotesk } from "next/font/google";
@@ -41,6 +41,7 @@ export default function RootLayout({
       lang="en"
       suppressHydrationWarning
     >
+      <Toaster richColors />
       <body className="font-body">
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           <Navbar />
