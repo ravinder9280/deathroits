@@ -55,7 +55,7 @@ const TournamentDetailpage = async({ params }: {
 
             <Button className='rounded-none w-full' size={'xl'} asChild>
 
-                <div className='absolute bottom-0'>
+                <div className='z-30 fixed bottom-0'>
                     Join Now
 
 
