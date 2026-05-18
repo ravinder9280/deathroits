@@ -50,8 +50,8 @@ const TournamentDetailpage = async ({ params }: {
                     <div>
                         <p>
                             {
-
-                                format(tournament?.startTime, "dd/MM/yyyy hh:mm a")
+                                tournament &&
+                                format(tournament.startTime, "dd/MM/yyyy hh:mm a")
                             }
                         </p>
                     </div>

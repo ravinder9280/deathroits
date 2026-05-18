@@ -1,9 +1,9 @@
 // middleware.ts
-import { betterFetch } from "@better-fetch/fetch";
-import type { auth } from "@/lib/auth"; // your auth-client types
+import { betterFetch } from '@better-fetch/fetch';
+import type { authClient } from "./lib/auth-client";
 import { NextRequest, NextResponse } from "next/server";
 
-type Session = typeof auth.$Infer.Session;
+type Session = typeof authClient.$Infer.Session;
 
 export async function middleware(request: NextRequest) {
   const { data: session } = await betterFetch<Session>(
