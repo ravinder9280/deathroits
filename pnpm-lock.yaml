@@ -54,6 +54,9 @@ importers:
       '@aws-sdk/s3-request-presigner':
         specifier: ^3.1037.0
         version: 3.1037.0
+      '@monorepo/db':
+        specifier: workspace:*
+        version: link:../../packages/db
       '@monorepo/types':
         specifier: workspace:*
         version: link:../../packages/types
@@ -91,9 +94,6 @@ importers:
         specifier: ^4.1.12
         version: 4.1.12
     devDependencies:
-      '@monorepo/db':
-        specifier: workspace:*
-        version: link:../../packages/db
       '@monorepo/eslint-config':
         specifier: workspace:*
         version: link:../../packages/eslint-config

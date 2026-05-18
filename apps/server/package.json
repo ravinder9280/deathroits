@@ -10,9 +10,11 @@
     "dev": "tsx watch src/main.ts",
     "build": "tsc",
     "lint": "eslint .",
-    "start": "node dist/main.js"
+    "start": "tsx src/main.ts"
   },
   "dependencies": {
+    "@monorepo/db": "workspace:*",
+
     "@aws-sdk/client-s3": "^3.1037.0",
     "@aws-sdk/s3-request-presigner": "^3.1037.0",
     "@monorepo/types": "workspace:*",
@@ -29,7 +31,6 @@
     "zod": "^4.1.12"
   },
   "devDependencies": {
-    "@monorepo/db": "workspace:*",
     "@monorepo/eslint-config": "workspace:*",
     "@monorepo/tsconfig": "workspace:*",
     "@types/bcrypt": "^6.0.0",
