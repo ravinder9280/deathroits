@@ -1,20 +1,28 @@
+// middleware.ts
+import { betterFetch } from "@better-fetch/fetch";
+import type { auth } from "@/lib/auth"; // your auth-client types
 import { NextRequest, NextResponse } from "next/server";
-import { headers } from "next/headers";
-import { auth } from "@monorepo/auth/server";
+
+type Session = typeof auth.$Infer.Session;
 
 export async function middleware(request: NextRequest) {
-    const session = await auth.api.getSession({
-        headers: await headers()
-    })
-
-    if (!session) {
-        return NextResponse.redirect(new URL("/sign-in", request.url));
+  const { data: session } = await betterFetch<Session>(
+    "/api/auth/get-session",
+    {
+      baseURL: process.env.NEXT_PUBLIC_API_BASE_URL, // your backend URL
+      headers: {
+        cookie: request.headers.get("cookie") || "",
+      },
     }
+  );
 
-    return NextResponse.next();
+  if (!session) {
+    return NextResponse.redirect(new URL("/sign-in", request.url));
+  }
+
+  return NextResponse.next();
 }
 
 export const config = {
-    runtime: "nodejs", // Required for auth.api calls
-    matcher: ["/dashboard"], // Specify the routes the middleware applies to
+  matcher: ["/tournaments"],
 };

@@ -4,8 +4,7 @@ import express from "express";
 import morgan from "morgan";
 
 import routes from "./routes";
-import { auth } from "@monorepo/auth/server";
-
+import { auth } from "./lib/auth";
 const app: express.Express = express();
 
 app.use(morgan("tiny"));

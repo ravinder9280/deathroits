@@ -29,7 +29,6 @@
     "zod": "^4.1.12"
   },
   "devDependencies": {
-    "@monorepo/auth": "workspace:*",
     "@monorepo/db": "workspace:*",
     "@monorepo/eslint-config": "workspace:*",
     "@monorepo/tsconfig": "workspace:*",

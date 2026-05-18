@@ -37,7 +37,7 @@ const UserProfile = ({ isMobile = false }: { isMobile?: boolean }) => {
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="min-w-[180px]">
-        <DropdownMenuLabel>{session?.user.name}</DropdownMenuLabel>
+        <DropdownMenuLabel className="text-muted-foreground " >{session?.user.name}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem
           className=""

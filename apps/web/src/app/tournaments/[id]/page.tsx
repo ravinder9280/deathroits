@@ -1,13 +1,13 @@
 import { prisma } from '@monorepo/db'
 import { Button } from '@monorepo/ui/components/button'
 import React from 'react'
+import { format } from 'date-fns'
+const TournamentDetailpage = async ({ params }: {
+    params: Promise<{ id: string }>
 
-const TournamentDetailpage = async({ params }: {
-   params: Promise<{ id: string }>
-   
 }) => {
 
-    const {id} = await params;
+    const { id } = await params;
     const tournament = await prisma.tournament.findUnique({ where: { id: id } })
     return (
         <main className={' bg-custom-dark min-h-screen relative '}>
@@ -46,6 +46,14 @@ const TournamentDetailpage = async({ params }: {
                             {tournament?.rules}
                         </p>
 
+                    </div>
+                    <div>
+                        <p>
+                            {
+
+                                format(tournament?.startTime, "dd/MM/yyyy hh:mm a")
+                            }
+                        </p>
                     </div>
 
 
