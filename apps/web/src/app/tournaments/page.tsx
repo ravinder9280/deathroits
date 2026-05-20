@@ -1,13 +1,20 @@
-import { prisma } from "@monorepo/db";
 import { Badge } from "@monorepo/ui/components/badge";
-import { Button } from "@monorepo/ui/components/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@monorepo/ui/components/card";
 import { Progress } from "@monorepo/ui/components/progress";
 import Link from "next/link";
 import React from "react";
 
 const TournamentsPage = async () => {
-  const tournaments = await prisma.tournament.findMany();
+
+
+  const res = await fetch(process.env.NEXT_PUBLIC_API_BASE_URL + "/tournament", {
+    cache: "no-store",
+  });
+
+
+
+  const { tournaments } = await res.json();
+
   return (
     <main className="bg-custom-dark min-h-screen py-27 px-4 ">
       <div className="container mx-auto">
@@ -44,7 +51,7 @@ const TournamentsPage = async () => {
 
                 </CardContent>
                 <div className="  border-t flex flex-col border-t border-white/10 gap-2 ">
-                  <div className="border-b p-4">
+                  <div className="border-b px-3 py-2">
 
                     <div className=" flex items-center justify-between text-sm ">
 
@@ -63,9 +70,15 @@ const TournamentsPage = async () => {
                     </div>
                   </div>
 
+                  <div className=" border-b px-3 py-2">
+                    <div className="flex items-center justify-between leading-relaxed text-muted-foreground">
+                      <span>Players</span>
+                      <span> {t.joinedPlayersCount}/{t.maxPlayers}</span>
+                    </div>
+                    <Progress value={(t.joinedPlayersCount / t.maxPlayers) * 100} />
+                  </div>
 
-
-                  <div className="grid grid-cols-3 gap-3 text-sm border-b p-4 ">
+                  <div className="grid grid-cols-3 gap-3 text-sm border-b px-3 py-2 ">
                     <div className="space-y-1 flex items-center flex-col">
                       <p className="text-muted-foreground">Game</p>
                       <p className="font-semibold ">Free Fire</p>
@@ -82,21 +95,15 @@ const TournamentsPage = async () => {
 
 
                   </div>
-                  <div className=" border-b p-4">
-                    <div className="flex items-center justify-between leading-relaxed text-muted-foreground">
-                      <span>Players</span>
-                      <span> {t.joinedPlayersCount}/{t.maxPlayers}</span>
-                    </div>
-                    <Progress value={(t.joinedPlayersCount / t.maxPlayers) * 100} />
-                  </div>
+
 
 
 
 
                 </div>
-                <Button className=" rounded-t-none rounded-b-xl" size={"xl"}>
+                {/* <Button className=" rounded-t-none rounded-b-xl" size={"xl"}>
                   Join Now
-                </Button>
+                </Button> */}
 
               </Card>
             </Link>

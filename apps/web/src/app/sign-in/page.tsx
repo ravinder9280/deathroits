@@ -13,27 +13,30 @@ export default function Page() {
 
   const handleSignIn = async () => {
 
-    try {
-      setLoading(true)
 
 
-      const { data, error } = await authClient.signIn.social({
-        callbackURL: process.env.NEXT_PUBLIC_AUTH_CALLBACK_URL,
 
-        provider: "google",
-      })
+    const { data, error } = await authClient.signIn.social({
+      callbackURL: process.env.NEXT_PUBLIC_AUTH_CALLBACK_URL,
 
-      if (error) {
-        toast.error(error.message)
-        return;
+      provider: "google",
+
+      fetchOptions: {
+        onRequest: () => {
+          setLoading(true)
+
+        },
+       
+
+
       }
 
-    } catch (error) {
-      toast.error("some error occured")
+    })
+    setLoading(false)
 
-    }
-    finally {
-      setLoading(false)
+    if (error) {
+      toast.error(error.message)
+      return;
     }
 
   }

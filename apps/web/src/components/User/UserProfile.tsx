@@ -1,3 +1,4 @@
+'use client'
 import {
   Avatar,
   AvatarFallback,
@@ -13,7 +14,7 @@ import {
 } from "@monorepo/ui/components/dropdown-menu";
 import { LogOutIcon, Shield, Trophy, User2 } from "lucide-react";
 import React from "react";
-
+import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 
 const UserProfile = ({ isMobile = false }: { isMobile?: boolean }) => {
@@ -23,6 +24,7 @@ const UserProfile = ({ isMobile = false }: { isMobile?: boolean }) => {
     isPending, //loading state
     refetch, //refetch the session
   } = authClient.useSession();
+  const router=useRouter()
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="ring-transparent cursor-pointer outline-none  ">
@@ -66,7 +68,16 @@ const UserProfile = ({ isMobile = false }: { isMobile?: boolean }) => {
         <DropdownMenuItem
           className="text-red-500"
           onClick={async () => {
-            await authClient.signOut();
+            await authClient.signOut(
+              {
+                fetchOptions: {
+                  onSuccess: () => {
+                    router.push("/sign-in"); // redirect to login page
+                  },
+                  
+                }
+              }
+            );
           }}
         >
           <LogOutIcon className="size-4" />

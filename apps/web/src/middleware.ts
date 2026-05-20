@@ -1,28 +1,20 @@
-// middleware.ts
-import { betterFetch } from '@better-fetch/fetch';
-import type { authClient } from "./lib/auth-client";
 import { NextRequest, NextResponse } from "next/server";
-
-type Session = typeof authClient.$Infer.Session;
+import { getSessionCookie } from "better-auth/cookies";
 
 export async function middleware(request: NextRequest) {
-  const { data: session } = await betterFetch<Session>(
-    "/api/auth/get-session",
-    {
-      baseURL: process.env.NEXT_PUBLIC_API_BASE_URL, // your backend URL
-      headers: {
-        cookie: request.headers.get("cookie") || "",
-      },
-    }
-  );
+	const sessionCookie = getSessionCookie(request);
 
-  if (!session) {
-    return NextResponse.redirect(new URL("/sign-in", request.url));
+    // THIS IS NOT SECURE!
+    // This is the recommended approach to optimistically redirect users
+    // We recommend handling auth checks in each page/route
+    if(!sessionCookie) {
+      return NextResponse.redirect(new URL("/sign-in", request.url));
   }
 
-  return NextResponse.next();
+
+	return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/tournaments"],
+	matcher: ["/tournaments"], // Specify the routes the middleware applies to
 };

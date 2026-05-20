@@ -1,19 +1,12 @@
-import { prisma } from "@monorepo/db";
 import { type Auth, betterAuth, type BetterAuthOptions } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { emailOTP } from "better-auth/plugins/email-otp";
+import { prisma } from "../db/client";
 
 const authOptions: BetterAuthOptions = {
   baseURL: process.env.BETTER_AUTH_URL, // Express server URL
   database: prismaAdapter(prisma, { provider: "postgresql" }),
   emailAndPassword: { enabled: true },
-  user:{
-
-    additionalFields:{
-      
-
-    }
-  },
   plugins: [
     emailOTP({
       async sendVerificationOTP({ email: _email, otp: _otp, type }) {
@@ -36,6 +29,10 @@ const authOptions: BetterAuthOptions = {
     },
   },
   trustedOrigins: ["http://localhost:3000"],
+  user: {
+
+    additionalFields: {},
+  },
 };
 
 export const auth: Auth = betterAuth(authOptions);

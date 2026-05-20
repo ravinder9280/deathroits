@@ -3,8 +3,8 @@ import cors from "cors";
 import express from "express";
 import morgan from "morgan";
 
-import routes from "./routes";
 import { auth } from "./lib/auth";
+import routes from "./routes";
 const app: express.Express = express();
 
 app.use(morgan("tiny"));
@@ -17,6 +17,7 @@ app.use(
 );
 
 app.all("/api/auth/{*any}", toNodeHandler(auth));
+
 
 app.use(express.json({ limit: "100mb" }));
 
