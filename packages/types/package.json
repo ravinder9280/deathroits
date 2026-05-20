@@ -1,6 +1,7 @@
 {
   "name": "@monorepo/types",
-  "author": "Ives Furtado | @ivesfurtado",
+  "main": "./src/index.ts",
+  "author": "ravinder",
   "version": "1.0.0",
   "keywords": [],
   "license": "ISC",
