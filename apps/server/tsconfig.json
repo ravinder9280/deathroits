@@ -4,6 +4,8 @@
     "outDir": "./dist",
     "rootDir": "./src",
     "skipLibCheck": true,
+    "module": "CommonJS",
+    "moduleResolution": "node",
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "paths": {
       "@/*": ["./*"]

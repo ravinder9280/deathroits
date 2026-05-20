@@ -15,6 +15,7 @@ ARG PROJECT
 WORKDIR /app
 COPY . .
 RUN turbo prune --scope=${PROJECT} --docker
+
 # Build the project
 FROM base AS builder
 ARG PROJECT
@@ -26,13 +27,12 @@ COPY --from=pruner /app/out/pnpm-workspace.yaml ./pnpm-workspace.yaml
 COPY --from=pruner /app/out/json/ .
 
 # Install dependencies first (they change less often)
-RUN pnpm install --frozen-lockfile
-
+RUN --mount=type=cache,id=pnpm,target=/root/.pnpm-store \pnpm install --frozen-lockfile
 # Copy full source of isolated subworkspace
 COPY --from=pruner /app/out/full/ .
 
-# Generate Prisma client BEFORE building
-RUN pnpm --filter @monorepo/db db:generate
+# Generate Prisma client from server (not @monorepo/db anymore)
+RUN pnpm --filter server db:generate
 
 # Build
 RUN turbo build --filter=${PROJECT}
