@@ -3,7 +3,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@monorepo/
 import { Progress } from "@monorepo/ui/components/progress";
 import Link from "next/link";
 import React from "react";
-
+import type {TournamentCard} from "@monorepo/types"
 const TournamentsPage = async () => {
 
 
@@ -29,7 +29,7 @@ const TournamentsPage = async () => {
         </div>
         <div className=" pt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-8">
 
-          {tournaments.map((t) => {
+          {tournaments.map((t:TournamentCard) => {
             return (<Link href={`/tournaments/${t.id}`}>
               <Card
                 className="p-0 overflow-hidden border-white/10 backdrop-blur-xl bg-card/50 gap-0 hover:border-white/50 cursor-pointer"
