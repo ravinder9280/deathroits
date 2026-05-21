@@ -28,7 +28,18 @@ const authOptions: BetterAuthOptions = {
       prompt: "select_account",
     },
   },
-  trustedOrigins: ["http://localhost:3000"],
+
+  trustedOrigins: ["http://localhost:3000", "https://deathroit.vercel.app"],
+  advanced: {
+    crossSubDomainCookies: {
+      enabled: false,
+    },
+    defaultCookieAttributes: {
+      sameSite: "none",
+      secure: true,
+    },
+
+  },
   user: {
 
     additionalFields: {},
