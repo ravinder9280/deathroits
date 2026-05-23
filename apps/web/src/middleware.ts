@@ -5,9 +5,7 @@ export async function middleware(request: NextRequest) {
 
     // THIS IS NOT SECURE!
  
-    const sessionCookie = getSessionCookie(request, {
-      cookiePrefix: "better-auth",
-    });
+    const sessionCookie = getSessionCookie(request);
 
 
 	return NextResponse.next();
