@@ -29,7 +29,7 @@ const authOptions: BetterAuthOptions = {
     },
   },
 
-  trustedOrigins: ["http://localhost:3000", "https://deathroit.vercel.app"],
+  trustedOrigins: ["http://localhost:3000", "https://deathroit.vercel.app","https://deathroit.ravindertech.me"],
   advanced: {
     crossSubDomainCookies: {
       enabled: false,
