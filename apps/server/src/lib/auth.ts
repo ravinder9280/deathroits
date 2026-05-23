@@ -35,7 +35,7 @@ const authOptions: BetterAuthOptions = {
       enabled: false,
     },
     defaultCookieAttributes: {
-      sameSite: "none",
+      sameSite: "lax",
       secure: true,
     },
 
