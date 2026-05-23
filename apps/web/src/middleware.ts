@@ -1,16 +1,24 @@
+// middleware.ts
 import { NextRequest, NextResponse } from "next/server";
-import { getSessionCookie } from "better-auth/cookies";
 
 export async function middleware(request: NextRequest) {
+	const response = await fetch(
+		`${process.env.NEXT_PUBLIC_API_ORIGIN}/api/auth/get-session`, {
+			headers: {
+				cookie: request.headers.get("cookie") || "",
+			},
+		}
+	);
 
-  // THIS IS NOT SECURE!
+	if (!response.ok) {
+		return NextResponse.redirect(new URL("/sign-in", request.url));
+	}
 
-  const sessionCookie = request.cookies.get("__Secure-better-auth.session_token")
-    || request.cookies.get("better-auth.session_token");
+	const session = await response.json();
 
-  return NextResponse.next();
+	if (!session) {
+		return NextResponse.redirect(new URL("/sign-in", request.url));
+	}
+
+	return NextResponse.next();
 }
-
-export const config = {
-  matcher: ["/tournaments"], // Specify the routes the middleware applies to
-};
