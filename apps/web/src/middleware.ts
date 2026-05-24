@@ -1,16 +1,32 @@
-import { NextRequest, NextResponse } from "next/server";
 import { getSessionCookie } from "better-auth/cookies";
-
-export async function middleware(request: NextRequest) {
-
-    // THIS IS NOT SECURE!
- 
-    const sessionCookie = getSessionCookie(request);
+import { NextRequest, NextResponse } from "next/server";
 
 
-	return NextResponse.next();
+export async function middleware(req: NextRequest) {
+  const { pathname } = req.nextUrl;
+
+
+  const session = getSessionCookie(req);
+  const onboarded = req.cookies.get("onboarded")?.value === "1";
+
+  if (!session) {
+    return NextResponse.redirect(new URL("/sign-in", req.url));
+  }
+
+  if (pathname.startsWith("/onboarding")) {
+    if (onboarded) {
+      return NextResponse.redirect(new URL("/", req.url));
+    }
+    return NextResponse.next();
+  }
+
+  if (!onboarded) {
+    return NextResponse.redirect(new URL("/onboarding", req.url));
+  }
+
+  return NextResponse.next();
 }
 
 export const config = {
-	matcher: ["/tournaments"], // Specify the routes the middleware applies to
+  matcher: ["/tournaments","/contact"],
 };

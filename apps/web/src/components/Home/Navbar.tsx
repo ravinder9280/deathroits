@@ -1,8 +1,9 @@
 "use client";
 
 import { Button } from "@monorepo/ui/components/button";
+import { Sheet, SheetContent, SheetTrigger } from "@monorepo/ui/components/sheet";
 import { cn } from "@monorepo/utils/styles";
-import { Menu, X } from "lucide-react";
+import { Ellipsis, Menu, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -32,7 +33,6 @@ const NavbarItems = [
 ];
 
 const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const {
     data: session,
@@ -69,26 +69,47 @@ const Navbar = () => {
   return (
     <header
       className={cn(
-        "fixed top-0  w-full z-50 border-b transition-all duration-300",
+        "fixed top-0 h-14 flex items-center justify-center  w-full z-50 border-b transition-all duration-300",
         scrolled
           ? "bg-background/50 backdrop-blur-md shadow-sm border-white/20"
           : "bg-transparent border-transparent",
       )}
     >
-      <div className="container mx-auto px-4 md:px-6 py-3">
+      <div className="container mx-auto px-4 md:px-6 ">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center gap-2">
-          <button
-            className="md:hidden cursor-pointer"
-            onClick={() => setIsOpen(!isOpen)}
-          >
-            {isOpen ? <X className="size-6 " /> : <Menu className="size-6 " />}
-          </button>
+              {/* Mobile Menu */}
+      <Sheet>
+        <SheetTrigger className="hover:bg-muted/50 cursor-pointer">
+          <Menu/>
+        </SheetTrigger>
+        <SheetContent side={'left'} >
 
-          <Link className="" href={'/'} >
-          <img alt="" height={24} src={"/logo.svg"} width={150} className="h-[24px] w-auto" />
-          </Link>
+
+        <div className="">
+          <div className="container mx-auto px-4 py-4">
+            <nav className="flex flex-col space-y-4">
+              {NavbarItems.map((item) => (
+                <Link href={item.link}
+                  className=" hover:text-foreground transition-colors py-2 text-left"
+                  key={item.label}
+                  onClick={() => scrollToSection(item.link)}
+                >
+                  {item.label}
+                </Link>
+              ))}
+
+            </nav>
+          </div>
+    </div>
+        </SheetContent>
+      </Sheet>
+
+
+            <Link className="" href={'/'} >
+              <img alt="" height={24} src={"/logo.svg"} width={150} className="h-[24px] w-auto" />
+            </Link>
           </div>
 
           {/* Desktop Navigation */}
@@ -122,30 +143,12 @@ const Navbar = () => {
           )}
 
           {/* Mobile Toggle */}
-         
+
         </div>
       </div>
 
-      {/* Mobile Menu */}
-      {isOpen && (
-        <div className="md:hidden bg-background/50 backdrop-blur-md shadow-sm  border-t border-white/10">
-          <div className="container mx-auto px-4 py-4">
-            <nav className="flex flex-col space-y-4">
-              {NavbarItems.map((item) => (
-                <Link href={item.link}
-                  className=" hover:text-foreground transition-colors py-2 text-left"
-                  key={item.label}
-                  onClick={() => scrollToSection(item.link)}
-                >
-                  {item.label}
-                </Link>
-              ))}
-              
-            </nav>
-          </div>
-        </div>
-      )}
-    </header>
+    
+    </header >
   );
 };
 

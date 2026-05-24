@@ -1,11 +1,17 @@
+import {
+  emailOTPClient,
+  inferAdditionalFields,
+} from "better-auth/client/plugins";
 import { createAuthClient } from "better-auth/react";
-import { emailOTPClient } from "better-auth/client/plugins"
-const authConfig = {
+
+import { userAdditionalFields } from "../../../server/src/lib/auth-user-fields";
+
+export const authClient: ReturnType<typeof createAuthClient> = createAuthClient({
   baseURL: process.env.NEXT_PUBLIC_API_ORIGIN,
   plugins: [
-    emailOTPClient()
-  ]
-};
-
-export const authClient: ReturnType<typeof createAuthClient> =
-  createAuthClient(authConfig);
+    emailOTPClient(),
+    inferAdditionalFields({
+      user: userAdditionalFields,
+    }),
+  ],
+});

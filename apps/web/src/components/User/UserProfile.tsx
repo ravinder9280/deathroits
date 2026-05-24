@@ -38,8 +38,8 @@ const UserProfile = ({ isMobile = false }: { isMobile?: boolean }) => {
           <AvatarFallback>U</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="min-w-[180px]">
-        <DropdownMenuLabel className="text-muted-foreground " >{session?.user.name}</DropdownMenuLabel>
+      <DropdownMenuContent className="w-[180px]" align="end">
+        <DropdownMenuLabel className="text-muted-foreground  truncate " >{session?.user.name}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem
           className=""
@@ -68,16 +68,17 @@ const UserProfile = ({ isMobile = false }: { isMobile?: boolean }) => {
         <DropdownMenuItem
           className="text-red-500"
           onClick={async () => {
-            await authClient.signOut(
-              {
-                fetchOptions: {
-                  onSuccess: () => {
-                    router.push("/sign-in"); // redirect to login page
-                  },
-                  
-                }
-              }
-            );
+            await fetch("/api/onboarding/set-cookie", {
+              method: "DELETE",
+              credentials: "include",
+            });
+            await authClient.signOut({
+              fetchOptions: {
+                onSuccess: () => {
+                  router.push("/sign-in");
+                },
+              },
+            });
           }}
         >
           <LogOutIcon className="size-4" />

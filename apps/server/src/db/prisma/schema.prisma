@@ -23,6 +23,9 @@ model User {
   gameUid       String?   @unique
   upiId         String?
 
+  gameId        String?   @unique
+  onboarded     Boolean   @default(false)
+
   role          UserRole  @default(PLAYER)
   isBanned      Boolean   @default(false)
 

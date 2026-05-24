@@ -4,6 +4,7 @@ import express from "express";
 import morgan from "morgan";
 
 import { auth } from "./lib/auth";
+import onboardingRouter from "./routes/onboarding.route";
 import routes from "./routes";
 const app: express.Express = express();
 
@@ -20,6 +21,8 @@ app.all("/api/auth/{*any}", toNodeHandler(auth));
 
 
 app.use(express.json({ limit: "100mb" }));
+
+app.use("/api/onboarding", onboardingRouter);
 
 app.get("/api/me", async (req, res) => {
   const session = await auth.api.getSession({

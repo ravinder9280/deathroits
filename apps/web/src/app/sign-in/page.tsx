@@ -17,7 +17,7 @@ export default function Page() {
 
 
     const { data, error } = await authClient.signIn.social({
-      callbackURL: process.env.NEXT_PUBLIC_AUTH_CALLBACK_URL,
+      callbackURL: process.env.NEXT_PUBLIC_URL+"/tournaments",
 
       provider: "google",
 

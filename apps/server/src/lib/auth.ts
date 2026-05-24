@@ -1,9 +1,10 @@
-import { type Auth, betterAuth, type BetterAuthOptions } from "better-auth";
+import { betterAuth, type BetterAuthOptions } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { emailOTP } from "better-auth/plugins/email-otp";
 import { prisma } from "../db/client";
+import { userAdditionalFields } from "./auth-user-fields";
 
-const authOptions: BetterAuthOptions = {
+export const authOptions = {
   baseURL: process.env.BETTER_AUTH_URL, // Express server URL
   database: prismaAdapter(prisma, { provider: "postgresql" }),
   emailAndPassword: { enabled: true },
@@ -41,9 +42,9 @@ const authOptions: BetterAuthOptions = {
 
   },
   user: {
-
-    additionalFields: {},
+    additionalFields: userAdditionalFields,
   },
-};
+} satisfies BetterAuthOptions;
 
-export const auth: Auth = betterAuth(authOptions);
+export const auth = betterAuth(authOptions);
+export type Auth = typeof auth;
