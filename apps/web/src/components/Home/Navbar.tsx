@@ -51,7 +51,6 @@ const Navbar = () => {
   }, []);
 
   const scrollToSection = (sectionId: string) => {
-    setIsOpen(false);
 
     const element = document.getElementById(sectionId);
 
