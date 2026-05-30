@@ -1,6 +1,6 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { authClient } from "../auth-client";
+import { authClient } from "../lib/auth-client";
 
 export function useOnboarding() {
   const router = useRouter();

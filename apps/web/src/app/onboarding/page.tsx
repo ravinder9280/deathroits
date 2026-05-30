@@ -1,7 +1,7 @@
 "use client";
 import { authClient } from "@/lib/auth-client";
-import type { OnboardingUserFields } from "@/lib/auth-types";
-import { useOnboarding } from "@/lib/hooks/useOnboarding";
+import type { OnboardingUserFields } from "@monorepo/types";
+import { useOnboarding } from "@/hooks/useOnboarding";
 import { Button } from "@monorepo/ui/components/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@monorepo/ui/components/card";
 import { Input } from "@monorepo/ui/components/input";
@@ -24,15 +24,13 @@ export default function OnboardingPage() {
     }).then(() => router.replace("/"));
   }, [isPending, user?.onboarded, router]);
 
-  // Block render until session is resolved
-  if (isPending||user?.onboarded) {
-    return
-    <main className="bg-custom-dark min-h-screen flex items-center justify-center px-2">
-      <Spinner/>
-
-    </main>;
+  if (isPending) {
+    return <div>loading</div>;
   }
 
+  if (user?.onboarded) {
+    return null;
+  }
 
   return (
     <main className="bg-custom-dark min-h-screen flex items-center justify-center px-2">
@@ -70,9 +68,9 @@ export default function OnboardingPage() {
             size="xl"
             onClick={submit}
             disabled={loading || gameId.trim().length < 3}
-            
+
           >
-            {loading && <Spinner/>}
+            {loading && <Spinner />}
             {loading ? "Saving…" : "Continue"}
           </Button>
         </CardFooter>

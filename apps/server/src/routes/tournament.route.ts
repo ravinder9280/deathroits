@@ -1,9 +1,10 @@
 import { Router } from "express";
-import { listTournament } from "../controllers/tournament.controller";
+import { getTournamentById, listTournament } from "../controllers/tournament.controller";
 
 const router = Router();
 
 router.get("/", listTournament);
+router.get("/:id", getTournamentById);
 
 
 

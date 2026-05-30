@@ -1,3 +1,4 @@
+import type { OnboardingUserFields } from "@monorepo/types";
 import { fromNodeHeaders } from "better-auth/node";
 import type { NextFunction, Request, Response } from "express";
 import { prisma } from "../db/client";
@@ -31,7 +32,7 @@ export async function requireOnboarded(
     return res.status(401).json({ error: "Not authenticated" });
   }
 
-  const sessionOnboarded = (user as { onboarded?: boolean }).onboarded;
+  const sessionOnboarded = (user as OnboardingUserFields).onboarded;
   const onboarded =
     sessionOnboarded ??
     (

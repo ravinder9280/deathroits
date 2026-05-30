@@ -3,10 +3,11 @@
 import { Button } from "@monorepo/ui/components/button";
 import { Sheet, SheetContent, SheetTrigger } from "@monorepo/ui/components/sheet";
 import { cn } from "@monorepo/utils/styles";
-import { Ellipsis, Menu, X } from "lucide-react";
+import { Building, CalendarPlus, Ellipsis, Home, icons, Menu, Trophy, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 
 import { authClient } from "@/lib/auth-client";
 
@@ -16,24 +17,29 @@ const NavbarItems = [
   {
     label: "Home",
     link: "/",
+    icon: Home
   },
 
   {
     label: "Tournaments",
     link: "/tournaments",
+    icon: Trophy
   },
   {
     label: "Leaderboard",
     link: "/about",
+    icon: Building
   },
   {
     label: "Contact",
     link: "/contact",
+    icon: CalendarPlus
   },
 ];
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
   const {
     data: session,
     error, //error object
@@ -78,32 +84,43 @@ const Navbar = () => {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center gap-2">
-              {/* Mobile Menu */}
-      <Sheet>
-        <SheetTrigger className="hover:bg-muted/50 cursor-pointer">
-          <Menu/>
-        </SheetTrigger>
-        <SheetContent side={'left'} >
+            {/* Mobile Menu */}
+            <Sheet>
+              <SheetTrigger className="p-2 rounded-full cursor-pointer md:hidden hover:bg-accent/40">
+
+               
+                  <Menu  className="size-5" />
+                  <span className="sr-only">Toggle navigation menu</span>
+              </SheetTrigger>
+
+              <SheetContent side={'left'} >
 
 
-        <div className="">
-          <div className="container mx-auto px-4 py-4">
-            <nav className="flex flex-col space-y-4">
-              {NavbarItems.map((item) => (
-                <Link href={item.link}
-                  className=" hover:text-foreground transition-colors py-2 text-left"
-                  key={item.label}
-                  onClick={() => scrollToSection(item.link)}
-                >
-                  {item.label}
-                </Link>
-              ))}
+                <div className="flex flex-col gap-6 text-lg font-medium">
+                  <Link className="" href={'/'} >
+                    <img alt="" height={24} src={"/logo.svg"} width={150} className="h-[24px] w-auto" />
+                  </Link>
+                  <nav className="flex flex-col gap-2">
+                    {NavbarItems.map((item) => (
+                      <Link href={item.link}
+                        className={cn(
+                          "inline-flex items-center whitespace-nowrap text-sm font-medium transition-colors outline-offset-2 focus-visible:outline-2 focus-visible:outline-ring/70 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 h-10 rounded-lg px-8 justify-start pl-2",
+                          pathname === item.link
+                            ? "bg-primary/10 text-primary "
+                            : "hover:bg-accent "
+                        )}
+                        key={item.label}
+                        onClick={() => scrollToSection(item.link)}
+                      >
+                        {<item.icon className="mr-2 size-4" />}
+                        {item.label}
+                      </Link>
+                    ))}
 
-            </nav>
-          </div>
-    </div>
-        </SheetContent>
-      </Sheet>
+                  </nav>
+                </div>
+              </SheetContent>
+            </Sheet>
 
 
             <Link className="" href={'/'} >
@@ -146,7 +163,7 @@ const Navbar = () => {
         </div>
       </div>
 
-    
+
     </header >
   );
 };

@@ -30,13 +30,14 @@ const TournamentsPage = async () => {
         <div className=" pt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-8">
 
           {tournaments.map((t:TournamentCard) => {
-            return (<Link href={`/tournaments/${t.id}`}>
-              <Card
-                className="p-0 overflow-hidden border-white/10 backdrop-blur-xl bg-card/50 gap-0 hover:border-white/50 cursor-pointer"
+            return (
+            <Link href={`/tournaments/${t.id}`} className="" >
+            <Card
+                className="p-0 overflow-hidden border-white/10 backdrop-blur-xl bg-card/50 gap-0 h-full hover:border-white/50 cursor-pointer"
                 key={t.id}
 
               >
-                <CardContent className="p-0 aspect-square max-h-[300px] relative bg-muted">
+                <CardContent className="p-0 aspect-square max-h-[200px] relative bg-muted">
 
                   <img
                     alt={""}
@@ -65,7 +66,7 @@ const TournamentsPage = async () => {
                         in 2 days
                       </Badge>
                     </div>
-                    <div className=" font-semibold">
+                    <div className=" font-semibold truncate">
                       {t.title}
                     </div>
                   </div>
