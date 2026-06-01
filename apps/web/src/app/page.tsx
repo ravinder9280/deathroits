@@ -1,5 +1,7 @@
 import Choose from "@/components/Home/Choose";
+import Contact from "@/components/Home/Contact";
 import FAQ from "@/components/Home/FAQ";
+import Footer from "@/components/Home/Footer";
 import Games from "@/components/Home/Games";
 import Hero from "@/components/Home/Hero";
 import Trust from "@/components/Home/Trust";
@@ -36,6 +38,8 @@ export default function Page() {
       <Work />
       <FAQ />
       <Whatsapp />
+      <Contact/>
+      <Footer/>
     </main>
   );
 }
