@@ -6,7 +6,9 @@ const Trust = () => {
 
         <div className='container max-w-[1200px] mx-auto'>
             <p className='text-sm mb-6 tracking-[1px] text-[#6b6b6b] uppercase text-center font-medium'>
-            Trusted by E-sports players everywhere
+            Trusted by E-sports players 
+
+            everywhere
             </p>
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 '>
                 <div className='flex items-center md:flex-col md:items-start gap-5 w-full py-6 md:py-9 md:px-7 px-5 rounded-[20px] shadow-md bg-white'>

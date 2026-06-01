@@ -1,7 +1,10 @@
 import Choose from "@/components/Home/Choose";
+import FAQ from "@/components/Home/FAQ";
 import Games from "@/components/Home/Games";
 import Hero from "@/components/Home/Hero";
 import Trust from "@/components/Home/Trust";
+import Whatsapp from "@/components/Home/Whatsapp";
+import Work from "@/components/Home/Work";
 
 export default function Page() {
   return (
@@ -27,9 +30,12 @@ export default function Page() {
           <Hero />
         </div>
       </div>
-      <Trust/>
-      <Games/>
+      <Trust />
+      <Games />
       <Choose />
+      <Work />
+      <FAQ />
+      <Whatsapp />
     </main>
   );
 }
