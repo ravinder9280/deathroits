@@ -34,16 +34,20 @@ bg-red-400
         />
       </div>
 
-      <div className="flex items-center flex-col z-10 ">
+      <div className="flex items-center flex-col z-10 mx-auto max-w-2xl ">
         <Badge className="mb-8  bg-yellow-500/15 text-yellow-500 hover:bg-yellow-500/20  text-sm md:text-base rounded-full">
           🎮 Compete. Dominate. Win Tournaments.
         </Badge>
-        <div className="text-center  ">
-          <h1 className=" text-4xl md:text-7xl font-bold mb-6 leading-tight">
-            The ultimate platform for esports tournaments and competitive
-            gaming.
+        <div className="text-center max-w-2xl  ">
+          <h1 className=" text-5xl md:text-7xl font-bold mb-6 leading-[0.90]">
+          Where Champions Are Made
+          <br />
+          <span className="text-primary">
+
+           Legends Compete.
+          </span>
           </h1>
-          <p className=" md:text-xl text-zinc-800 dark:text-zinc-300 font-medium">
+          <p className=" md:text-xl text-zinc-800 dark:text-zinc-300 font-medium leading-[1.6]">
             Join custom tournaments, compete with top players, track live
             leaderboards, and prove your squad is the best. Built for gamers,
             organizers, and growing esports communities.

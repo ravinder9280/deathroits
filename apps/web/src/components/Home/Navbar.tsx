@@ -146,13 +146,13 @@ const Navbar = () => {
           ) : (
             <div className="flex items-center gap-4 ">
               <Button
-                className=" font-semibold"
+                className=" font-semibold rounded-full"
                 size={"lg"}
                 variant={"outline"}
               >
                 <Link href={"/sign-in"}>Login</Link>
               </Button>
-              <Button className=" font-semibold hidden md:block" size={"lg"}>
+              <Button className=" font-semibold hidden rounded-full md:block" size={"lg"}>
                 <Link href={"/sign-up"}>Sign Up</Link>
               </Button>
             </div>

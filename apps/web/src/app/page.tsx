@@ -1,5 +1,7 @@
 import Choose from "@/components/Home/Choose";
+import Games from "@/components/Home/Games";
 import Hero from "@/components/Home/Hero";
+import Trust from "@/components/Home/Trust";
 
 export default function Page() {
   return (
@@ -25,6 +27,8 @@ export default function Page() {
           <Hero />
         </div>
       </div>
+      <Trust/>
+      <Games/>
       <Choose />
     </main>
   );
