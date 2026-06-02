@@ -47,7 +47,7 @@ const FAQ = () => {
             Everything you need to know about competing on Deathroit. Can't find your answer? Reach out to our support team.
           </p>
         </div>
-        <Accordion type='multiple' collapsible  className="space-y-3">
+        <Accordion type='multiple'   className="space-y-3">
           {faqData.map((item) => (
             <AccordionItem className='rounded-2xl shadow overflow-hidden' key={item.value} value={item.value}>
               <AccordionTrigger>{item.question}</AccordionTrigger>
