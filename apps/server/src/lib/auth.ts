@@ -29,8 +29,14 @@ export const authOptions = {
       prompt: "select_account",
     },
   },
-
-  trustedOrigins: ["http://localhost:3000", "https://deathroit.vercel.app","https://deathroit.ravindertech.me"],
+  session: {
+    cookieCache: {
+      enabled: true,
+      maxAge: 5 * 60, // 5 minutes
+    },
+  }
+  ,
+  trustedOrigins: ["http://localhost:3000", "https://deathroit.vercel.app", "https://deathroit.ravindertech.me"],
   advanced: {
     crossSubDomainCookies: {
       enabled: false,
@@ -41,6 +47,7 @@ export const authOptions = {
     },
 
   },
+
   user: {
     additionalFields: userAdditionalFields,
   },
