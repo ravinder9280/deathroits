@@ -103,6 +103,7 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-custom-dark: var(--custom-dark);
+  --color-primary-dark: #8fa012;  
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
   --color-popover: var(--popover);

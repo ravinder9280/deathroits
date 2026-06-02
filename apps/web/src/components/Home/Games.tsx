@@ -10,7 +10,7 @@ const Games = () => {
             {/* Title */}
             <h2 className=' text-[40px] md:text-[64px] font-extrabold    mb-4 uppercase tracking-[-0.08em] leading-[0.95]  text-black'>
                 BUILT FOR THE  {" "}
-                <span className='text-primary'>GRINDERS</span>
+                <span className='text-primary-dark'>GRINDERS</span>
             </h2>
 
             {/* Description */}
