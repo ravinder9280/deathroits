@@ -4,8 +4,13 @@ import { emailOTP } from "better-auth/plugins/email-otp";
 import { prisma } from "../db/client";
 import { userAdditionalFields } from "./auth-user-fields";
 
+const isProduction = process.env.BETTER_AUTH_URL === 'https://api.deathroit.ravindertech.me';
+
 export const authOptions = {
-  baseURL: process.env.BETTER_AUTH_URL, // Express server URL
+  baseURL: {
+    allowedHosts: ["http://localhost:3000", "https://deathroit.vercel.app", "https://deathroit.ravindertech.me", "https://api.deathroit.ravindertech.me"],
+
+  }, // Express server URL
   database: prismaAdapter(prisma, { provider: "postgresql" }),
   emailAndPassword: { enabled: true },
   plugins: [
@@ -36,15 +41,16 @@ export const authOptions = {
     },
   }
   ,
-  trustedOrigins: ["http://localhost:3000", "https://deathroit.vercel.app", "https://deathroit.ravindertech.me"],
+  trustedOrigins: ["http://localhost:3000", "https://deathroit.vercel.app", "https://deathroit.ravindertech.me", "https://api.deathroit.ravindertech.me"],
+
   advanced: {
+    useSecureCookies: isProduction,
+
     crossSubDomainCookies: {
-      enabled: false,
+      enabled: isProduction,
+      domain: `deathroit.ravindertech.me`,
     },
-    defaultCookieAttributes: {
-      sameSite: "lax",
-      secure: true,
-    },
+
 
   },
 
