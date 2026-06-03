@@ -1,7 +1,7 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
-const PROTECTED_PREFIXES = ['/contests', '/interviews', '/interview','/tournaments'];
+const PROTECTED_PREFIXES = ['/tournaments'];
 const LOGIN_PATH = '/sign-in';
 
 function isProtectedPath(pathname: string) {
@@ -56,5 +56,5 @@ export  async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/contests/:path*', '/interviews/:path*', '/interview/:path*','/tournaments/:path*'],
+  matcher: ['/tournaments/:path*'],
 };

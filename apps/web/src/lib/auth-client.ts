@@ -8,6 +8,9 @@ import { userAdditionalFields } from "../../../server/src/lib/auth-user-fields";
 
 export const authClient: ReturnType<typeof createAuthClient> = createAuthClient({
   baseURL: process.env.NEXT_PUBLIC_API_ORIGIN,
+  fetchOptions: {
+    credentials: 'include',
+  },
   plugins: [
     emailOTPClient(),
     inferAdditionalFields({
