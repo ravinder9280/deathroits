@@ -5,7 +5,9 @@ const PROTECTED_PREFIXES = ['/tournaments'];
 const LOGIN_PATH = '/sign-in';
 
 function isProtectedPath(pathname: string) {
-  return PROTECTED_PREFIXES.some((p) => pathname === p || pathname.startsWith(`${p}/`));
+  return PROTECTED_PREFIXES.some(
+    (p) => pathname === p || pathname.startsWith(`${p}/`)
+  );
 }
 
 function buildLoginRedirect(req: NextRequest) {
@@ -15,42 +17,18 @@ function buildLoginRedirect(req: NextRequest) {
   return NextResponse.redirect(url);
 }
 
-async function hasSession(req: NextRequest) {
-  const backend = process.env.NEXT_PUBLIC_API_ORIGIN;
-  if (!backend) return false;
-
-  const cookie = req.headers.get('cookie') ?? '';
-  if (!cookie) return false;
-
-  try {
-    const res = await fetch(new URL('/api/auth/get-session', backend), {
-      method: 'GET',
-      headers: {
-        cookie,
-      },
-      cache: 'no-store',
-    });
-
-    if (!res.ok) return false;
-
-    const data = (await res.json()) as { user?: unknown } | null;
-    return Boolean(data && data.user);
-  } catch {
-    return false;
-  }
-}
-
-export  async function middleware(req: NextRequest) {
+export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  // Only enforce auth on protected app routes.
   if (!isProtectedPath(pathname)) return NextResponse.next();
+  if (pathname.startsWith(LOGIN_PATH)) return NextResponse.next();
 
-  // If already on login, never redirect-loop.
-  if (pathname === LOGIN_PATH || pathname.startsWith(`${LOGIN_PATH}/`)) return NextResponse.next();
+  // Directly check for the better-auth session cookie
+  const sessionCookie =
+    req.cookies.get('__Secure-better-auth.session_token') ??
+    req.cookies.get('better-auth.session_token'); // fallback for localhost (no __Secure- prefix)
 
-  const ok = await hasSession(req);
-  if (ok) return NextResponse.next();
+  if (sessionCookie?.value) return NextResponse.next();
 
   return buildLoginRedirect(req);
 }
