@@ -11,6 +11,7 @@ export const authOptions = {
     allowedHosts: ["http://localhost:3000","localhost:3001", "https://deathroit.vercel.app", "https://deathroit.ravindertech.me", "https://api.deathroit.ravindertech.me"],
 
   }, // Express server URL
+  
   database: prismaAdapter(prisma, { provider: "postgresql" }),
   emailAndPassword: { enabled: true },
   plugins: [
