@@ -139,6 +139,10 @@ model TournamentEntry {
 
   paymentId       String?
 
+  ign           String
+  
+  gameUid       String
+
   status          EntryStatus @default(PENDING_PAYMENT)
 
   joinedAt        DateTime @default(now())

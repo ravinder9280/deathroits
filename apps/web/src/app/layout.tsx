@@ -41,9 +41,9 @@ export default function RootLayout({
       lang="en"
       suppressHydrationWarning
     >
-      <Toaster richColors />
+      <Toaster richColors closeButton />
       <body className="font-body">
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem >
           <Navbar />
 
           {children}

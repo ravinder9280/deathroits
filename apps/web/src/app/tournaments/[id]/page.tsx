@@ -6,6 +6,7 @@ import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { ArrowRight, Calendar, CardSim, CreditCard, Gamepad, Trophy, Users } from "lucide-react";
+import JoinTournamentModal from "../_components/JoinTournamentModal";
 
 const TournamentDetailPage = () => {
     const { id } = useParams();
@@ -24,7 +25,9 @@ const TournamentDetailPage = () => {
     if (!tournamentData) return null;
 
     return (
-        <main className="bg-custom-dark min-h-screen relative">
+        <main className=" min-h-screen relative">
+            <div className="container bg-custom-dark mx-auto max-w-xl">
+
             <div className="py-[56px]">
                 <div className="relative">
                     <img
@@ -52,7 +55,8 @@ const TournamentDetailPage = () => {
                         <div className="flex flex-col items-center justify-center bg-muted p-2 rounded-md">
                             <CreditCard size={24} className="mb-2 text-primary"/>
                             <h3 className=" font-semibold font-sans">
-                                Free
+                            {tournamentData.entryFee > 0 ? `₹${tournamentData.entryFee}` : "Free"}
+
                             </h3>
                             <p className="text-muted-foreground text-xs">
                                 Entry Fee
@@ -136,7 +140,7 @@ const TournamentDetailPage = () => {
                             <span>
                             🥉
                             </span>
-                            1st: ₹20
+                            3rd: ₹20
 
                         </div>
                         </div>
@@ -155,12 +159,21 @@ const TournamentDetailPage = () => {
                 </div>
             </div>
 
-            <div className="z-30 fixed bottom-0 w-full">
+            <div className="z-30 fixed bottom-0 w-full max-w-xl">
+                <JoinTournamentModal>
+
                 <Button className="rounded-none w-full font-semibold" size="xl">
-                    Register Now
+
+                    {
+                        tournamentData.entryFee > 0 ? "Register Now" : "Register for Free"
+                    }
+                    
                     <ArrowRight/>
                 </Button>
+                        </JoinTournamentModal>
             </div>
+            </div>
+
         </main>
     );
 };

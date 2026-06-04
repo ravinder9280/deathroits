@@ -1283,6 +1283,8 @@ export const TournamentEntryScalarFieldEnum = {
   userId: 'userId',
   tournamentId: 'tournamentId',
   paymentId: 'paymentId',
+  ign: 'ign',
+  gameUid: 'gameUid',
   status: 'status',
   joinedAt: 'joinedAt'
 } as const
