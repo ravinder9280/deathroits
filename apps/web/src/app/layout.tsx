@@ -2,10 +2,10 @@ import "@monorepo/ui/globals.css";
 import Navbar from "@/components/Home/Navbar";
 import { Toaster } from 'sonner';
 import type { Metadata } from "next";
-
 import { JetBrains_Mono, Space_Grotesk } from "next/font/google";
 
 import { ThemeProvider } from "../providers/theme-provider";
+import { QueryProvider } from "@/providers/query-provider";
 const space_grotesk_display = Space_Grotesk({
   subsets: ["latin"],
   variable: "--display-family",
@@ -41,12 +41,16 @@ export default function RootLayout({
       lang="en"
       suppressHydrationWarning
     >
+      
       <Toaster richColors closeButton />
       <body className="font-body">
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem >
           <Navbar />
+          <QueryProvider>
+
 
           {children}
+          </QueryProvider>
         </ThemeProvider>
       </body>
     </html>

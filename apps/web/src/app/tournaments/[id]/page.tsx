@@ -3,26 +3,45 @@ import { Button } from "@monorepo/ui/components/button";
 import type { Tournament } from "@monorepo/types";
 import { format } from "date-fns";
 import { useParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { ArrowRight, Calendar, CardSim, CreditCard, Gamepad, Trophy, Users } from "lucide-react";
 import JoinTournamentModal from "../_components/JoinTournamentModal";
+import { useTournament } from "@/hooks/useTournament";
+
 
 const TournamentDetailPage = () => {
     const { id } = useParams();
-    const [tournamentData, setTournamentData] = useState<Tournament>();
 
-    useEffect(() => {
-        const getTournamentPageData = async () => {
-            const result = await axios.get(
-                `${process.env.NEXT_PUBLIC_API_BASE_URL}/tournament/${id}`
-            );
-            setTournamentData(result.data.tournament);
-        };
-        getTournamentPageData();
-    }, [id]);
-
-    if (!tournamentData) return null;
+    const {
+        data: tournament,
+        isLoading,
+        isError,
+        error,
+      } = useTournament(id as string);
+    
+      if (isLoading) {
+        return (
+          <div className="flex justify-center py-20">
+            <p>Loading tournament...</p>
+          </div>
+        );
+      }
+    
+      if (isError) {
+        return (
+          <div className="text-center py-20 text-red-500">
+            {(error as Error).message}
+          </div>
+        );
+      }
+    
+      if (!tournament) {
+        return (
+          <div className="text-center py-20">
+            Tournament not found
+          </div>
+        );
+      }
+    
 
     return (
         <main className=" min-h-screen relative">
@@ -33,7 +52,7 @@ const TournamentDetailPage = () => {
                     <img
                         alt=""
                         className="cursor-pointer w-full object-cover"
-                        src={tournamentData.bannerImage ?? "/game3.png"}
+                        src={tournament.bannerImage ?? "/game3.png"}
                     />
                     <div className="absolute left-0 bottom-0 p-2 bg-muted rounded-tr-md text-sm text-primary">
                        Registration Open
@@ -45,17 +64,17 @@ const TournamentDetailPage = () => {
 
                     <div className="mb-6">
 
-                        <h2 className="text-xl font-semibold">{tournamentData.title}</h2>
+                        <h2 className="text-xl font-semibold">{tournament.title}</h2>
 
                         <p className="text-sm text-muted-foreground line-clamp-5">
-                            {tournamentData.description}
+                            {tournament.description}
                         </p>
                     </div>
                     <div className="grid grid-cols-3 gap-2">
                         <div className="flex flex-col items-center justify-center bg-muted p-2 rounded-md">
                             <CreditCard size={24} className="mb-2 text-primary"/>
                             <h3 className=" font-semibold font-sans">
-                            {tournamentData.entryFee > 0 ? `₹${tournamentData.entryFee}` : "Free"}
+                            {tournament.entryFee > 0 ? `₹${tournament.entryFee}` : "Free"}
 
                             </h3>
                             <p className="text-muted-foreground text-xs">
@@ -67,7 +86,7 @@ const TournamentDetailPage = () => {
                         <div className="flex flex-col items-center justify-center bg-muted p-2 rounded-md">
                             <Trophy size={24} className="mb-2 text-primary"/>
                             <h3 className="text-green-500 font-semibold font-sans">
-                            ₹{tournamentData.prizePool}
+                            ₹{tournament.prizePool}
                             </h3>
                             <p className="text-muted-foreground text-xs">
                                 Prize Pool
@@ -78,7 +97,7 @@ const TournamentDetailPage = () => {
                         <div className="flex flex-col items-center justify-center bg-muted p-2 rounded-md">
                             <Users size={24} className="mb-2 text-primary"/>
                             <h3 className=" font-semibold font-sans">
-                                {tournamentData.joinedPlayersCount}/{tournamentData.maxPlayers}
+                                {tournament.joinedPlayersCount}/{tournament.maxPlayers}
                             </h3>
                             <p className="text-muted-foreground text-xs">
                                 Players
@@ -112,7 +131,7 @@ const TournamentDetailPage = () => {
                             Start At
                         </div>
                         <p>
-                            {format(new Date(tournamentData.startTime), "dd/MM/yyyy hh:mm a")}
+                            {format(new Date(tournament.startTime), "dd/MM/yyyy hh:mm a")}
                         </p>
                     </div>
                     </div>
@@ -151,7 +170,7 @@ const TournamentDetailPage = () => {
                     <div>
                         <h3 className="text-sm leading-relaxed">Rules</h3>
                         <p className="text-sm text-muted-foreground">
-                            {tournamentData.rules}
+                            {tournament.rules}
                         </p>
                     </div>
 
@@ -160,12 +179,12 @@ const TournamentDetailPage = () => {
             </div>
 
             <div className="z-30 fixed bottom-0 w-full max-w-xl">
-                <JoinTournamentModal>
+                <JoinTournamentModal  tournamentId={id as string}>
 
                 <Button className="rounded-none w-full font-semibold" size="xl">
-
+              
                     {
-                        tournamentData.entryFee > 0 ? "Register Now" : "Register for Free"
+                        tournament.entryFee > 0 ? "Join Now" : "Join for Free"
                     }
                     
                     <ArrowRight/>

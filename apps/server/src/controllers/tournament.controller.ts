@@ -102,7 +102,7 @@ export const joinTournament = async (
 
         if (existingEntry) {
             return res.status(409).json({
-                message: "Already joined tournament",
+                message: "You Have Already joined this tournament",
             });
         }
 
