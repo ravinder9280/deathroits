@@ -24,6 +24,10 @@ export const listTournament = asyncHandler(
 export const getTournamentById = asyncHandler(
     async (req: Request, res: Response) => {
         const { id } = req.params;
+        if (Array.isArray(id)) {
+            res.status(400).json({ error: "Invalid tournament ID" });
+            return;
+        }
 
         const tournament = await prisma.tournament.findUnique({
             where: { id },
@@ -52,6 +56,11 @@ export const joinTournament = async (
 
         }
         const { tournamentId } = req.params;
+        if (Array.isArray(tournamentId)) {
+            return res.status(400).json({
+                message: "Invalid tournament ID",
+            });
+        }
 
         const parsed = joinTournamentSchema.safeParse(req.body);
 
@@ -150,6 +159,7 @@ export const getMyTournaments = async (
 ) => {
   try {
     const userId = req.user?.id;
+    
 
     if (!userId) {
       return res.status(401).json({

@@ -103,16 +103,17 @@ const TournamentsPage = async () => {
 
 
                 </div>
-                <CardFooter className="p-6">
+                <div className="p-6 gap grid gap-4 grid-cols-2">
 
-                <Button  size={"sm"}>
+
+                <Button  size={"sm"} className="w-full">
                   Join Now
                   </Button>
-                <Button  size={"sm"}>
-                  Join Now
+                <Button  size={"sm"} variant={"outline"} className="w-full">
+                  View Details
                   </Button>
 
-                  </CardFooter>
+                  </div>
 
               </Card>
             </Link>
