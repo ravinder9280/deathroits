@@ -1,16 +1,17 @@
 import { Router } from "express";
-import { getTournamentById, listTournament,joinTournament } from "../controllers/tournament.controller";
+import { getTournamentById, listTournament,joinTournament, getMyTournaments } from "../controllers/tournament.controller";
 import { requireAuth } from "../middleware/auth.middleware";
 
 const router = Router();
 
 router.get("/", listTournament);
-router.get("/:id", getTournamentById);
+router.get("/me",requireAuth, getMyTournaments);
 router.post(
-    "/:tournamentId/join",
-    requireAuth,
-    joinTournament
-  );
+  "/:tournamentId/join",
+  requireAuth,
+  joinTournament
+);
+router.get("/:id", getTournamentById);
 
 
 

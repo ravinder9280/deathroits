@@ -18,6 +18,7 @@
     "@tanstack/react-query": "^5.99.2",
     "axios": "^1.15.0",
     "better-auth": "^1.6.11",
+    "boneyard-js": "^1.8.1",
     "class-variance-authority": "^0.7.1",
     "date-fns": "^4.1.0",
     "lucide-react": "^0.525.0",

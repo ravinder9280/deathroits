@@ -150,7 +150,7 @@ export default function JoinTournamentModal({
 
             <Input
               {...register("ign")}
-              placeholder="Enter IGN"
+              placeholder="Enter Your In Game Name"
             />
 
             {errors.ign && (
@@ -165,7 +165,7 @@ export default function JoinTournamentModal({
 
             <Input
               {...register("gameUid")}
-              placeholder="Enter UID"
+              placeholder="Enter Your Game UID"
             />
 
             {errors.gameUid && (
@@ -180,7 +180,7 @@ export default function JoinTournamentModal({
 
             <Input
               {...register("upiId")}
-              placeholder="Enter UPI ID"
+              placeholder="Enter Your UPI ID"
             />
 
             {errors.upiId && (

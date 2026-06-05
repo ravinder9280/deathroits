@@ -45,7 +45,7 @@ export const joinTournament = async (
     try {
         const userId = req.user?.id;
         if (!userId) {
-            return res.status(400).json({
+            return res.status(401).json({
                 message: "Unauthorized",
             });
 
@@ -140,4 +140,108 @@ export const joinTournament = async (
             message: "Something went wrong",
         });
     }
+};
+
+
+
+export const getMyTournaments = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const userId = req.user?.id;
+
+    if (!userId) {
+      return res.status(401).json({
+        error: "Unauthorized",
+      });
+    }
+
+    const status = req.query.status as
+      | "upcoming"
+      | "live"
+      | "completed"
+      | undefined;
+
+    const now = new Date();
+
+    let tournamentFilter = {};
+
+    if (status === "upcoming") {
+      tournamentFilter = {
+        startTime: {
+          gt: now,
+        },
+      };
+    }
+
+    if (status === "live") {
+      tournamentFilter = {
+        status: "ONGOING",
+      };
+    }
+
+    if (status === "completed") {
+      tournamentFilter = {
+        status: "COMPLETED",
+      };
+    }
+
+    const entries =
+      await prisma.tournamentEntry.findMany({
+        where: {
+          userId,
+          status: "CONFIRMED",
+
+          tournament: tournamentFilter,
+        },
+
+        include: {
+          tournament: true,
+        },
+
+        orderBy: {
+          joinedAt: "desc",
+        },
+      });
+
+    return res.status(200).json({
+      tournaments: entries.map((entry) => ({
+        id: entry.tournament.id,
+        title: entry.tournament.title,
+        bannerImage: entry.tournament.bannerImage,
+
+        game: entry.tournament.game,
+
+        startTime: entry.tournament.startTime,
+
+        prizePool: entry.tournament.prizePool,
+
+        entryFee: entry.tournament.entryFee,
+
+        joinedPlayersCount:
+          entry.tournament.joinedPlayersCount,
+
+        maxPlayers:
+          entry.tournament.maxPlayers,
+
+        tournamentStatus:
+          entry.tournament.status,
+
+        registrationStatus:
+          entry.status,
+
+        joinedAt: entry.joinedAt,
+
+        ign: entry.ign,
+        gameUid: entry.gameUid,
+      })),
+    });
+  } catch (error) {
+    console.error(error);
+
+    return res.status(500).json({
+      error: "Internal Server Error",
+    });
+  }
 };

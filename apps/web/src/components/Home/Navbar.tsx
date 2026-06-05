@@ -82,15 +82,13 @@ const Navbar = () => {
     >
       <div className="container mx-auto px-4 md:px-6 ">
         <div className="flex items-center justify-between">
-          {/* Logo */}
           <div className="flex items-center gap-2">
-            {/* Mobile Menu */}
             <Sheet>
               <SheetTrigger className="p-2 rounded-full cursor-pointer md:hidden hover:bg-accent/40">
 
-               
-                  <Menu  className="size-5" />
-                  <span className="sr-only">Toggle navigation menu</span>
+
+                <Menu className="size-5" />
+                <span className="sr-only">Toggle navigation menu</span>
               </SheetTrigger>
 
               <SheetContent side={'left'} >
@@ -124,11 +122,10 @@ const Navbar = () => {
 
 
             <Link className="" href={'/'} >
-              <img alt="" height={24} src={"/logo.svg"} width={150} className="h-[24px] w-auto" />
+              <img alt="" height={30} src={"/logo.svg"} width={150} className="h-[30px] w-auto" />
             </Link>
           </div>
 
-          {/* Desktop Navigation */}
           <nav className=" hidden md:flex items-center justify-between gap-8">
             {NavbarItems.map((item, i) => (
               <Link
@@ -158,7 +155,6 @@ const Navbar = () => {
             </div>
           )}
 
-          {/* Mobile Toggle */}
 
         </div>
       </div>

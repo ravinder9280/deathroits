@@ -15,7 +15,7 @@ export default function Page() {
         <div
           className="
       absolute inset-0
-      bg-[url('/bg.svg')]
+      bg-[url('/bg.avif')]
       bg-cover
       bg-no-repeat
       max-h-[95vh]

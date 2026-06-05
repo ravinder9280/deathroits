@@ -16,6 +16,7 @@ import { LogOutIcon, Shield, Trophy, User2 } from "lucide-react";
 import React from "react";
 import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
+import Link from "next/link";
 
 const UserProfile = ({ isMobile = false }: { isMobile?: boolean }) => {
   const {
@@ -50,12 +51,16 @@ const UserProfile = ({ isMobile = false }: { isMobile?: boolean }) => {
           Profile
         </DropdownMenuItem>
         <DropdownMenuItem
+        asChild
           className=""
           onClick={async () => {
           }}
+         
         >
+           <Link href={'/my-tournaments'}>
           <Trophy />
           My Tournaments
+           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem
           className=""

@@ -41,7 +41,11 @@ export default function RootLayout({
       lang="en"
       suppressHydrationWarning
     >
-      
+       <link
+    rel="preload"
+    href="/bg.svg"
+    as="image"
+  />
       <Toaster richColors closeButton />
       <body className="font-body">
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem >

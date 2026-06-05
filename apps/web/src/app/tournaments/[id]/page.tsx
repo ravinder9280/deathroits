@@ -6,6 +6,7 @@ import { useParams } from "next/navigation";
 import { ArrowRight, Calendar, CardSim, CreditCard, Gamepad, Trophy, Users } from "lucide-react";
 import JoinTournamentModal from "../_components/JoinTournamentModal";
 import { useTournament } from "@/hooks/useTournament";
+import TournamentDetailSkeleton from "../_components/TournamentDetailSkeleton";
 
 
 const TournamentDetailPage = () => {
@@ -20,9 +21,7 @@ const TournamentDetailPage = () => {
     
       if (isLoading) {
         return (
-          <div className="flex justify-center py-20">
-            <p>Loading tournament...</p>
-          </div>
+          <TournamentDetailSkeleton/>
         );
       }
     
