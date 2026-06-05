@@ -28,7 +28,7 @@ type TournamentStatus =
   | "live"
   | "completed";
 
-export const useMyTournaments = (
+const useMyTournaments = (
   status: TournamentStatus
 ) => {
   return useQuery({

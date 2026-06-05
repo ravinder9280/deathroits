@@ -4,6 +4,7 @@ import { Progress } from "@monorepo/ui/components/progress";
 import Link from "next/link";
 import React from "react";
 import type {TournamentCard} from "@monorepo/types"
+import { Button } from "@monorepo/ui/components/button";
 const TournamentsPage = async () => {
 
 
@@ -102,9 +103,16 @@ const TournamentsPage = async () => {
 
 
                 </div>
-                {/* <Button className=" rounded-t-none rounded-b-xl" size={"xl"}>
+                <CardFooter className="p-6">
+
+                <Button  size={"sm"}>
                   Join Now
-                </Button> */}
+                  </Button>
+                <Button  size={"sm"}>
+                  Join Now
+                  </Button>
+
+                  </CardFooter>
 
               </Card>
             </Link>
