@@ -5,19 +5,24 @@ import { Label } from "@monorepo/ui/components/label";
 import Image from "next/image";
 import Link from "next/link";
 
-import { authClient } from "@/lib/auth-client";
+import { signIn } from "@/lib/auth-client";
 import { useState } from "react";
 import { toast } from "sonner";
+import { Spinner } from "@monorepo/ui/components/spinner";
+import { useSearchParams } from "next/navigation";
 export default function Page() {
   const [loading, setLoading] = useState(false)
+  const searchParams = useSearchParams();
+  
+  const redirect = searchParams.get("redirect") ?? "/tournaments";
 
   const handleSignIn = async () => {
 
 
 
 
-    const { data, error } = await authClient.signIn.social({
-      callbackURL: process.env.NEXT_PUBLIC_URL+"/tournaments",
+    const { data, error } = await signIn.social({
+      callbackURL: process.env.NEXT_PUBLIC_URL+redirect,
 
       provider: "google",
 
@@ -83,12 +88,16 @@ export default function Page() {
             }
             <Image alt="" height={16} src={"/google-logo.svg"} width={16} />
             Continue with Google
+            {
+              loading&& <Spinner/>
+            }
           </Button>
           <div className="mx-auto text-muted-foreground">
             Don't have an account?{" "}
             <Link className="text-foreground hover:underline" href={"/sign-up"}>
               Sign up
             </Link>
+           
           </div>
         </div>
       </div>

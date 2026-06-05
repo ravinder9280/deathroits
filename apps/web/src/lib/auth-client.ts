@@ -19,3 +19,5 @@ export const authClient: ReturnType<typeof createAuthClient> = createAuthClient(
     }),
   ],
 });
+
+export const { signIn, signOut, useSession, signUp } = authClient;
