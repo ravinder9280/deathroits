@@ -52,3 +52,61 @@ export async function requireOnboarded(
   next();
 }
 
+export const requireOrganizer = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  const user = req.user;
+  if (!user) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  const dbUser = await prisma.user.findUnique({
+    where: { id: user.id },
+    select: { role: true },
+  });
+
+  if (!dbUser || (dbUser.role !== "ORGANIZER" && dbUser.role !== "ADMIN")) {
+    return res.status(403).json({ error: "Organizer access required" });
+  }
+
+  next();
+};
+
+export const requireTournamentOwner = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  const userId = req.user?.id;
+  if (!userId) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  const tournamentId = req.params.id || req.params.tournamentId;
+  if (!tournamentId) {
+    return res.status(400).json({ error: "Tournament ID is required" });
+  }
+
+  const tournament = await prisma.tournament.findUnique({
+    where: { id: tournamentId },
+    select: { organizerId: true },
+  });
+
+  if (!tournament) {
+    return res.status(404).json({ error: "Tournament not found" });
+  }
+
+  const dbUser = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { role: true },
+  });
+
+  // ADMIN can access any tournament, ORGANIZER only their own
+  if (dbUser?.role === "ADMIN" || tournament.organizerId === userId) {
+    return next();
+  }
+
+  return res.status(403).json({ error: "Not authorized for this tournament" });
+};

@@ -36,6 +36,8 @@ export const authOptions = {
     },
   },
   session: {
+    expiresIn: 60 * 60 * 24 * 30, // 30 days
+    updateAge: 60 * 60 * 24,  
     cookieCache: {
       enabled: true,
       maxAge: 5 * 60, // 5 minutes

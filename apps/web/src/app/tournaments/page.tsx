@@ -3,8 +3,11 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@monorepo/
 import { Progress } from "@monorepo/ui/components/progress";
 import Link from "next/link";
 import React from "react";
-import type {TournamentCard} from "@monorepo/types"
+import type { TournamentCard } from "@monorepo/types"
 import { Button } from "@monorepo/ui/components/button";
+import JoinTournamentModal from "./_components/JoinTournamentModal";
+import { Calendar } from "lucide-react";
+import { differenceInDays, format, formatDistanceToNow } from "date-fns";
 const TournamentsPage = async () => {
 
 
@@ -30,11 +33,10 @@ const TournamentsPage = async () => {
         </div>
         <div className=" pt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-8">
 
-          {tournaments.map((t:TournamentCard) => {
+          {tournaments.map((t: TournamentCard) => {
             return (
-            <Link href={`/tournaments/${t.id}`} className="" >
-            <Card
-                className="p-0 overflow-hidden border-white/10 backdrop-blur-xl bg-card/50 gap-0 h-full hover:border-white/50 cursor-pointer"
+              <Card
+                className="p-0 overflow-hidden border-white/10 backdrop-blur-xl bg-card/50 gap-0 h-full hover:border-white/50"
                 key={t.id}
 
               >
@@ -57,15 +59,16 @@ const TournamentsPage = async () => {
 
                     <div className=" flex items-center justify-between text-sm ">
 
-                      <p className="font-medium text-muted-foreground">
-                        {new Date(t.startTime).toLocaleString("en-IN", {
-                          dateStyle: "medium",
-                          timeStyle: "short",
-                        })}
-                      </p>
-                      <Badge variant={'secondary'}  >
-                        in 2 days
-                      </Badge>
+                      <div className="flex items-center gap-2 font-medium text-muted-foreground text-sm">
+                        <Calendar className="size-4" />
+                        {format(new Date(t.startTime), "dd MMM yyyy, hh:mm a")}
+                      </div>
+
+                      {differenceInDays(new Date(t.startTime), new Date()) < 10 && (
+                        <Badge variant={'secondary'}>
+                          {formatDistanceToNow(new Date(t.startTime), { addSuffix: true })}
+                        </Badge>
+                      )}
                     </div>
                     <div className=" font-semibold truncate">
                       {t.title}
@@ -105,18 +108,22 @@ const TournamentsPage = async () => {
                 </div>
                 <div className="p-6 gap grid gap-4 grid-cols-2">
 
+                  <JoinTournamentModal tournamentId={t.id} >
 
-                <Button  size={"sm"} className="w-full">
-                  Join Now
-                  </Button>
-                <Button  size={"sm"} variant={"outline"} className="w-full">
-                  View Details
+                    <Button size={"sm"} className="w-full">
+                      Join Now
+                    </Button>
+                  </JoinTournamentModal>
+                  <Button size={"sm"} variant={"outline"} className="w-full" asChild>
+                    <Link href={`/tournaments/${t.id}`} className="" >
+
+                      View Details
+                    </Link>
                   </Button>
 
-                  </div>
+                </div>
 
               </Card>
-            </Link>
             );
           })}
 

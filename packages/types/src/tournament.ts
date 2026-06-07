@@ -3,6 +3,7 @@ import type { TournamentStatus } from "./enums";
 
 export type Tournament = {
   id: string;
+  organizerId: string | null;
   title: string;
   description: string | null;
   game: string;

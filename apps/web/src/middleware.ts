@@ -1,7 +1,7 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
-
-const PROTECTED_PREFIXES = ['/my-tournaments'];
+const AUTH_PATHS = ['/sign-in', '/sign-up'];
+const PROTECTED_PREFIXES = ['/my-tournaments', '/organizer'];
 const LOGIN_PATH = '/sign-in';
 
 function isProtectedPath(pathname: string) {
@@ -17,22 +17,27 @@ function buildLoginRedirect(req: NextRequest) {
   return NextResponse.redirect(url);
 }
 
+
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  if (!isProtectedPath(pathname)) return NextResponse.next();
-  if (pathname.startsWith(LOGIN_PATH)) return NextResponse.next();
-
-  // Directly check for the better-auth session cookie
   const sessionCookie =
     req.cookies.get('__Secure-better-auth.session_token') ??
-    req.cookies.get('better-auth.session_token'); // fallback for localhost (no __Secure- prefix)
+    req.cookies.get('better-auth.session_token');
 
+  if (sessionCookie?.value && AUTH_PATHS.some(p => pathname === p || pathname.startsWith(`${p}/`))) {
+    const url = req.nextUrl.clone();
+    url.pathname = '/tournaments';
+    url.search = '';
+    return NextResponse.redirect(url);
+  }
+
+  if (!isProtectedPath(pathname)) return NextResponse.next();
   if (sessionCookie?.value) return NextResponse.next();
-
   return buildLoginRedirect(req);
 }
 
 export const config = {
-  matcher: ['/my-tournaments'],
+  matcher: ['/my-tournaments', '/organizer/:path*', '/sign-in', '/sign-up'],
 };
+

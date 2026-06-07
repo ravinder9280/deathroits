@@ -146,6 +146,7 @@ export type VerificationScalarFieldEnum = (typeof VerificationScalarFieldEnum)[k
 
 export const TournamentScalarFieldEnum = {
   id: 'id',
+  organizerId: 'organizerId',
   title: 'title',
   description: 'description',
   game: 'game',

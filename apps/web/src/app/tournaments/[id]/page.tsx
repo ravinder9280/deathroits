@@ -5,6 +5,7 @@ import { format } from "date-fns";
 import { useParams } from "next/navigation";
 import { ArrowRight, Calendar, CardSim, CreditCard, Gamepad, Trophy, Users } from "lucide-react";
 import JoinTournamentModal from "../_components/JoinTournamentModal";
+import RoomDetailsCard from "../_components/RoomDetailsCard";
 import { useTournament } from "@/hooks/useTournament";
 import TournamentDetailSkeleton from "../_components/TournamentDetailSkeleton";
 
@@ -43,8 +44,8 @@ const TournamentDetailPage = () => {
     
 
     return (
-        <main className=" min-h-screen relative">
-            <div className="container bg-custom-dark mx-auto max-w-xl">
+        <main className=" min-h-screen relative bg-custom-dark">
+            <div className="container md:border border-white/10 mx-auto max-w-xl">
 
             <div className="py-[56px]">
                 <div className="relative">
@@ -58,7 +59,10 @@ const TournamentDetailPage = () => {
                     </div>
                 </div>
 
-                <div className="container mx-auto px-4 py-4 space-y-4 ">
+                <div className="container mx-auto px-4 py-4 space-y-4 "> 
+                    {tournament.activeMatchId && (
+                        <RoomDetailsCard matchId={tournament.activeMatchId} />
+                    )}
                     <div className="">
 
                     <div className="mb-6">
@@ -172,6 +176,8 @@ const TournamentDetailPage = () => {
                             {tournament.rules}
                         </p>
                     </div>
+
+                   
 
                    
                 </div>

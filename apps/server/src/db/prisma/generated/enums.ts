@@ -11,6 +11,7 @@
 
 export const UserRole = {
   PLAYER: 'PLAYER',
+  ORGANIZER: 'ORGANIZER',
   ADMIN: 'ADMIN'
 } as const
 
@@ -20,7 +21,7 @@ export type UserRole = (typeof UserRole)[keyof typeof UserRole]
 export const TournamentStatus = {
   DRAFT: 'DRAFT',
   REGISTRATION_OPEN: 'REGISTRATION_OPEN',
-  FULL: 'FULL',
+  REGISTRATION_CLOSED: 'REGISTRATION_CLOSED',
   ONGOING: 'ONGOING',
   COMPLETED: 'COMPLETED',
   CANCELLED: 'CANCELLED'

@@ -31,6 +31,18 @@ export const getTournamentById = asyncHandler(
 
         const tournament = await prisma.tournament.findUnique({
             where: { id },
+            include: {
+                matches: {
+                    orderBy: { roundNumber: "asc" },
+                    take: 1,
+                    select: {
+                        id: true,
+                        roundNumber: true,
+                        scheduledAt: true,
+                        status: true,
+                    },
+                },
+            },
         });
 
         if (!tournament) {
@@ -38,7 +50,13 @@ export const getTournamentById = asyncHandler(
             return;
         }
 
-        res.json({ tournament });
+        res.json({
+            tournament: {
+                ...tournament,
+                activeMatchId: tournament.matches[0]?.id ?? null,
+                matches: undefined,
+            },
+        });
     },
 );
 

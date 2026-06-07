@@ -40,12 +40,12 @@ bg-red-400
         </Badge>
         <div className="text-center max-w-2xl  ">
           <h1 className=" text-5xl md:text-7xl font-bold mb-6 leading-[0.90]">
-          Where Champions Are Made
-          <br />
-          <span className="text-primary">
+            Where Champions Are Made
+            <br />
+            <span className="text-primary">
 
-           Legends Compete.
-          </span>
+              Legends Compete.
+            </span>
           </h1>
           <p className=" md:text-xl text-zinc-800 dark:text-zinc-300 font-medium leading-[1.6]">
             Join custom tournaments, compete with top players, track live
@@ -54,7 +54,12 @@ bg-red-400
           </p>
         </div>
         <div className="flex flex-col md:flex-row justify-center mt-8 gap-2">
-          <Button size={"xl"}>Start Competing</Button>
+          <Button size={"xl"}>
+            <Link href={"/sign-in"}>
+              Start Competing
+
+            </Link>
+          </Button>
           <Button
             asChild
             className=" border-white/20"
