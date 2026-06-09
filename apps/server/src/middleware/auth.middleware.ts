@@ -3,6 +3,7 @@ import { fromNodeHeaders } from "better-auth/node";
 import type { NextFunction, Request, Response } from "express";
 import { prisma } from "../db/client";
 import { auth } from "../lib/auth";
+import { z } from "zod";
 
 export const requireAuth = async (
   req: Request,
@@ -74,6 +75,15 @@ export const requireOrganizer = async (
   next();
 };
 
+const requireTournamentOwnerSchema = z.object({
+  params: z.object({
+    id: z.string().min(1).optional(),
+    tournamentId: z.string().min(1).optional(),
+  }).refine((params) => !!params.id || !!params.tournamentId, {
+    message: "Either id or tournamentId must be provided in params",
+  }),
+});
+
 export const requireTournamentOwner = async (
   req: Request,
   res: Response,
@@ -84,7 +94,18 @@ export const requireTournamentOwner = async (
     return res.status(401).json({ error: "Unauthorized" });
   }
 
-  const tournamentId = req.params.id || req.params.tournamentId;
+  const parsed = requireTournamentOwnerSchema.safeParse({
+    params: req.params,
+  });
+
+  if (!parsed.success) {
+    return res.status(400).json({
+      error: "Invalid input",
+      details: parsed.error.flatten().fieldErrors,
+    });
+  }
+
+  const tournamentId = parsed.data.params.id || parsed.data.params.tournamentId;
   if (!tournamentId) {
     return res.status(400).json({ error: "Tournament ID is required" });
   }

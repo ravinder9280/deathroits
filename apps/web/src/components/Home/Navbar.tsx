@@ -27,7 +27,7 @@ const NavbarItems = [
   },
   {
     label: "Leaderboard",
-    link: "/about",
+    link: "/leaderboard",
     icon: Building
   },
   {
@@ -46,6 +46,17 @@ const Navbar = () => {
     isPending, //loading state
     refetch, //refetch the session
   } = authClient.useSession();
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 10);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+
 
   return (
     <header
@@ -125,7 +136,7 @@ const Navbar = () => {
                 size={"lg"}
                 variant={"outline"}
               >
-                <Link href={"/sign-in"}>Login</Link>
+                <Link href={"/sign-in"}>Sign in</Link>
               </Button>
               <Button className=" font-semibold hidden rounded-full md:block" size={"lg"}>
                 <Link href={"/sign-up"}>Sign Up</Link>

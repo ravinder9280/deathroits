@@ -6,13 +6,47 @@ import { z } from "zod";
 // ─── Validation Schemas ──────────────────────────────────────────
 
 export const updateRoomSchema = z.object({
-  roomId: z.string().min(1, "Room ID is required").max(50),
-  roomPassword: z.string().min(1, "Password is required").max(50),
+  params: z.object({
+    matchId: z.string().min(1, "Match ID is required"),
+  }),
+  body: z.object({
+    roomId: z.string().min(1, "Room ID is required").max(50),
+    roomPassword: z.string().min(1, "Password is required").max(50),
+  }),
 });
 
 export const createMatchSchema = z.object({
-  roundNumber: z.coerce.number().int().positive(),
-  scheduledAt: z.string().datetime(),
+  params: z.object({
+    id: z.string().min(1, "Tournament ID is required"),
+  }),
+  body: z.object({
+    roundNumber: z.coerce.number().int().positive(),
+    scheduledAt: z.string().datetime(),
+  }),
+});
+
+export const getMatchesSchema = z.object({
+  params: z.object({
+    id: z.string().min(1, "Tournament ID is required"),
+  }),
+});
+
+export const getMatchRoomSchema = z.object({
+  params: z.object({
+    matchId: z.string().min(1, "Match ID is required"),
+  }),
+});
+
+export const publishMatchRoomSchema = z.object({
+  params: z.object({
+    matchId: z.string().min(1, "Match ID is required"),
+  }),
+});
+
+export const getParticipantsSchema = z.object({
+  params: z.object({
+    id: z.string().min(1, "Tournament ID is required"),
+  }),
 });
 
 // ─── Match CRUD ──────────────────────────────────────────────────
@@ -20,7 +54,19 @@ export const createMatchSchema = z.object({
 /** GET /tournament/:id/matches — list matches for a tournament (organizer) */
 export const getMatches = asyncHandler(
   async (req: Request, res: Response) => {
-    const { id } = req.params;
+    const parsed = getMatchesSchema.safeParse({
+      params: req.params,
+    });
+
+    if (!parsed.success) {
+      res.status(400).json({
+        error: "Invalid input",
+        details: parsed.error.flatten().fieldErrors,
+      });
+      return;
+    }
+
+    const { id } = parsed.data.params;
 
     const matches = await prisma.match.findMany({
       where: { tournamentId: id },
@@ -34,9 +80,10 @@ export const getMatches = asyncHandler(
 /** POST /tournament/:id/match — create a single match for a tournament */
 export const createMatch = asyncHandler(
   async (req: Request, res: Response) => {
-    const { id } = req.params;
-
-    const parsed = createMatchSchema.safeParse(req.body);
+    const parsed = createMatchSchema.safeParse({
+      params: req.params,
+      body: req.body,
+    });
     if (!parsed.success) {
       res.status(400).json({
         error: "Invalid input",
@@ -45,7 +92,8 @@ export const createMatch = asyncHandler(
       return;
     }
 
-    const { roundNumber, scheduledAt } = parsed.data;
+    const { id } = parsed.data.params;
+    const { roundNumber, scheduledAt } = parsed.data.body;
 
     // Prevent duplicate round numbers
     const existing = await prisma.match.findFirst({
@@ -74,7 +122,18 @@ export const createMatch = asyncHandler(
 /** GET /tournament/match/:matchId/room — get room details (player or organizer) */
 export const getMatchRoom = asyncHandler(
   async (req: Request, res: Response) => {
-    const { matchId } = req.params;
+    const parsed = getMatchRoomSchema.safeParse({
+      params: req.params,
+    });
+    if (!parsed.success) {
+      res.status(400).json({
+        error: "Invalid input",
+        details: parsed.error.flatten().fieldErrors,
+      });
+      return;
+    }
+
+    const { matchId } = parsed.data.params;
     const userId = req.user?.id;
 
     if (!userId) {
@@ -85,11 +144,11 @@ export const getMatchRoom = asyncHandler(
     const match = await prisma.match.findUnique({
       where: { id: matchId },
       include: {
-        tournament: { select: { id: true, organizerId: true, status: true } },
+        tournament: true,
       },
     });
 
-    if (!match) {
+    if (!match || !match.tournament) {
       res.status(404).json({ error: "Match not found" });
       return;
     }
@@ -162,9 +221,10 @@ export const getMatchRoom = asyncHandler(
 /** PATCH /tournament/match/:matchId/room — save room credentials (draft) */
 export const updateMatchRoom = asyncHandler(
   async (req: Request, res: Response) => {
-    const { matchId } = req.params;
-
-    const parsed = updateRoomSchema.safeParse(req.body);
+    const parsed = updateRoomSchema.safeParse({
+      params: req.params,
+      body: req.body,
+    });
     if (!parsed.success) {
       res.status(400).json({
         error: "Invalid input",
@@ -173,12 +233,14 @@ export const updateMatchRoom = asyncHandler(
       return;
     }
 
+    const { matchId } = parsed.data.params;
+
     const match = await prisma.match.findUnique({
       where: { id: matchId },
-      include: { tournament: { select: { status: true } } },
+      include: { tournament: true },
     });
 
-    if (!match) {
+    if (!match || !match.tournament) {
       res.status(404).json({ error: "Match not found" });
       return;
     }
@@ -193,7 +255,7 @@ export const updateMatchRoom = asyncHandler(
       return;
     }
 
-    const { roomId, roomPassword } = parsed.data;
+    const { roomId, roomPassword } = parsed.data.body;
 
     const updated = await prisma.match.update({
       where: { id: matchId },
@@ -207,14 +269,25 @@ export const updateMatchRoom = asyncHandler(
 /** POST /tournament/match/:matchId/room/publish — make room visible to players */
 export const publishMatchRoom = asyncHandler(
   async (req: Request, res: Response) => {
-    const { matchId } = req.params;
+    const parsed = publishMatchRoomSchema.safeParse({
+      params: req.params,
+    });
+    if (!parsed.success) {
+      res.status(400).json({
+        error: "Invalid input",
+        details: parsed.error.flatten().fieldErrors,
+      });
+      return;
+    }
+
+    const { matchId } = parsed.data.params;
 
     const match = await prisma.match.findUnique({
       where: { id: matchId },
-      include: { tournament: { select: { status: true } } },
+      include: { tournament: true },
     });
 
-    if (!match) {
+    if (!match || !match.tournament) {
       res.status(404).json({ error: "Match not found" });
       return;
     }
@@ -245,14 +318,23 @@ export const publishMatchRoom = asyncHandler(
 /** GET /tournament/:id/participants — list confirmed entries (organizer) */
 export const getParticipants = asyncHandler(
   async (req: Request, res: Response) => {
-    const { id } = req.params;
+    const parsed = getParticipantsSchema.safeParse({
+      params: req.params,
+    });
+    if (!parsed.success) {
+      res.status(400).json({
+        error: "Invalid input",
+        details: parsed.error.flatten().fieldErrors,
+      });
+      return;
+    }
+
+    const { id } = parsed.data.params;
 
     const entries = await prisma.tournamentEntry.findMany({
       where: { tournamentId: id, status: "CONFIRMED" },
       include: {
-        user: {
-          select: { id: true, name: true, image: true, ign: true },
-        },
+        user: true,
       },
       orderBy: { joinedAt: "asc" },
     });
