@@ -33,5 +33,10 @@
     "prettier": "^3.6.2",
     "typescript": "^5.9.2"
   },
+  "pnpm": {
+    "overrides": {
+      "zod": "4.1.12"
+    }
+  },
   "packageManager": "pnpm@9.12.1"
 }
