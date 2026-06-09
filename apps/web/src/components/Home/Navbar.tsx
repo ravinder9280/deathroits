@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@monorepo/ui/components/button";
-import { Sheet, SheetContent, SheetTrigger } from "@monorepo/ui/components/sheet";
+import { Sheet, SheetClose, SheetContent, SheetTrigger } from "@monorepo/ui/components/sheet";
 import { cn } from "@monorepo/utils/styles";
 import { Building, CalendarPlus, Ellipsis, Home, icons, Menu, Trophy, X } from "lucide-react";
 import Image from "next/image";
@@ -46,30 +46,6 @@ const Navbar = () => {
     isPending, //loading state
     refetch, //refetch the session
   } = authClient.useSession();
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 10);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  const scrollToSection = (sectionId: string) => {
-
-    const element = document.getElementById(sectionId);
-
-    if (element) {
-      const offsetTop =
-        element.getBoundingClientRect().top + window.pageYOffset;
-
-      window.scrollTo({
-        behavior: "smooth",
-        top: offsetTop,
-      });
-    }
-  };
 
   return (
     <header
@@ -100,6 +76,8 @@ const Navbar = () => {
                   </Link>
                   <nav className="flex flex-col gap-2">
                     {NavbarItems.map((item) => (
+                      <SheetClose asChild>
+
                       <Link href={item.link}
                         className={cn(
                           "inline-flex items-center whitespace-nowrap text-sm font-medium transition-colors outline-offset-2 focus-visible:outline-2 focus-visible:outline-ring/70 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 h-10 rounded-lg px-8 justify-start pl-2",
@@ -108,11 +86,11 @@ const Navbar = () => {
                             : "hover:bg-accent "
                         )}
                         key={item.label}
-                        onClick={() => scrollToSection(item.link)}
                       >
                         {<item.icon className="mr-2 size-4" />}
                         {item.label}
                       </Link>
+                      </SheetClose>
                     ))}
 
                   </nav>

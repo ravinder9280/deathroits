@@ -1,6 +1,8 @@
 import { prisma } from "../db/client";
 import { asyncHandler } from "../utils/async-handler";
 import type { Request, Response } from "express";
+import { fromNodeHeaders } from "better-auth/node";
+import { auth } from "../lib/auth";
 
 import { z } from "zod";
 
@@ -13,10 +15,41 @@ export const joinTournamentSchema = z.object({
 
 export const listTournament = asyncHandler(
     async (req: Request, res: Response) => {
+        const tournaments = await prisma.tournament.findMany({
+            where: { status: { not: "DRAFT" } },
+        });
 
+        try {
+            const session = await auth.api.getSession({
+                headers: fromNodeHeaders(req.headers),
+            });
 
+            if (session?.user) {
+                const userId = session.user.id;
+                const entries = await prisma.tournamentEntry.findMany({
+                    where: {
+                        userId,
+                        tournamentId: { in: tournaments.map((t) => t.id) },
+                    },
+                    select: {
+                        tournamentId: true,
+                    },
+                });
 
-        const tournaments = await prisma.tournament.findMany()
+                const joinedSet = new Set(entries.map((e) => e.tournamentId));
+
+                const decorated = tournaments.map((t) => ({
+                    ...t,
+                    isJoined: joinedSet.has(t.id),
+                }));
+
+                res.json({ tournaments: decorated });
+                return;
+            }
+        } catch {
+            // Fall through if auth check fails
+        }
+
         res.json({ tournaments });
     },
 );
@@ -40,6 +73,7 @@ export const getTournamentById = asyncHandler(
                         roundNumber: true,
                         scheduledAt: true,
                         status: true,
+                        credentialsVisibleAt: true,
                     },
                 },
             },
@@ -50,12 +84,76 @@ export const getTournamentById = asyncHandler(
             return;
         }
 
+        // Hide DRAFT tournaments from non-organizers
+        if (tournament.status === "DRAFT") {
+            // Attempt auth to check if organizer
+            const session = await auth.api.getSession({
+                headers: fromNodeHeaders(req.headers),
+            }).catch(() => null);
+
+            const isOwner = session?.user?.id === tournament.organizerId;
+            if (!isOwner) {
+                res.status(404).json({ error: "Tournament not found" });
+                return;
+            }
+        }
+
+        const activeMatch = tournament.matches[0] ?? null;
+
+        // Build userState if the user is authenticated
+        let userState = null;
+
+        try {
+            const session = await auth.api.getSession({
+                headers: fromNodeHeaders(req.headers),
+            });
+
+            if (session?.user) {
+                const userId = session.user.id;
+
+                const entry = await prisma.tournamentEntry.findUnique({
+                    where: {
+                        userId_tournamentId: { userId, tournamentId: id },
+                    },
+                    select: { status: true },
+                });
+
+                const isRegistered = entry?.status === "CONFIRMED";
+
+                const canJoin =
+                    tournament.status === "REGISTRATION_OPEN" &&
+                    !isRegistered &&
+                    tournament.joinedPlayersCount < tournament.maxPlayers;
+
+                const roomPublished =
+                    !!activeMatch?.credentialsVisibleAt &&
+                    new Date(activeMatch.credentialsVisibleAt) <= new Date();
+
+                const canViewRoom =
+                    isRegistered &&
+                    tournament.status === "ONGOING" &&
+                    roomPublished;
+
+                userState = {
+                    isAuthenticated: true,
+                    isRegistered,
+                    registrationStatus: entry?.status ?? null,
+                    canJoin,
+                    canViewRoom,
+                    roomPublished,
+                };
+            }
+        } catch {
+            // Auth check failed — treat as unauthenticated
+        }
+
         res.json({
             tournament: {
                 ...tournament,
-                activeMatchId: tournament.matches[0]?.id ?? null,
+                activeMatchId: activeMatch?.id ?? null,
                 matches: undefined,
             },
+            userState,
         });
     },
 );
@@ -140,7 +238,7 @@ export const joinTournament = async (
                     tournamentId,
                     ign,
                     gameUid,
-                    paymentId:upiId,
+                    paymentId: upiId,
                     status: "CONFIRMED",
                 },
             });
@@ -172,104 +270,108 @@ export const joinTournament = async (
 
 
 export const getMyTournaments = async (
-  req: Request,
-  res: Response
+    req: Request,
+    res: Response
 ) => {
-  try {
-    const userId = req.user?.id;
-    
+    try {
+        const userId = req.user?.id;
 
-    if (!userId) {
-      return res.status(401).json({
-        error: "Unauthorized",
-      });
+
+        if (!userId) {
+            return res.status(401).json({
+                error: "Unauthorized",
+            });
+        }
+
+        const status = req.query.status as
+            | "all"
+            | "live"
+            | "completed"
+            | undefined;
+
+        const now = new Date();
+
+        let tournamentFilter = {};
+
+        if (status === "all" || !status) {
+            tournamentFilter = {
+                status: {
+                    notIn: ["COMPLETED"],
+                }
+
+            };
+        }
+
+
+        if (status === "live") {
+            tournamentFilter = {
+                status: "ONGOING",
+            };
+        }
+
+        if (status === "completed") {
+            tournamentFilter = {
+                status: "COMPLETED",
+            };
+        }
+
+        const entries =
+            await prisma.tournamentEntry.findMany({
+                where: {
+                    userId,
+                    status: "CONFIRMED",
+
+                    tournament: tournamentFilter,
+                },
+
+                include: {
+                    tournament: true,
+                },
+
+                orderBy: {
+                    tournament: {
+                        startTime: "asc",
+                    }
+                },
+            });
+
+        return res.status(200).json({
+            tournaments: entries.map((entry) => ({
+                id: entry.tournament.id,
+                title: entry.tournament.title,
+                bannerImage: entry.tournament.bannerImage,
+
+                game: entry.tournament.game,
+
+                startTime: entry.tournament.startTime,
+
+                prizePool: entry.tournament.prizePool,
+
+                entryFee: entry.tournament.entryFee,
+
+                joinedPlayersCount:
+                    entry.tournament.joinedPlayersCount,
+
+                maxPlayers:
+                    entry.tournament.maxPlayers,
+
+                tournamentStatus:
+                    entry.tournament.status,
+
+                registrationStatus:
+                    entry.status,
+
+                joinedAt: entry.joinedAt,
+
+                ign: entry.ign,
+                gameUid: entry.gameUid,
+            })),
+        });
+    } catch (error) {
+        console.error(error);
+
+        return res.status(500).json({
+            error: "Internal Server Error",
+        });
     }
-
-    const status = req.query.status as
-      | "upcoming"
-      | "live"
-      | "completed"
-      | undefined;
-
-    const now = new Date();
-
-    let tournamentFilter = {};
-
-    if (status === "upcoming") {
-      tournamentFilter = {
-        startTime: {
-          gt: now,
-        },
-      };
-    }
-
-    if (status === "live") {
-      tournamentFilter = {
-        status: "ONGOING",
-      };
-    }
-
-    if (status === "completed") {
-      tournamentFilter = {
-        status: "COMPLETED",
-      };
-    }
-
-    const entries =
-      await prisma.tournamentEntry.findMany({
-        where: {
-          userId,
-          status: "CONFIRMED",
-
-          tournament: tournamentFilter,
-        },
-
-        include: {
-          tournament: true,
-        },
-
-        orderBy: {
-          joinedAt: "desc",
-        },
-      });
-
-    return res.status(200).json({
-      tournaments: entries.map((entry) => ({
-        id: entry.tournament.id,
-        title: entry.tournament.title,
-        bannerImage: entry.tournament.bannerImage,
-
-        game: entry.tournament.game,
-
-        startTime: entry.tournament.startTime,
-
-        prizePool: entry.tournament.prizePool,
-
-        entryFee: entry.tournament.entryFee,
-
-        joinedPlayersCount:
-          entry.tournament.joinedPlayersCount,
-
-        maxPlayers:
-          entry.tournament.maxPlayers,
-
-        tournamentStatus:
-          entry.tournament.status,
-
-        registrationStatus:
-          entry.status,
-
-        joinedAt: entry.joinedAt,
-
-        ign: entry.ign,
-        gameUid: entry.gameUid,
-      })),
-    });
-  } catch (error) {
-    console.error(error);
-
-    return res.status(500).json({
-      error: "Internal Server Error",
-    });
-  }
 };

@@ -22,9 +22,10 @@ import {
   TabsTrigger,
   TabsContent,
 } from "@monorepo/ui/components/tabs";
+import StatusBadge from "@/app/tournaments/_components/StatusBadge";
 
 type TournamentStatus =
-  | "upcoming"
+  | "all"
   | "live"
   | "completed";
 
@@ -51,7 +52,7 @@ const useMyTournaments = (
 
 export default function MyTournamentsPage() {
   const [status, setStatus] =
-    useState<TournamentStatus>("upcoming");
+    useState<TournamentStatus>("all");
 
   const {
     data: tournaments,
@@ -78,8 +79,8 @@ export default function MyTournamentsPage() {
           }
         >
           <TabsList className="grid w-full grid-cols-3 max-w-lg mb-6">
-            <TabsTrigger value="upcoming">
-              Upcoming
+            <TabsTrigger value="all">
+              All
             </TabsTrigger>
 
             <TabsTrigger value="live">
@@ -119,6 +120,7 @@ export default function MyTournamentsPage() {
             {/* Empty State */}
 
             {!isLoading &&
+            status === "all" &&
               tournaments?.length === 0 && (
                 <Card className="p-8 text-center ">
                   <h3 className="text-xl font-semibold">
@@ -152,7 +154,7 @@ export default function MyTournamentsPage() {
                   <div className="space-y-4 ">
                     {/* Header */}
 
-                    <div className="flex items-start justify-between gap-4">
+                    <div className="flex items-start flex-col justify-between gap-4">
                       <div>
                         <h2 className="font-semibold text-lg">
                           {t.title}
@@ -161,11 +163,7 @@ export default function MyTournamentsPage() {
 
                       </div>
 
-                      <Badge variant={"secondary"}>
-                        {t.registrationStatus ===
-                          "CONFIRMED" &&
-                          "Joined"}
-                      </Badge>
+                  <StatusBadge status={t.tournamentStatus || t.status}/>
                     </div>
                     <div className="">
                       <p className="text-sm text-muted-foreground">

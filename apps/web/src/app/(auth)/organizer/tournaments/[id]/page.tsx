@@ -20,7 +20,7 @@ import CreateMatchForm from "./_components/CreateMatchForm";
 const statusVariant: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
   DRAFT: "outline",
   REGISTRATION_OPEN: "default",
-  FULL: "secondary",
+  REGISTRATION_CLOSED: "secondary",
   ONGOING: "default",
   COMPLETED: "secondary",
   CANCELLED: "destructive",
@@ -31,7 +31,7 @@ export default function OrganizerTournamentPage() {
   const [tab, setTab] = useState("participants");
 
   const {
-    data: tournament,
+    data: tournamentData,
     isLoading: tournamentLoading,
   } = useTournament(id);
 
@@ -51,6 +51,8 @@ export default function OrganizerTournamentPage() {
       </main>
     );
   }
+
+  const tournament = tournamentData?.tournament;
 
   if (!tournament) {
     return (

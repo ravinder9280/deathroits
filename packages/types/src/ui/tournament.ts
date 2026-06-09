@@ -13,7 +13,9 @@ export type TournamentCard = Pick<
   | "joinedPlayersCount"
   | "startTime"
   | "status"
->;
+> & {
+  isJoined?: boolean;
+};
 
 export type JoinState =
   | "NOT_LOGGED_IN"

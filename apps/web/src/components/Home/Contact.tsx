@@ -4,9 +4,9 @@ import { Textarea } from '@monorepo/ui/components/textarea'
 import { Button } from '@monorepo/ui/components/button'
 import { Label } from '@monorepo/ui/components/label'
 
-const Contact = () => {
+const Contact = ({ className }: { className?: string }) => {
   return (
-    <section className='bg-primary/15 py-10 px-5 md:py-[100px] md:px-6  border-t border-[rgba(242,242,236,0.06)]'>
+    <section className={`${className} bg-primary/15 py-10 px-5 md:py-[100px] md:px-6  border-t border-[rgba(242,242,236,0.06)]`}>
       <div className='max-w-[600px] mx-auto text-center'>
         <div className="text-center flex flex-col items-center justify-center mb-10">
           <h2 className='text-[40px] md:text-[64px] font-extrabold mb-4 uppercase tracking-[-0.08em] leading-[0.95]'>
