@@ -11,4 +11,10 @@ export const userAdditionalFields = {
     defaultValue: false,
     fieldName: "onboarded",
   },
+  role: {
+    type: ["player", "organizer", "admin"], 
+    required: false,
+    defaultValue: "player",
+    input: false,
+  },
 } as const;
