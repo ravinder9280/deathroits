@@ -13,6 +13,9 @@ export type TournamentUserState = {
 
 /** Full response shape for GET /tournament/:id */
 export type TournamentDetailResponse = {
-  tournament: Tournament & { activeMatchId: string | null };
+  tournament: Tournament & {
+    activeMatchId: string | null;
+    activeMatchCredentialsVisibleAt: Date | string | null;
+  };
   userState: TournamentUserState | null;
 };

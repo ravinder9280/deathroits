@@ -40,7 +40,7 @@ export const authOptions = {
     updateAge: 60 * 60 * 24,  
     cookieCache: {
       enabled: true,
-      maxAge: 5 * 60, // 5 minutes
+      maxAge: 60*60*24*7 // 7 day
     },
   }
   ,

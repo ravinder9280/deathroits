@@ -4,6 +4,7 @@ import {
   listTournament,
   joinTournament,
   getMyTournaments,
+  getTournamentEntry,
 } from "../controllers/tournament.controller";
 import {
   getMatches,
@@ -25,6 +26,7 @@ const router = Router();
 router.get("/", listTournament);
 router.get("/me", requireAuth, getMyTournaments);
 router.get("/:id", getTournamentById);
+router.get("/:id/entry", getTournamentEntry);
 
 // ─── Player Actions ──────────────────────────────────────────────
 router.post("/:tournamentId/join", requireAuth, joinTournament);

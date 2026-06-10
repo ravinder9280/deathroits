@@ -100,8 +100,25 @@ export const getTournamentById = asyncHandler(
 
         const activeMatch = tournament.matches[0] ?? null;
 
-        // Build userState if the user is authenticated
-        let userState = null;
+        res.json({
+            tournament: {
+                ...tournament,
+                activeMatchId: activeMatch?.id ?? null,
+                activeMatchCredentialsVisibleAt: activeMatch?.credentialsVisibleAt ?? null,
+                matches: undefined,
+            },
+            userState: null,
+        });
+    },
+);
+
+export const getTournamentEntry = asyncHandler(
+    async (req: Request, res: Response) => {
+        const { id } = req.params;
+        if (Array.isArray(id)) {
+            res.status(400).json({ error: "Invalid tournament ID" });
+            return;
+        }
 
         try {
             const session = await auth.api.getSession({
@@ -110,52 +127,21 @@ export const getTournamentById = asyncHandler(
 
             if (session?.user) {
                 const userId = session.user.id;
-
                 const entry = await prisma.tournamentEntry.findUnique({
                     where: {
                         userId_tournamentId: { userId, tournamentId: id },
                     },
                     select: { status: true },
                 });
-
-                const isRegistered = entry?.status === "CONFIRMED";
-
-                const canJoin =
-                    tournament.status === "REGISTRATION_OPEN" &&
-                    !isRegistered &&
-                    tournament.joinedPlayersCount < tournament.maxPlayers;
-
-                const roomPublished =
-                    !!activeMatch?.credentialsVisibleAt &&
-                    new Date(activeMatch.credentialsVisibleAt) <= new Date();
-
-                const canViewRoom =
-                    isRegistered &&
-                    tournament.status === "ONGOING" &&
-                    roomPublished;
-
-                userState = {
-                    isAuthenticated: true,
-                    isRegistered,
-                    registrationStatus: entry?.status ?? null,
-                    canJoin,
-                    canViewRoom,
-                    roomPublished,
-                };
+                res.json({ entry });
+                return;
             }
         } catch {
-            // Auth check failed — treat as unauthenticated
+            // Fall through if auth check fails
         }
 
-        res.json({
-            tournament: {
-                ...tournament,
-                activeMatchId: activeMatch?.id ?? null,
-                matches: undefined,
-            },
-            userState,
-        });
-    },
+        res.json({ entry: null });
+    }
 );
 
 export const joinTournament = async (

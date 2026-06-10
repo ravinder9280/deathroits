@@ -4,6 +4,9 @@ import { format } from "date-fns";
 import { useParams } from "next/navigation";
 import { Calendar, CreditCard, Gamepad, Trophy, Users } from "lucide-react";
 import { useTournament } from "@/hooks/useTournament";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { authClient } from "@/lib/auth-client";
 import TournamentDetailSkeleton from "../_components/TournamentDetailSkeleton";
 import StatusBadge from "../_components/StatusBadge";
 import CountdownCard from "../_components/CountdownCard";
@@ -19,7 +22,24 @@ const TournamentDetailPage = () => {
     error,
   } = useTournament(id as string);
 
-  if (isLoading) {
+  const { data: sessionData, isPending: isSessionPending } = authClient.useSession();
+  const isAuthenticated = !!sessionData?.user;
+
+  const { data: entryData, isLoading: isEntryLoading } = useQuery({
+    queryKey: ["tournament-entry", id],
+    queryFn: async () => {
+      const { data } = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/tournament/${id}/entry`,
+        { withCredentials: true }
+      );
+      return data.entry;
+    },
+    enabled: isAuthenticated && !!id,
+  });
+
+  const isPageLoading = isLoading || isSessionPending || (isAuthenticated && isEntryLoading);
+
+  if (isPageLoading) {
     return <TournamentDetailSkeleton />;
   }
 
@@ -37,7 +57,27 @@ const TournamentDetailPage = () => {
     );
   }
 
-  const { tournament, userState } = data;
+  const { tournament } = data;
+
+  const isRegistered = entryData?.status === "CONFIRMED";
+  const roomPublished =
+    !!tournament.activeMatchCredentialsVisibleAt &&
+    new Date(tournament.activeMatchCredentialsVisibleAt) <= new Date();
+
+  const userState = {
+    isAuthenticated,
+    isRegistered,
+    registrationStatus: entryData?.status ?? null,
+    canJoin:
+      tournament.status === "REGISTRATION_OPEN" &&
+      !isRegistered &&
+      tournament.joinedPlayersCount < tournament.maxPlayers,
+    canViewRoom:
+      isRegistered &&
+      tournament.status === "ONGOING" &&
+      roomPublished,
+    roomPublished,
+  };
 
   // Determine whether to show the countdown
   const shouldShowCountdown =
