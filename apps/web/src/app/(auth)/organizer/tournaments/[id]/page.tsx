@@ -47,6 +47,7 @@ export default function OrganizerTournamentPage() {
           <Skeleton className="h-10 w-3/4" />
           <Skeleton className="h-6 w-1/2" />
           <Skeleton className="h-[400px] w-full rounded-xl" />
+          <Skeleton className="h-[400px] w-full rounded-xl" />
         </div>
       </main>
     );
