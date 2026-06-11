@@ -12,9 +12,9 @@ export const userAdditionalFields = {
     fieldName: "onboarded",
   },
   role: {
-    type: ["player", "organizer", "admin"] as string[],
+    type: ["PLAYER", "ORGANIZER", "ADMIN"] as string[],
     required: false,
-    defaultValue: "player",
+    defaultValue: "PLAYER",
     input: false,
   },
 } as const;
