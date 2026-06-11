@@ -93,6 +93,9 @@ export default function JoinTournamentModal({
       queryClient.invalidateQueries({
         queryKey: ["tournaments", tournamentId],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["tournament-entry", tournamentId],
+      });
 
       reset();
       setOpen(false);
