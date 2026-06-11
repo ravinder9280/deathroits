@@ -8,10 +8,10 @@ const isProduction = process.env.BETTER_AUTH_URL === 'https://api.deathroit.ravi
 
 export const authOptions = {
   baseURL: {
-    allowedHosts: ["http://localhost:3000","localhost:3001", "https://deathroit.vercel.app", "https://deathroit.ravindertech.me", "https://api.deathroit.ravindertech.me"],
+    allowedHosts: ["http://localhost:3000", "localhost:3001", "https://deathroit.vercel.app", "https://deathroit.ravindertech.me", "https://api.deathroit.ravindertech.me"],
 
   }, // Express server URL
-  
+
   database: prismaAdapter(prisma, { provider: "postgresql" }),
   emailAndPassword: { enabled: true },
   plugins: [
@@ -33,14 +33,19 @@ export const authOptions = {
       clientId: process.env.GOOGLE_CLIENT_ID ?? "",
       clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
       prompt: "select_account",
+      mapProfileToUser: (profile) => {
+        return {
+          role: "PLAYER", 
+        };
+      },
     },
   },
   session: {
     expiresIn: 60 * 60 * 24 * 30, // 30 days
-    updateAge: 60 * 60 * 24,  
+    updateAge: 60 * 60 * 24,
     cookieCache: {
       enabled: true,
-      maxAge: 60*60*24*7 // 7 day
+      maxAge: 60 * 60 * 24 * 7 // 7 day
     },
   }
   ,
@@ -56,6 +61,7 @@ export const authOptions = {
 
 
   },
+
 
   user: {
     additionalFields: userAdditionalFields,
