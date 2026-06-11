@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
-import { format } from "date-fns";
+import { format, formatDistanceToNow } from "date-fns";
 import {
   Trophy,
   Users,
@@ -22,7 +22,6 @@ import {
   TabsTrigger,
   TabsContent,
 } from "@monorepo/ui/components/tabs";
-import StatusBadge from "@/app/tournaments/_components/StatusBadge";
 
 type TournamentStatus =
   | "all"
@@ -64,12 +63,12 @@ export default function MyTournamentsPage() {
     <main className="min-h-screen py-24 px-4">
       <div className="container max-w-8xl  mx-auto">
         <div className="flex gap-2 text-2xl md:text-3xl font-bold mb-6 items-center">
-        
+
           <h1 className="">
 
             My Tournaments
           </h1>
- 
+
         </div>
 
         <Tabs
@@ -120,8 +119,8 @@ export default function MyTournamentsPage() {
             {/* Empty State */}
 
             {!isLoading &&
-            status === "all" &&
               tournaments?.length === 0 && (
+                status === "all" ? (
                 <Card className="p-8 text-center ">
                   <h3 className="text-xl font-semibold">
                     No tournaments found
@@ -141,6 +140,9 @@ export default function MyTournamentsPage() {
                     </Button>
                   </Link>
                 </Card>
+                ): <div className="p-8 text-center  text-muted-foreground">
+                  No {status} tournaments found
+                </div>
               )}
 
             {/* Tournament List */}
@@ -153,17 +155,13 @@ export default function MyTournamentsPage() {
                 >
                   <div className="space-y-4 ">
                     {/* Header */}
-
-                    <div className="flex items-start flex-col justify-between gap-4">
-                      <div>
-                        <h2 className="font-semibold text-lg">
-                          {t.title}
-                        </h2>
-
-
-                      </div>
-
-                  <StatusBadge status={t.tournamentStatus || t.status}/>
+                    <div className="flex items-start gap-2 justify-between">
+                      <h2 className="font-semibold text-lg">
+                        {t.title}
+                      </h2>
+                      <Badge className="shrink-0 " variant={'secondary'}>
+                        {formatDistanceToNow(new Date(t.startTime), { addSuffix: true })}
+                      </Badge>
                     </div>
                     <div className="">
                       <p className="text-sm text-muted-foreground">
@@ -174,6 +172,7 @@ export default function MyTournamentsPage() {
                       </p>
 
                     </div>
+
 
                     {/* Stats */}
 
@@ -221,6 +220,7 @@ export default function MyTournamentsPage() {
                     {/* Footer */}
 
                     <div className="flex justify-end">
+
                       <Link
                         href={`/tournaments/${t.id}`}
                       >

@@ -16,7 +16,7 @@ export const joinTournamentSchema = z.object({
 export const listTournament = asyncHandler(
     async (req: Request, res: Response) => {
         const tournaments = await prisma.tournament.findMany({
-            where: { status: { not: "DRAFT" } },
+            where: { status: { notIn: ["DRAFT", "COMPLETED"] } },
         });
 
         try {
