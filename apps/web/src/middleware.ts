@@ -1,7 +1,7 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 const AUTH_PATHS = ['/sign-in', '/sign-up'];
-const PROTECTED_PREFIXES = ['/my-tournaments', '/organizer'];
+const PROTECTED_PREFIXES = ['/my-tournaments', '/organizer', '/my-profile'];
 const LOGIN_PATH = '/sign-in';
 
 function isProtectedPath(pathname: string) {
@@ -38,6 +38,6 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/my-tournaments', '/organizer/:path*', '/sign-in', '/sign-up'],
+  matcher: ['/my-tournaments', '/organizer/:path*', '/sign-in', '/sign-up',"/my-profile"],
 };
 

@@ -25,7 +25,7 @@ const UserProfile = ({ isMobile = false }: { isMobile?: boolean }) => {
     isPending, //loading state
     refetch, //refetch the session
   } = authClient.useSession();
-  const router=useRouter()
+  const router = useRouter()
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="ring-transparent cursor-pointer outline-none  ">
@@ -44,23 +44,24 @@ const UserProfile = ({ isMobile = false }: { isMobile?: boolean }) => {
         <DropdownMenuSeparator />
         <DropdownMenuItem
           className=""
-          onClick={async () => {
-          }}
+          asChild
+
         >
-          <User2 />
-          Profile
+          <Link href="/my-profile">
+            <User2 />
+            Profile
+          </Link>
         </DropdownMenuItem>
         <DropdownMenuItem
-        asChild
+          asChild
           className=""
-          onClick={async () => {
-          }}
-         
+
+
         >
-           <Link href={'/my-tournaments'}>
-          <Trophy />
-          My Tournaments
-           </Link>
+          <Link href={'/my-tournaments'}>
+            <Trophy />
+            My Tournaments
+          </Link>
         </DropdownMenuItem>
         <DropdownMenuItem
           className=""
