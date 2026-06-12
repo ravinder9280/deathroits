@@ -50,6 +50,8 @@
   --code-border: oklch(88% 0.01 286);
   --custom-dark: #24243d;
   --radius: 0.625rem;
+  --sky-400: #38bdf8;
+  --sky-500: #0ea5e9;
 }
 
 .dark {
@@ -97,6 +99,8 @@
   --code-selection: oklch(20% 0.02 286);
   --code-border: oklch(25% 0.02 286);
   --radius: 0.625rem;
+  --sky-400: #38bdf8;
+  --sky-500: #0ea5e9;
 }
 
 @theme inline {
@@ -162,6 +166,15 @@
     }
     to {
       height: 0;
+    }
+  }
+
+  --animate-marquee: marquee var(--duration, 30s) linear infinite;
+  --animate-marquee-reverse: marquee var(--duration, 30s) linear infinite reverse;
+
+  @keyframes marquee {
+    to {
+      transform: translateX(-50%);
     }
   }
 }

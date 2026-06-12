@@ -2,17 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import axios from "axios";
-import { useQuery } from "@tanstack/react-query";
-import { format, formatDistanceToNow } from "date-fns";
-import {
-  Trophy,
-  Users,
-  Calendar,
-  ArrowRight,
-} from "lucide-react";
 
-import { Badge } from "@monorepo/ui/components/badge";
+
 import { Button } from "@monorepo/ui/components/button";
 import { Card } from "@monorepo/ui/components/card";
 import { Skeleton } from "@monorepo/ui/components/skeleton";
@@ -22,32 +13,16 @@ import {
   TabsTrigger,
   TabsContent,
 } from "@monorepo/ui/components/tabs";
+import MyTournamentsCard, { type MyTournament } from "@/components/Tournaments/MyTournamentsCard";
+import { useMyTournaments } from "@/hooks/useMyTournaments";
 
-type TournamentStatus =
+export type TournamentStatus =
   | "all"
   | "live"
-  | "completed";
+  | "completed"
+  | "upcoming";
 
-const useMyTournaments = (
-  status: TournamentStatus
-) => {
-  return useQuery({
-    queryKey: ["my-tournaments", status],
-    queryFn: async () => {
-      const { data } = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/tournament/me`,
-        {
-          params: {
-            status,
-          },
-          withCredentials: true,
-        }
-      );
 
-      return data.tournaments;
-    },
-  });
-};
 
 export default function MyTournamentsPage() {
   const [status, setStatus] =
@@ -148,90 +123,8 @@ export default function MyTournamentsPage() {
             {/* Tournament List */}
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
-              {tournaments?.map((t: any) => (
-                <Card
-                  key={t.id}
-                  className="overflow-hidden p-4"
-                >
-                  <div className="space-y-4 ">
-                    {/* Header */}
-                    <div className="flex items-start gap-2 justify-between">
-                      <h2 className="font-semibold text-lg">
-                        {t.title}
-                      </h2>
-                      <Badge className="shrink-0 " variant={'secondary'}>
-                        {formatDistanceToNow(new Date(t.startTime), { addSuffix: true })}
-                      </Badge>
-                    </div>
-                    <div className="">
-                      <p className="text-sm text-muted-foreground">
-                        IGN: {t.ign}
-                      </p>
-                      <p className="text-sm text-muted-foreground">
-                        UID: {t.gameUid}
-                      </p>
-
-                    </div>
-
-
-                    {/* Stats */}
-
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
-                      <div className="flex items-center gap-2">
-                        <Calendar
-                          size={16}
-                          className="text-muted-foreground"
-                        />
-                        <span>
-                          {format(
-                            new Date(
-                              t.startTime
-                            ),
-                            "dd MMM hh:mm a"
-                          )}
-                        </span>
-                      </div>
-
-                      <div className="flex items-center gap-2">
-                        <Users size={16}
-                          className="text-muted-foreground"
-
-                        />
-                        <span>
-                          {
-                            t.joinedPlayersCount
-                          }
-                          /{t.maxPlayers}
-                        </span>
-                      </div>
-
-                      <div className="flex items-center gap-2">
-                        <Trophy
-                          size={16}
-                          className="text-muted-foreground"
-
-                        />
-                        <span>
-                          ₹{t.prizePool}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Footer */}
-
-                    <div className="flex justify-end">
-
-                      <Link
-                        href={`/tournaments/${t.id}`}
-                      >
-                        <Button>
-                          View Tournament
-                          <ArrowRight />
-                        </Button>
-                      </Link>
-                    </div>
-                  </div>
-                </Card>
+              {tournaments?.map((t: MyTournament) => (
+                <MyTournamentsCard key={t.id} tournament={t} />
               ))}
             </div>
           </TabsContent>

@@ -273,6 +273,7 @@ export const getMyTournaments = async (
             | "all"
             | "live"
             | "completed"
+            | "upcoming"
             | undefined;
 
         const now = new Date();
@@ -298,6 +299,14 @@ export const getMyTournaments = async (
         if (status === "completed") {
             tournamentFilter = {
                 status: "COMPLETED",
+            };
+        }
+
+        if (status === "upcoming") {
+            tournamentFilter = {
+                status: {
+                    in: ["REGISTRATION_OPEN", "REGISTRATION_CLOSED"],
+                },
             };
         }
 
