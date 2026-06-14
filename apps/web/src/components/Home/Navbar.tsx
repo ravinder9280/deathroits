@@ -139,7 +139,7 @@ const Navbar = () => {
               >
                 <Link href={"/sign-in"}>Sign in</Link>
               </Button>
-              <Button className=" font-semibold hidden rounded-full md:block" size={"lg" } asChild>
+              <Button className=" font-semibold hidden rounded-full md:inline-flex" size={"lg" } asChild>
                 <Link href={"/sign-up"}>Sign Up</Link>
               </Button>
             </div>
