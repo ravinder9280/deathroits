@@ -6,7 +6,6 @@ import Link from "next/link";
 
 import { Button } from "@monorepo/ui/components/button";
 import { Card } from "@monorepo/ui/components/card";
-import { Skeleton } from "@monorepo/ui/components/skeleton";
 import {
   Tabs,
   TabsList,
@@ -15,6 +14,7 @@ import {
 } from "@monorepo/ui/components/tabs";
 import MyTournamentsCard, { type MyTournament } from "@/components/Tournaments/MyTournamentsCard";
 import { useMyTournaments } from "@/hooks/useMyTournaments";
+import MyTournamentCardSkeleton from "@/components/Tournaments/MyTournamentCardSkeleton";
 
 export type TournamentStatus =
   | "all"
@@ -67,23 +67,18 @@ export default function MyTournamentsPage() {
           </TabsList>
 
           <TabsContent value={status}>
-            {/* Loading State */}
 
             {isLoading && (
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8">
 
                 {Array.from({
                   length: 4,
                 }).map((_, i) => (
-                  <Skeleton
-                    key={i}
-                    className="h-[290px] w-full rounded-xl"
-                  />
+                  <MyTournamentCardSkeleton />
                 ))}
               </div>
             )}
 
-            {/* Error State */}
 
             {isError && (
               <div className="text-red-500">
@@ -91,38 +86,36 @@ export default function MyTournamentsPage() {
               </div>
             )}
 
-            {/* Empty State */}
 
             {!isLoading &&
               tournaments?.length === 0 && (
                 status === "all" ? (
-                <Card className="p-8 text-center ">
-                  <h3 className="text-xl font-semibold">
-                    No tournaments found
-                  </h3>
+                  <Card className="p-8 text-center ">
+                    <h3 className="text-xl font-semibold">
+                      No tournaments found
+                    </h3>
 
-                  <p className="text-muted-foreground mt-2">
-                    Join your first tournament and
-                    start competing.
-                  </p>
+                    <p className="text-muted-foreground mt-2">
+                      Join your first tournament and
+                      start competing.
+                    </p>
 
-                  <Link
-                    href="/tournaments"
-                    className="mt-4 inline-block"
-                  >
-                    <Button>
-                      Browse Tournaments
-                    </Button>
-                  </Link>
-                </Card>
-                ): <div className="p-8 text-center  text-muted-foreground">
+                    <Link
+                      href="/tournaments"
+                      className="mt-4 inline-block"
+                    >
+                      <Button>
+                        Browse Tournaments
+                      </Button>
+                    </Link>
+                  </Card>
+                ) : <div className="p-8 text-center  text-muted-foreground">
                   No {status} tournaments found
                 </div>
               )}
 
-            {/* Tournament List */}
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2  lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8">
               {tournaments?.map((t: MyTournament) => (
                 <MyTournamentsCard key={t.id} tournament={t} />
               ))}

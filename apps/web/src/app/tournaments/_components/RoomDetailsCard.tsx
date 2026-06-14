@@ -28,7 +28,6 @@ export default function RoomDetailsCard({ matchId }: Props) {
 
   if (!data) return null;
 
-  // Room not published yet — show waiting state
   if (!data.roomPublished) {
     return (
       <Card className="border-dashed">
@@ -48,7 +47,6 @@ export default function RoomDetailsCard({ matchId }: Props) {
     );
   }
 
-  // Room published — show credentials
   const copyToClipboard = (text: string, label: string) => {
     navigator.clipboard.writeText(text);
     toast.success(`${label} copied!`);

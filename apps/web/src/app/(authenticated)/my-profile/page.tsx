@@ -7,7 +7,7 @@ import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, Di
 import { Input } from '@monorepo/ui/components/input';
 import { Label } from '@monorepo/ui/components/label';
 import { Spinner } from '@monorepo/ui/components/spinner';
-import { ArrowRight, Award, CreditCard, Crown, Dumbbell, PencilIcon, Save, Trophy, Users } from 'lucide-react';
+import { ArrowRight, Award, Camera, Crown, Dumbbell, PencilIcon, Save, Trophy, Users } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -18,6 +18,7 @@ import { useMyTournaments } from '@/hooks/useMyTournaments';
 import MyTournamentsCard from '@/components/Tournaments/MyTournamentsCard';
 import { Skeleton } from '@monorepo/ui/components/skeleton';
 import Link from 'next/link';
+import MyTournamentCardSkeleton from '@/components/Tournaments/MyTournamentCardSkeleton';
 
 const updateProfileSchema = z.object({
     name: z.string().min(2, "Name must be at least 2 characters"),
@@ -136,113 +137,10 @@ const MyProfile = () => {
                             />
                             <AvatarFallback>U</AvatarFallback>
                         </Avatar>
+                        <Button variant={'outline'} size={'icon'} className='absolute top-0 right-0 rounded-full'>
+                            <Camera className='size-4' />
+                        </Button>
 
-                        <Dialog open={open} onOpenChange={setOpen}>
-                            <DialogTrigger asChild>
-                                <Button variant={'outline'} size={'icon'} className='absolute bottom-0 right-0 rounded-full'>
-                                    <PencilIcon className='size-4' />
-                                </Button>
-                            </DialogTrigger>
-
-                            <DialogContent className='p-0'>
-                                <form onSubmit={handleSubmit(onSubmit)}>
-                                    <DialogHeader className='px-5 py-4 border-b border-white/10'>
-                                        <DialogTitle className='text-center'>Edit profile</DialogTitle>
-                                        <DialogDescription className='text-center'>
-                                            Update your public profile details.
-                                        </DialogDescription>
-                                    </DialogHeader>
-
-                                    <div className='flex flex-col gap-5 px-5 py-5'>
-                                        <div className='flex flex-col items-center gap-2'>
-                                            <p>Profile Image</p>
-                                            <div className='relative w-fit'>
-                                                <Avatar className="size-24 ring-transparent border border-white/40 ">
-                                                    <AvatarImage
-                                                        alt={"U"}
-                                                        height={96}
-                                                        src={user?.image ?? undefined}
-                                                        width={96}
-                                                    />
-                                                    <AvatarFallback>U</AvatarFallback>
-                                                </Avatar>
-                                                <Button type="button" variant={'outline'} size={'icon'} className='absolute bottom-0 right-0 rounded-full'>
-                                                    <PencilIcon className='size-4' />
-                                                </Button>
-                                            </div>
-                                        </div>
-
-                                        <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-                                            <div>
-                                                <Label htmlFor='name'>Name</Label>
-                                                <Input
-                                                    className='mt-2'
-                                                    id='name'
-                                                    {...register('name')}
-                                                    placeholder='Enter Your Name'
-                                                />
-                                                {errors.name && (
-                                                    <p className="text-red-500 text-xs mt-1">
-                                                        {errors.name.message}
-                                                    </p>
-                                                )}
-                                            </div>
-                                            <div>
-                                                <Label htmlFor='email'>Email</Label>
-                                                <Input
-                                                    className='mt-2'
-                                                    id='email'
-                                                    value={user?.email}
-                                                    placeholder='Enter Your Email'
-                                                    disabled
-                                                />
-
-                                            </div>
-
-                                            <div className='md:col-span-2'>
-                                                <Label htmlFor='gameId'>Game Id</Label>
-                                                <Input
-                                                    className='mt-2'
-                                                    id='gameId'
-                                                    {...register('gameId')}
-                                                    placeholder='Enter Your Game ID'
-                                                />
-                                                {errors.gameId && (
-                                                    <p className="text-red-500 text-xs mt-1">
-                                                        {errors.gameId.message}
-                                                    </p>
-                                                )}
-                                            </div>
-                                        </div>
-
-                                        {errors.root && (
-                                            <div className="rounded-md bg-red-500/10 p-3 text-sm text-red-500">
-                                                {errors.root.message}
-                                            </div>
-                                        )}
-
-                                        <DialogFooter className=''>
-                                            <DialogClose asChild>
-                                                <Button variant="outline" type="button">Cancel</Button>
-                                            </DialogClose>
-                                            <Button type="submit" disabled={isSubmitting}>
-                                                {isSubmitting ? (
-                                                    <>
-                                                        <Spinner className="mr-2" />
-                                                        Saving...
-                                                    </>
-                                                ) : (
-                                                    <>
-                                                        <Save className='size-4' />
-                                                        Save changes
-                                                    </>
-                                                )}
-                                            </Button>
-                                        </DialogFooter>
-                                    </div>
-                                </form>
-                            </DialogContent>
-                        </Dialog>
                     </div>
 
                     <div className='text-center'>
@@ -253,6 +151,112 @@ const MyProfile = () => {
                             {user?.email}
                         </p>
                     </div>
+                    <Dialog open={open} onOpenChange={setOpen}>
+                        <DialogTrigger asChild>
+                            <Button variant={'outline'}>
+                                Edit Profile
+                                <PencilIcon className='size-4' />
+
+                            </Button>
+
+                        </DialogTrigger>
+
+                        <DialogContent className='p-0'>
+                            <form onSubmit={handleSubmit(onSubmit)}>
+                                <DialogHeader className='px-5 py-4 border-b border-white/10'>
+                                    <DialogTitle className='text-center'>Edit profile</DialogTitle>
+                                    <DialogDescription className='text-center'>
+                                        Update your public profile details.
+                                    </DialogDescription>
+                                </DialogHeader>
+
+                                <div className='flex flex-col gap-5 px-5 py-5'>
+                                   
+                                        <div className=' w-fit mx-auto'>
+                                            <Avatar className="size-24 ring-transparent border border-white/40 ">
+                                                <AvatarImage
+                                                    alt={"U"}
+                                                    height={96}
+                                                    src={user?.image ?? undefined}
+                                                    width={96}
+                                                />
+                                                <AvatarFallback>U</AvatarFallback>
+                                            </Avatar>
+                                            
+                                    </div>
+
+                                    <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+                                        <div>
+                                            <Label htmlFor='name'>Name</Label>
+                                            <Input
+                                                className='mt-2'
+                                                id='name'
+                                                {...register('name')}
+                                                placeholder='Enter Your Name'
+                                            />
+                                            {errors.name && (
+                                                <p className="text-red-500 text-xs mt-1">
+                                                    {errors.name.message}
+                                                </p>
+                                            )}
+                                        </div>
+                                        <div>
+                                            <Label htmlFor='email'>Email</Label>
+                                            <Input
+                                                className='mt-2'
+                                                id='email'
+                                                value={user?.email}
+                                                placeholder='Enter Your Email'
+                                                disabled
+                                            />
+
+                                        </div>
+
+                                        <div className='md:col-span-2'>
+                                            <Label htmlFor='gameId'>Game Id</Label>
+                                            <Input
+                                                className='mt-2'
+                                                id='gameId'
+                                                {...register('gameId')}
+                                                placeholder='Enter Your Game ID'
+                                            />
+                                            {errors.gameId && (
+                                                <p className="text-red-500 text-xs mt-1">
+                                                    {errors.gameId.message}
+                                                </p>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    {errors.root && (
+                                        <div className="rounded-md bg-red-500/10 p-3 text-sm text-red-500">
+                                            {errors.root.message}
+                                        </div>
+                                    )}
+
+                                    <DialogFooter className=''>
+                                        <DialogClose asChild>
+                                            <Button variant="outline" type="button">Cancel</Button>
+                                        </DialogClose>
+                                        <Button type="submit" disabled={isSubmitting}>
+                                            {isSubmitting ? (
+                                                <>
+                                                    <Spinner className="mr-2" />
+                                                    Saving...
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <Save className='size-4' />
+                                                    Save changes
+                                                </>
+                                            )}
+                                        </Button>
+                                    </DialogFooter>
+                                </div>
+                            </form>
+                        </DialogContent>
+                    </Dialog>
+
                 </section>
 
                 <section className="grid grid-cols-2 md:grid-cols-4 gap-4 overflow-auto px-4 py-10">
@@ -299,12 +303,14 @@ const MyProfile = () => {
                         </Button>
                     </div>
                     {isLoading ? (
-                        <div className="flex gap-4 md:gap-6 overflow-x-auto pb-4 scrollbar-thin">
+                        <div className="flex gap-4 md:gap-6 overflow-x-auto pb-4 pl-1 pr-4 scrollbar-thin snap-x snap-mandatory">
+
                             {Array.from({ length: 3 }).map((_, i) => (
-                                <Skeleton
-                                    key={i}
-                                    className="h-[200px] w-[320px] sm:w-[350px] shrink-0 rounded-xl"
-                                />
+                                <div key={i} className="w-[320px] sm:w-[350px] shrink-0 snap-start">
+
+
+                                    <MyTournamentCardSkeleton />
+                                </div>
                             ))}
                         </div>
                     ) : isError ? (

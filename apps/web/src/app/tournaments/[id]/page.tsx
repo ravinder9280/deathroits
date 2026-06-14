@@ -79,7 +79,6 @@ const TournamentDetailPage = () => {
     roomPublished,
   };
 
-  // Determine whether to show the countdown
   const shouldShowCountdown =
     userState?.isAuthenticated &&
     userState?.isRegistered &&
@@ -87,8 +86,6 @@ const TournamentDetailPage = () => {
       tournament.status === "REGISTRATION_CLOSED") &&
     new Date(tournament.startTime) > new Date();
 
-  // Determine if the action panel uses a fixed bottom bar
-  // (only for REGISTRATION_OPEN when user can join or needs to sign in)
   const isFixedBottomAction =
     tournament.status === "REGISTRATION_OPEN" &&
     (!userState || !userState.isAuthenticated || userState.canJoin);
@@ -119,7 +116,6 @@ const TournamentDetailPage = () => {
               <CountdownCard startTime={tournament.startTime} />
             )}
 
-            {/* Action Panel (inline cards for non-joinable states) */}
             {!isFixedBottomAction && (
               <ActionPanel
                 tournamentId={tournament.id}
@@ -130,7 +126,6 @@ const TournamentDetailPage = () => {
               />
             )}
 
-            {/* Title & Description */}
             <div>
               <div className="mb-6">
                 <h2 className="text-xl font-semibold">{tournament.title}</h2>
@@ -139,7 +134,6 @@ const TournamentDetailPage = () => {
                 </p>
               </div>
 
-              {/* Stats Grid */}
               <div className="grid grid-cols-3 gap-2">
                 <div className="flex flex-col items-center justify-center bg-muted p-2 rounded-md">
                   <CreditCard size={24} className="mb-2 text-primary" />
@@ -167,14 +161,13 @@ const TournamentDetailPage = () => {
               </div>
             </div>
 
-            {/* Game & Start Time */}
             <div className="space-y-3">
               <div>
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <Gamepad size={14} />
                   Game
                 </div>
-                <p>FREE FIRE MAX</p>
+                <p>{tournament.game}</p>
               </div>
               <div>
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -190,7 +183,6 @@ const TournamentDetailPage = () => {
               </div>
             </div>
 
-            {/* Prize Breakdown */}
             <div>
               <h3 className="text-muted-foreground font-semibold">
                 Prize Breakdown
@@ -211,7 +203,6 @@ const TournamentDetailPage = () => {
               </div>
             </div>
 
-            {/* Rules */}
             <div>
               <h3 className="text-sm leading-relaxed">Rules</h3>
               <p className="text-sm text-muted-foreground">
@@ -221,7 +212,6 @@ const TournamentDetailPage = () => {
           </div>
         </div>
 
-        {/* Fixed bottom action bar (Join / Sign In) */}
         {isFixedBottomAction && (
           <ActionPanel
             tournamentId={tournament.id}

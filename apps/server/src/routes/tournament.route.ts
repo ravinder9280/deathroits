@@ -22,19 +22,15 @@ import {
 
 const router = Router();
 
-// ─── Public ──────────────────────────────────────────────────────
 router.get("/", listTournament);
 router.get("/me", requireAuth, getMyTournaments);
 router.get("/:id", getTournamentById);
 router.get("/:id/entry", getTournamentEntry);
 
-// ─── Player Actions ──────────────────────────────────────────────
 router.post("/:tournamentId/join", requireAuth, joinTournament);
 
-// ─── Match Room (player + organizer) ─────────────────────────────
 router.get("/match/:matchId/room", requireAuth, getMatchRoom);
 
-// ─── Organizer Routes ────────────────────────────────────────────
 router.get(
   "/:id/participants",
   requireAuth,

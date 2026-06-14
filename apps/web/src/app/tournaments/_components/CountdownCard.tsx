@@ -2,7 +2,6 @@
 
 import { Card, CardContent } from "@monorepo/ui/components/card";
 import { useCountdown } from "@/hooks/useCountdown";
-import { Radio } from "lucide-react";
 import { cn } from "@monorepo/utils/styles";
 
 type Props = {
@@ -16,7 +15,6 @@ export default function CountdownCard({ startTime, enabled = true }: Props) {
     enabled
   );
 
-  // Tournament has started — show live indicator
   if (isExpired) {
     return (
       <Card className="border-green-500/30 bg-green-500/10">
@@ -57,7 +55,6 @@ export default function CountdownCard({ startTime, enabled = true }: Props) {
     { value: seconds, label: "Sec" },
   ];
 
-  // For > 24h, show simplified display
   if (days > 0) {
     return (
       <Card className={`${cardClassName} p-4`}>
@@ -81,7 +78,6 @@ export default function CountdownCard({ startTime, enabled = true }: Props) {
     );
   }
 
-  // < 24h — show all 4 segments with urgency styling
   return (
     <Card className={cardClassName}>
       <CardContent className="flex flex-col items-center gap-2 p-4">

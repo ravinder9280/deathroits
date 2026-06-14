@@ -140,31 +140,25 @@ export default function ActionPanel({
   activeMatchId,
   userState,
 }: Props) {
-  // ─── DRAFT ─────────────────────────────────────────────────────
   if (status === "DRAFT") {
     return null;
   }
 
-  // ─── CANCELLED ─────────────────────────────────────────────────
   if (status === "CANCELLED") {
     return <StatusCard config={STATUS_CARDS.CANCELLED} />;
   }
 
-  // ─── COMPLETED ─────────────────────────────────────────────────
   if (status === "COMPLETED") {
     return <StatusCard config={STATUS_CARDS.COMPLETED} />;
   }
 
-  // ─── ONGOING ───────────────────────────────────────────────────
   if (status === "ONGOING") {
     if (userState?.isRegistered && activeMatchId) {
       return <RoomDetailsCard matchId={activeMatchId} />;
     }
   }
 
-  // ─── REGISTRATION_OPEN ────────────────────────────────────────
   if (status === "REGISTRATION_OPEN") {
-    // Not logged in
     if (!userState || !userState.isAuthenticated) {
       return (
         <div className="fixed bottom-0 left-0 right-0 z-30 flex justify-center">

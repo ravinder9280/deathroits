@@ -17,11 +17,11 @@ const TournamentCard = ({ t }: { t: TournamentCardType }) => {
             key={t.id}
 
         >
-            <CardContent className="p-0 aspect-square max-h-[200px] relative bg-muted">
+            <CardContent className="p-0 relative aspect-[2/1] w-full  rounded-lg  overflow-hidden">
 
                 <img
                     alt={""}
-                    className="absolute inset-0 cursor-pointer relative size-full object-cover"
+                    className="size-full object-cover"
                     src={"/game3.png"}
                 />
                 <div className="absolute bottom-3 left-3 rounded-r-xl">

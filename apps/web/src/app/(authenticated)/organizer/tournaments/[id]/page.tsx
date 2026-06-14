@@ -70,7 +70,6 @@ export default function OrganizerTournamentPage() {
   return (
     <main className="min-h-screen py-24 px-4">
       <div className="container max-w-4xl mx-auto flex flex-col gap-6">
-        {/* Header */}
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-3 flex-wrap">
             <h1 className="text-2xl md:text-3xl font-bold">
@@ -85,7 +84,6 @@ export default function OrganizerTournamentPage() {
           </p>
         </div>
 
-        {/* Stats */}
         <div className="grid grid-cols-3 gap-4">
           <div className="flex flex-col  items-center gap-2 rounded-lg border p-3">
             <Users className="text-muted-foreground" />
@@ -108,7 +106,6 @@ export default function OrganizerTournamentPage() {
           </div>
         </div>
 
-        {/* Tabs */}
         <Tabs value={tab} onValueChange={setTab}>
           <TabsList className="grid w-full grid-cols-2 max-w-md">
             <TabsTrigger value="participants">Participants</TabsTrigger>

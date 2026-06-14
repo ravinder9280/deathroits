@@ -13,12 +13,14 @@ import {
   DropdownMenuTrigger,
 } from "@monorepo/ui/components/dropdown-menu";
 import { LogOutIcon, Shield, Trophy, User2 } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import Link from "next/link";
+import { Skeleton } from "@monorepo/ui/components/skeleton";
 
 const UserProfile = ({ isMobile = false }: { isMobile?: boolean }) => {
+  const [open, setOpen] = useState(false);
   const {
     data: session,
     error, //error object
@@ -26,21 +28,30 @@ const UserProfile = ({ isMobile = false }: { isMobile?: boolean }) => {
     refetch, //refetch the session
   } = authClient.useSession();
   const router = useRouter()
+
+if(isPending){
   return (
-    <DropdownMenu>
+
+    <Skeleton className="rounded-full size-8"/>
+  )
+}
+
+  return (
+    <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger className="ring-transparent cursor-pointer outline-none  ">
         <Avatar className="size-8 ring-transparent border border-white/40 ">
-          <AvatarImage
-            alt={"U"}
-            height={32}
-            src={session?.user?.image ?? undefined}
-            width={32}
-          />
-          <AvatarFallback>U</AvatarFallback>
+        
+              <AvatarImage
+                alt={"U"}
+                height={32}
+                src={session?.user?.image ?? undefined}
+                width={32}
+              />
+              <AvatarFallback>U</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-[180px]" align="end">
-        <DropdownMenuLabel className="text-muted-foreground  truncate " >{session?.user.name}</DropdownMenuLabel>
+        <DropdownMenuLabel className="text-muted-foreground  truncate " >Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem
           className=""
@@ -72,6 +83,7 @@ const UserProfile = ({ isMobile = false }: { isMobile?: boolean }) => {
           Rank
         </DropdownMenuItem>
         <DropdownMenuItem
+        
           className="text-red-500"
           onClick={async () => {
             await fetch("/api/onboarding/set-cookie", {
@@ -80,6 +92,11 @@ const UserProfile = ({ isMobile = false }: { isMobile?: boolean }) => {
             });
             await authClient.signOut({
               fetchOptions: {
+                onPending: () => {
+
+                  <Skeleton className="w-full h-full" />
+
+                },
                 onSuccess: () => {
                   router.push("/sign-in");
                 },
