@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import type { TournamentCard as TournamentCardType } from "@monorepo/types";
 import TournamentCard from "./_components/TournamentCard";
@@ -24,8 +24,9 @@ import {
 } from "@monorepo/ui/components/pagination";
 import { Search, X, Trophy, SlidersHorizontal } from "lucide-react";
 import { useSearchTournaments } from "@/hooks/useSearchTournaments";
+import useDebounce from "@/hooks/useDebounceHook";
 
-const LIMIT = 1;
+const LIMIT = 2;
 
 function TournamentCardSkeleton() {
   return (
@@ -40,7 +41,7 @@ function TournamentCardSkeleton() {
           <Skeleton className="h-10" />
           <Skeleton className="h-10" />
         </div>
-        <div className="grid grid-cols-2 gap-2 pt-2">
+        <div className="grid grid-cols-2 gap-2 p-3">
           <Skeleton className="h-8" />
           <Skeleton className="h-8" />
         </div>
@@ -52,9 +53,17 @@ function TournamentCardSkeleton() {
 const TournamentsPage = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const query = searchParams.get("query") ?? "";
+  const [searchVal, setSearchVal] = useState(query);
+
+  // Sync URL query to local state
+  useEffect(() => {
+    setSearchVal(query);
+  }, [query]);
+
+  const debouncedSearchVal = useDebounce(searchVal, 300);
 
   // ── Derive all filter state from URL params ──
-  const query = searchParams.get("query") ?? "";
   const type = (searchParams.get("type") as "free" | "paid" | "") ?? "";
   const page = Number(searchParams.get("page") ?? "1") || 1;
 
@@ -75,6 +84,13 @@ const TournamentsPage = () => {
     },
     [router, searchParams]
   );
+
+  // Update URL params when debounced search value changes
+  useEffect(() => {
+    if (debouncedSearchVal !== query) {
+      updateParams({ query: debouncedSearchVal || null, page: "1" });
+    }
+  }, [debouncedSearchVal, query, updateParams]);
 
   // ── Query ──
   const { data, isLoading, isFetching, isError } = useSearchTournaments({
@@ -109,12 +125,12 @@ const TournamentsPage = () => {
   const handlePageChange = useCallback(
     (newPage: number) => {
       updateParams({ page: String(newPage) });
-      window.scrollTo({ top: 0, behavior: "smooth" });
     },
     [updateParams]
   );
 
   const handleClearFilters = useCallback(() => {
+    setSearchVal("");
     router.push("/tournaments", { scroll: false });
   }, [router]);
 
@@ -134,39 +150,29 @@ const TournamentsPage = () => {
         </div>
 
         {/* Search + Filters Bar */}
-        <form
-          action={handleSearch}
-          className="flex flex-col sm:flex-row gap-3 mb-8"
+        <div
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8"
         >
           {/* Search Input */}
-          <div className="relative flex-1">
+          <div className="relative flex-1 md:col-span-2">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
             <Input
               id="tournament-search"
               name="search"
               placeholder="Search tournaments..."
-              defaultValue={query}
-              key={query}
-              className="pl-10 bg-card/50 border-white/10 h-10"
+              value={searchVal}
+              className="pl-10 bg-zinc-900 border border-white/10 "
+              onChange={(e) => setSearchVal(e.target.value)}
             />
-            {query && (
-              <button
-                type="button"
-                onClick={() => updateParams({ query: null, page: "1" })}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-              >
-                <X className="size-4" />
-              </button>
-            )}
+           
           </div>
 
           {/* Type Filter */}
           <Select value={type || "all"} onValueChange={handleTypeChange}>
             <SelectTrigger
               id="tournament-type-filter"
-              className="w-full sm:w-[160px] bg-card/50 border-white/10 h-10"
+              className=" bg-zinc-900 border border-white/10  h-12"
             >
-              <SlidersHorizontal className="size-4 mr-2 text-muted-foreground" />
               <SelectValue placeholder="Entry Type" />
             </SelectTrigger>
             <SelectContent>
@@ -178,9 +184,8 @@ const TournamentsPage = () => {
           <Select value={type || "all"} onValueChange={handleTypeChange}>
             <SelectTrigger
               id="tournament-type-filter"
-              className="w-full sm:w-[160px] bg-card/50 border-white/10 h-10"
+              className=" bg-zinc-900 border border-white/10  h-12"
             >
-              <SlidersHorizontal className="size-4 mr-2 text-muted-foreground" />
               <SelectValue placeholder="Entry Type" />
             </SelectTrigger>
             <SelectContent>
@@ -190,16 +195,9 @@ const TournamentsPage = () => {
             </SelectContent>
           </Select>
 
-          {/* Search Button */}
-          <Button
-            id="tournament-search-btn"
-            type="submit"
-            className="h-10 px-6"
-          >
-            <Search className="size-4 mr-2" />
-            Search
-          </Button>
-        </form>
+
+
+        </div>
 
         {/* Active Filters Indicator */}
         {hasActiveFilters && (
@@ -240,12 +238,6 @@ const TournamentsPage = () => {
               </span>{" "}
               tournaments
             </p>
-            {isFetching && !isLoading && (
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <div className="size-3 rounded-full border-2 border-primary border-t-transparent animate-spin" />
-                Updating...
-              </div>
-            )}
           </div>
         )}
 
@@ -266,7 +258,7 @@ const TournamentsPage = () => {
         )}
 
         {/* Loading State */}
-        {isLoading && (
+        {(isLoading || isFetching) && (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-8">
             {Array.from({ length: LIMIT }).map((_, i) => (
               <TournamentCardSkeleton key={i} />
@@ -295,7 +287,7 @@ const TournamentsPage = () => {
         )}
 
         {/* Tournament Grid */}
-        {!isLoading && !isError && tournaments.length > 0 && (
+        {!isLoading && !isFetching && !isError && tournaments.length > 0 && (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-8">
             {tournaments.map((t: TournamentCardType) => (
               <TournamentCard t={t} key={t.id} />
@@ -310,6 +302,8 @@ const TournamentsPage = () => {
               <PaginationContent>
                 {/* Previous */}
                 <PaginationItem>
+                  <Button className="" asChild variant={'outline'}>
+
                   <PaginationPrevious
                     onClick={() =>
                       pagination.hasPreviousPage &&
@@ -319,8 +313,9 @@ const TournamentsPage = () => {
                       !pagination.hasPreviousPage
                         ? "pointer-events-none opacity-50"
                         : "cursor-pointer"
-                    }
-                  />
+                      }
+                      />
+                      </Button>
                 </PaginationItem>
 
                 {/* Static page numbers: always show all pages */}
@@ -329,6 +324,7 @@ const TournamentsPage = () => {
                   (_, i) => i + 1
                 ).map((p) => (
                   <PaginationItem key={p}>
+                    
                     <PaginationLink
                       isActive={p === pagination.currentPage}
                       onClick={() => handlePageChange(p)}
@@ -341,6 +337,8 @@ const TournamentsPage = () => {
 
                 {/* Next */}
                 <PaginationItem>
+                  <Button className="" asChild variant={'outline'}>
+
                   <PaginationNext
                     onClick={() =>
                       pagination.hasNextPage &&
@@ -352,6 +350,7 @@ const TournamentsPage = () => {
                         : "cursor-pointer"
                     }
                   />
+                  </Button>
                 </PaginationItem>
               </PaginationContent>
             </Pagination>

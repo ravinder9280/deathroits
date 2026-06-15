@@ -7,7 +7,7 @@ import { type ButtonProps, buttonVariants } from "./button";
 const Pagination = ({ className, ...props }: React.ComponentProps<"nav">) => (
   <nav
     aria-label="pagination"
-    className={cn("mx-auto flex w-full justify-center", className)}
+    className={cn("mx-auto flex w-full justify-center items-center", className)}
     role="navigation"
     {...props}
   />
@@ -19,7 +19,7 @@ const PaginationContent = React.forwardRef<
   React.ComponentProps<"ul">
 >(({ className, ...props }, ref) => (
   <ul
-    className={cn("flex flex-row items-center gap-1", className)}
+    className={cn("flex flex-row items-center gap-2", className)}
     ref={ref}
     {...props}
   />
@@ -50,7 +50,7 @@ const PaginationLink = ({
     className={cn(
       buttonVariants({
         size,
-        variant: isActive ? "outline" : "ghost",
+        variant: isActive ? "default" : "outline",
       }),
       className,
     )}

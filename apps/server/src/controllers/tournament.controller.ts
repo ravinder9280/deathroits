@@ -426,6 +426,7 @@ export const searchTournaments = asyncHandler(
             orderBy: { startTime: "desc" },
             skip,
             take: limit,
+            
         });
 
         res.json({

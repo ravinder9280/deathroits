@@ -34,7 +34,6 @@ export const useSearchTournaments = (filters: SearchFilters) => {
 
       return data as SearchTournamentsResponse;
     },
-    placeholderData: keepPreviousData,
     staleTime: 30_000,
   });
 };
