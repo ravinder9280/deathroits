@@ -31,3 +31,20 @@ export type TournamentJoinContext = {
   state: JoinState;
   entry: TournamentEntry | null;
 };
+
+/** Search tournaments API response */
+export type SearchTournamentsResponse = {
+  data: Tournament[];
+  pagination: {
+    currentPage: number;
+    totalPages: number;
+    totalCount: number;
+    limit: number;
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
+  };
+  filters: {
+    type: "free" | "paid" | null;
+    query: string;
+  };
+};

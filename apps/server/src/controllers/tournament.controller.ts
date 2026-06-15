@@ -11,7 +11,12 @@ export const joinTournamentSchema = z.object({
     gameUid: z.string().min(3),
     upiId: z.string().optional(),
 });
-
+export const searchTournamentSchema = z.object({
+    query: z.string().optional().default(""),
+    type: z.enum(["free", "paid"]).optional(),
+    page: z.coerce.number().int().min(1).default(1),
+    limit: z.coerce.number().int().min(1).max(100).default(8),
+});
 
 export const listTournament = asyncHandler(
     async (req: Request, res: Response) => {
@@ -370,3 +375,73 @@ export const getMyTournaments = async (
         });
     }
 };
+
+export const searchTournaments = asyncHandler(
+    async (req: Request, res: Response) => {
+        const parsed = searchTournamentSchema.safeParse(req.query);
+
+        if (!parsed.success) {
+            res.status(400).json({
+                error: "Invalid search parameters",
+                details: parsed.error.flatten().fieldErrors,
+            });
+            return;
+        }
+
+        const { query, type, page, limit } = parsed.data;
+
+        // Build the where clause
+        const where: Record<string, unknown> = {
+            // Exclude DRAFT and CANCELLED tournaments from search
+            status: { notIn: ["DRAFT", "CANCELLED"] },
+        };
+
+        // Type filter: free = entryFee is 0, paid = entryFee > 0
+        if (type === "free") {
+            where.entryFee = { equals: 0 };
+        } else if (type === "paid") {
+            where.entryFee = { gt: 0 };
+        }
+
+        // Text search on title and description
+        if (query && query.trim().length > 0) {
+            const trimmedQuery = query.trim();
+            where.OR = [
+                { title: { contains: trimmedQuery, mode: "insensitive" } },
+                { description: { contains: trimmedQuery, mode: "insensitive" } },
+            ];
+        }
+
+        // Get total count for pagination
+        const totalCount = await prisma.tournament.count({ where: where as any });
+
+        const totalPages = Math.max(1, Math.ceil(totalCount / limit));
+
+        // Clamp page to valid range
+        const safePage = Math.min(page, totalPages);
+        const skip = (safePage - 1) * limit;
+
+        const tournaments = await prisma.tournament.findMany({
+            where: where as any,
+            orderBy: { startTime: "desc" },
+            skip,
+            take: limit,
+        });
+
+        res.json({
+            data: tournaments,
+            pagination: {
+                currentPage: safePage,
+                totalPages,
+                totalCount,
+                limit,
+                hasNextPage: safePage < totalPages,
+                hasPreviousPage: safePage > 1,
+            },
+            filters: {
+                type: type ?? null,
+                query: query ?? "",
+            },
+        });
+    },
+);

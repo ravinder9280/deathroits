@@ -25,8 +25,8 @@ const jetbrains_mono = JetBrains_Mono({
 export const metadata: Metadata = {
   description: "Deathroit",
   title: "Deathroit",
-  icons:{
-    icon:"/fevicon.svg"
+  icons: {
+    icon: "/logo2.svg"
   }
 };
 
@@ -41,11 +41,12 @@ export default function RootLayout({
       lang="en"
       suppressHydrationWarning
     >
-       <link
-    rel="preload"
-    href="/bg.svg"
-    as="image"
-  />
+      
+      <link
+        rel="preload"
+        href="/bg.svg"
+        as="image"
+      />
       <Toaster richColors closeButton />
       <body className="font-body">
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem >
@@ -53,7 +54,7 @@ export default function RootLayout({
           <QueryProvider>
 
 
-          {children}
+            {children}
           </QueryProvider>
         </ThemeProvider>
       </body>
