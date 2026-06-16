@@ -3,7 +3,7 @@ import { asyncHandler } from "../utils/async-handler";
 import type { Request, Response } from "express";
 import { fromNodeHeaders } from "better-auth/node";
 import { auth } from "../lib/auth";
-
+import { GAMES } from "@monorepo/utils";
 import { z } from "zod";
 
 export const joinTournamentSchema = z.object({
@@ -16,48 +16,49 @@ export const searchTournamentSchema = z.object({
     type: z.enum(["free", "paid"]).optional(),
     page: z.coerce.number().int().min(1).default(1),
     limit: z.coerce.number().int().min(1).max(100).default(8),
+    game: z.enum(GAMES).optional(),
 });
 
-export const listTournament = asyncHandler(
-    async (req: Request, res: Response) => {
-        const tournaments = await prisma.tournament.findMany({
-            where: { status: { notIn: ["DRAFT", "COMPLETED"] } },
-        });
+// export const listTournament = asyncHandler(
+//     async (req: Request, res: Response) => {
+//         const tournaments = await prisma.tournament.findMany({
+//             where: { status: { notIn: ["DRAFT", "COMPLETED"] } },
+//         });
 
-        try {
-            const session = await auth.api.getSession({
-                headers: fromNodeHeaders(req.headers),
-            });
+//         try {
+//             const session = await auth.api.getSession({
+//                 headers: fromNodeHeaders(req.headers),
+//             });
 
-            if (session?.user) {
-                const userId = session.user.id;
-                const entries = await prisma.tournamentEntry.findMany({
-                    where: {
-                        userId,
-                        tournamentId: { in: tournaments.map((t) => t.id) },
-                    },
-                    select: {
-                        tournamentId: true,
-                    },
-                });
+//             if (session?.user) {
+//                 const userId = session.user.id;
+//                 const entries = await prisma.tournamentEntry.findMany({
+//                     where: {
+//                         userId,
+//                         tournamentId: { in: tournaments.map((t) => t.id) },
+//                     },
+//                     select: {
+//                         tournamentId: true,
+//                     },
+//                 });
 
-                const joinedSet = new Set(entries.map((e) => e.tournamentId));
+//                 const joinedSet = new Set(entries.map((e) => e.tournamentId));
 
-                const decorated = tournaments.map((t) => ({
-                    ...t,
-                    isJoined: joinedSet.has(t.id),
-                }));
+//                 const decorated = tournaments.map((t) => ({
+//                     ...t,
+//                     isJoined: joinedSet.has(t.id),
+//                 }));
 
-                res.json({ tournaments: decorated });
-                return;
-            }
-        } catch {
-            // Fall through if auth check fails
-        }
+//                 res.json({ tournaments: decorated });
+//                 return;
+//             }
+//         } catch {
+//             // Fall through if auth check fails
+//         }
 
-        res.json({ tournaments });
-    },
-);
+//         res.json({ tournaments });
+//     },
+// );
 
 export const getTournamentById = asyncHandler(
     async (req: Request, res: Response) => {
@@ -388,7 +389,7 @@ export const searchTournaments = asyncHandler(
             return;
         }
 
-        const { query, type, page, limit } = parsed.data;
+        const { query, type, page, limit, game } = parsed.data;
 
         // Build the where clause
         const where: Record<string, unknown> = {
@@ -401,6 +402,11 @@ export const searchTournaments = asyncHandler(
             where.entryFee = { equals: 0 };
         } else if (type === "paid") {
             where.entryFee = { gt: 0 };
+        }
+
+        // Game filter
+        if (game) {
+            where.game = game;
         }
 
         // Text search on title and description
@@ -442,6 +448,7 @@ export const searchTournaments = asyncHandler(
             filters: {
                 type: type ?? null,
                 query: query ?? "",
+                game: game ?? null,
             },
         });
     },

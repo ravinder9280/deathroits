@@ -22,11 +22,12 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@monorepo/ui/components/pagination";
-import { Search, X, Trophy, SlidersHorizontal } from "lucide-react";
+import { Search, X, Trophy } from "lucide-react";
 import { useSearchTournaments } from "@/hooks/useSearchTournaments";
 import useDebounce from "@/hooks/useDebounceHook";
+import { GAMES, GAME_LABELS } from "@monorepo/utils";
 
-const LIMIT = 2;
+const LIMIT = 12;
 
 function TournamentCardSkeleton() {
   return (
@@ -65,6 +66,7 @@ const TournamentsPage = () => {
 
   // ── Derive all filter state from URL params ──
   const type = (searchParams.get("type") as "free" | "paid" | "") ?? "";
+  const game = searchParams.get("game") ?? "";
   const page = Number(searchParams.get("page") ?? "1") || 1;
 
   // ── Helper to update URL params (single source of truth) ──
@@ -96,6 +98,7 @@ const TournamentsPage = () => {
   const { data, isLoading, isFetching, isError } = useSearchTournaments({
     query,
     type,
+    game,
     page,
     limit: LIMIT,
   });
@@ -122,6 +125,16 @@ const TournamentsPage = () => {
     [updateParams]
   );
 
+  const handleGameChange = useCallback(
+    (value: string) => {
+      updateParams({
+        game: value === "all" ? null : value,
+        page: "1",
+      });
+    },
+    [updateParams]
+  );
+
   const handlePageChange = useCallback(
     (newPage: number) => {
       updateParams({ page: String(newPage) });
@@ -134,10 +147,10 @@ const TournamentsPage = () => {
     router.push("/tournaments", { scroll: false });
   }, [router]);
 
-  const hasActiveFilters = query || type;
+  const hasActiveFilters = query || type || game;
 
   return (
-    <main className="bg-custom-dark min-h-screen py-27 px-4">
+    <main className=" min-h-screen py-27 px-4">
       <div className="container mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
@@ -151,10 +164,10 @@ const TournamentsPage = () => {
 
         {/* Search + Filters Bar */}
         <div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8"
+          className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8"
         >
           {/* Search Input */}
-          <div className="relative flex-1 md:col-span-2">
+          <div className="relative flex-1 col-span-2">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
             <Input
               id="tournament-search"
@@ -181,17 +194,22 @@ const TournamentsPage = () => {
               <SelectItem value="paid">Paid</SelectItem>
             </SelectContent>
           </Select>
-          <Select value={type || "all"} onValueChange={handleTypeChange}>
+
+          {/* Game Filter */}
+          <Select value={game || "all"} onValueChange={handleGameChange}>
             <SelectTrigger
-              id="tournament-type-filter"
-              className=" bg-zinc-900 border border-white/10  h-12"
+              id="tournament-game-filter"
+              className="bg-zinc-900 border border-white/10 h-12"
             >
-              <SelectValue placeholder="Entry Type" />
+              <SelectValue placeholder="Game" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Types</SelectItem>
-              <SelectItem value="free">Free</SelectItem>
-              <SelectItem value="paid">Paid</SelectItem>
+              <SelectItem value="all">All Games</SelectItem>
+              {GAMES.map((g) => (
+                <SelectItem key={g} value={g}>
+                  {GAME_LABELS[g]}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
 
@@ -213,6 +231,11 @@ const TournamentsPage = () => {
             {type && (
               <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-xs font-medium bg-primary/15 text-primary border border-primary/20">
                 Type: {type === "free" ? "Free" : "Paid"}
+              </span>
+            )}
+            {game && (
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-xs font-medium bg-primary/15 text-primary border border-primary/20">
+                Game: {GAME_LABELS[game as keyof typeof GAME_LABELS] ?? game}
               </span>
             )}
             <button
@@ -323,6 +346,7 @@ const TournamentsPage = () => {
                   { length: pagination.totalPages },
                   (_, i) => i + 1
                 ).map((p) => (
+                  
                   <PaginationItem key={p}>
                     
                     <PaginationLink

@@ -1,7 +1,7 @@
 import { Router } from "express";
 import {
   getTournamentById,
-  listTournament,
+  // listTournament,
   joinTournament,
   getMyTournaments,
   getTournamentEntry,
@@ -23,7 +23,7 @@ import {
 
 const router = Router();
 
-router.get("/", listTournament);
+// router.get("/", listTournament);
 router.get("/search", searchTournaments);
 router.get("/me", requireAuth, getMyTournaments);
 router.get("/:id", getTournamentById);

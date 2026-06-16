@@ -7,6 +7,7 @@ const API = process.env.NEXT_PUBLIC_API_BASE_URL;
 export type SearchFilters = {
   query: string;
   type: "free" | "paid" | "";
+  game: string;
   page: number;
   limit: number;
 };
@@ -25,6 +26,7 @@ export const useSearchTournaments = (filters: SearchFilters) => {
 
       if (filters.query) params.set("query", filters.query);
       if (filters.type) params.set("type", filters.type);
+      if (filters.game) params.set("game", filters.game);
       params.set("page", String(filters.page));
       params.set("limit", String(filters.limit));
 

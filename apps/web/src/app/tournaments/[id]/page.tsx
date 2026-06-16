@@ -1,6 +1,7 @@
 "use client";
 
 import { format } from "date-fns";
+import { GAME_LABELS } from "@monorepo/utils";
 import { useParams } from "next/navigation";
 import { Calendar, CreditCard, Gamepad, Trophy, Users } from "lucide-react";
 import { useTournament } from "@/hooks/useTournament";
@@ -167,7 +168,7 @@ const TournamentDetailPage = () => {
                   <Gamepad size={14} />
                   Game
                 </div>
-                <p>{tournament.game}</p>
+                <p>{GAME_LABELS[tournament.game as keyof typeof GAME_LABELS] ?? tournament.game}</p>
               </div>
               <div>
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">

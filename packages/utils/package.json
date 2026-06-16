@@ -19,7 +19,7 @@
     "@monorepo/tsconfig": "workspace:*"
   },
   "exports": {
-    ".": "./src",
+    ".": "./src/index.ts",
     "./styles": "./src/styles.ts"
   }
 }
