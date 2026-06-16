@@ -177,7 +177,7 @@ const TournamentsPage = () => {
               className="pl-10 bg-zinc-900 border border-white/10 "
               onChange={(e) => setSearchVal(e.target.value)}
             />
-           
+
           </div>
 
           {/* Type Filter */}
@@ -224,26 +224,43 @@ const TournamentsPage = () => {
               Active filters:
             </span>
             {query && (
-              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-xs font-medium bg-primary/15 text-primary border border-primary/20">
+              <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-xs font-medium bg-primary/15 text-primary border border-primary/20">
                 Search: &quot;{query}&quot;
-              </span>
+                <button onClick={()=>{
+                  updateParams({query: null, page: "1"})
+                }} className="ml-1 cursor-pointer hover:text-destructive">
+                  x
+                </button>
+              </div>
             )}
             {type && (
-              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-xs font-medium bg-primary/15 text-primary border border-primary/20">
+              <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-xs font-medium bg-primary/15 text-primary border border-primary/20">
                 Type: {type === "free" ? "Free" : "Paid"}
-              </span>
+                <button onClick={()=>{
+                  updateParams({type: null})
+                }} className="ml-1 cursor-pointer hover:text-destructive">
+                  x
+                </button>
+              </div>
             )}
             {game && (
-              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-xs font-medium bg-primary/15 text-primary border border-primary/20">
+              <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-xs font-medium bg-primary/15 text-primary border border-primary/20">
                 Game: {GAME_LABELS[game as keyof typeof GAME_LABELS] ?? game}
-              </span>
+                <button className="ml-1 cursor-pointer hover:text-destructive" onClick={()=>{
+                  updateParams({game: null})
+                }}>
+                  x
+                </button>
+              </div>
             )}
-            <button
+            <Button
               onClick={handleClearFilters}
-              className="text-xs text-muted-foreground hover:text-foreground underline underline-offset-2 transition-colors"
+              className=""
+              variant={'outline'}
+              size={'sm'}
             >
-              Clear all
-            </button>
+              Clear all <X/>
+            </Button>
           </div>
         )}
 
@@ -327,18 +344,18 @@ const TournamentsPage = () => {
                 <PaginationItem>
                   <Button className="" asChild variant={'outline'}>
 
-                  <PaginationPrevious
-                    onClick={() =>
-                      pagination.hasPreviousPage &&
-                      handlePageChange(pagination.currentPage - 1)
-                    }
-                    className={
-                      !pagination.hasPreviousPage
-                        ? "pointer-events-none opacity-50"
-                        : "cursor-pointer"
+                    <PaginationPrevious
+                      onClick={() =>
+                        pagination.hasPreviousPage &&
+                        handlePageChange(pagination.currentPage - 1)
                       }
-                      />
-                      </Button>
+                      className={
+                        !pagination.hasPreviousPage
+                          ? "pointer-events-none opacity-50"
+                          : "cursor-pointer"
+                      }
+                    />
+                  </Button>
                 </PaginationItem>
 
                 {/* Static page numbers: always show all pages */}
@@ -346,9 +363,9 @@ const TournamentsPage = () => {
                   { length: pagination.totalPages },
                   (_, i) => i + 1
                 ).map((p) => (
-                  
+
                   <PaginationItem key={p}>
-                    
+
                     <PaginationLink
                       isActive={p === pagination.currentPage}
                       onClick={() => handlePageChange(p)}
@@ -363,17 +380,17 @@ const TournamentsPage = () => {
                 <PaginationItem>
                   <Button className="" asChild variant={'outline'}>
 
-                  <PaginationNext
-                    onClick={() =>
-                      pagination.hasNextPage &&
-                      handlePageChange(pagination.currentPage + 1)
-                    }
-                    className={
-                      !pagination.hasNextPage
-                        ? "pointer-events-none opacity-50"
-                        : "cursor-pointer"
-                    }
-                  />
+                    <PaginationNext
+                      onClick={() =>
+                        pagination.hasNextPage &&
+                        handlePageChange(pagination.currentPage + 1)
+                      }
+                      className={
+                        !pagination.hasNextPage
+                          ? "pointer-events-none opacity-50"
+                          : "cursor-pointer"
+                      }
+                    />
                   </Button>
                 </PaginationItem>
               </PaginationContent>

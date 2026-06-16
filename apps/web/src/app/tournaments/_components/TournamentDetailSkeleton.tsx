@@ -4,7 +4,7 @@ import { Skeleton } from "@monorepo/ui/components/skeleton";
 export default function TournamentDetailSkeleton() {
   return (
     <main className="max-h-[100dvh] overflow-hidden relative">
-      <div className="container bg-custom-dark mx-auto max-w-xl">
+      <div className="container  mx-auto max-w-xl">
         <div className="py-[56px]">
           
           <div className="relative">

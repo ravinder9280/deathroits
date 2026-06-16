@@ -92,9 +92,9 @@ const TournamentDetailPage = () => {
     (!userState || !userState.isAuthenticated || userState.canJoin);
 
   return (
-    <main className="min-h-screen relative bg-custom-dark">
-      <div className="container md:border border-white/10 mx-auto max-w-xl">
-        <div className="py-[56px]">
+    <main className="min-h-screen relative ">
+      <div className="container md:border border-white/10 mt-[56px] mx-auto max-w-xl">
+        <div className="pb-[56px]">
           {/* Banner */}
           <div className="relative">
             <img
@@ -102,10 +102,16 @@ const TournamentDetailPage = () => {
               className="cursor-pointer w-full object-cover"
               src={tournament.bannerImage ?? "/game3.png"}
             />
-            <div className="absolute left-0 bottom-0 p-2">
+            <div className="absolute right-0 top-0 p-2">
               <StatusBadge status={tournament.status} />
             </div>
+            <div className="absolute bottom-0 w-full p-4 bg-gradient-to-t from-background via-background/70 to-background/40">
+  <h2 className="text-xl font-bold text-foreground tracking-[-0.02em] leading-[0.95] ">
+    {tournament.title}
+  </h2>
+</div>
           </div>
+
 
           <div
             className={`container mx-auto px-4 py-4 space-y-4 ${
@@ -129,7 +135,7 @@ const TournamentDetailPage = () => {
 
             <div>
               <div className="mb-6">
-                <h2 className="text-xl font-semibold">{tournament.title}</h2>
+                <h2 className=" font-semibold">Overview</h2>
                 <p className="text-sm text-muted-foreground line-clamp-5">
                   {tournament.description}
                 </p>

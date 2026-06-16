@@ -447,7 +447,7 @@ export const searchTournaments = asyncHandler(
             },
             filters: {
                 type: type ?? null,
-                query: query ?? "",
+                query: query || null,
                 game: game ?? null,
             },
         });
