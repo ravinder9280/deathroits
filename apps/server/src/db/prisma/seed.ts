@@ -1,6 +1,6 @@
 import "dotenv/config";
 import { PrismaPg } from "@prisma/adapter-pg";
-import { PrismaClient } from "./generated/client";
+import { PrismaClient, TournamentStatus } from "./generated/client";
 
 const adapter = new PrismaPg({
   connectionString: process.env.DATABASE_URL,
@@ -10,13 +10,13 @@ const prisma = new PrismaClient({ adapter });
 
 const GAMES = ["FREE_FIRE", "BGMI", "VALORANT", "COD_MOBILE"];
 
-const STATUSES = [
-  "DRAFT",
-  "REGISTRATION_OPEN",
-  "REGISTRATION_CLOSED",
-  "ONGOING",
-  "COMPLETED",
-] as const;
+const STATUSES: TournamentStatus[] = [
+  TournamentStatus.DRAFT,
+  TournamentStatus.REGISTRATION_OPEN,
+  TournamentStatus.REGISTRATION_CLOSED,
+  TournamentStatus.ONGOING,
+  TournamentStatus.COMPLETED,
+];
 
 const TOURNAMENT_NAMES = [
   "Blaze Royale Open #2",

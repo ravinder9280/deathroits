@@ -2,13 +2,15 @@
   "extends": "@monorepo/tsconfig/express.json",
   "compilerOptions": {
     "outDir": "./dist",
-    "rootDir": "./src",
+    "rootDirs": ["./src", "../../packages/utils/src"],
     "skipLibCheck": true,
     "module": "CommonJS",
     "moduleResolution": "node",
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "@monorepo/utils": ["../../packages/utils/src/index.ts"],
+      "@monorepo/utils/*": ["../../packages/utils/src/*"]
     }
   },
   "include": ["src/**/*.ts", "eslint.config.mjs"],
