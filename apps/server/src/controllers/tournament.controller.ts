@@ -5,6 +5,7 @@ import { fromNodeHeaders } from "better-auth/node";
 import { auth } from "../lib/auth";
 import { GAMES } from "@monorepo/utils";
 import { z } from "zod";
+import { TournamentWhereInput } from "../db/prisma/generated/models";
 
 export const joinTournamentSchema = z.object({
     ign: z.string().min(3),
@@ -391,25 +392,21 @@ export const searchTournaments = asyncHandler(
 
         const { query, type, page, limit, game } = parsed.data;
 
-        // Build the where clause
-        const where: Record<string, unknown> = {
-            // Exclude DRAFT and CANCELLED tournaments from search
+        const where: TournamentWhereInput = {
             status: { notIn: ["DRAFT", "CANCELLED"] },
+
         };
 
-        // Type filter: free = entryFee is 0, paid = entryFee > 0
         if (type === "free") {
             where.entryFee = { equals: 0 };
         } else if (type === "paid") {
             where.entryFee = { gt: 0 };
         }
 
-        // Game filter
         if (game) {
             where.game = game;
         }
 
-        // Text search on title and description
         if (query && query.trim().length > 0) {
             const trimmedQuery = query.trim();
             where.OR = [
@@ -418,12 +415,10 @@ export const searchTournaments = asyncHandler(
             ];
         }
 
-        // Get total count for pagination
         const totalCount = await prisma.tournament.count({ where: where as any });
 
         const totalPages = Math.max(1, Math.ceil(totalCount / limit));
 
-        // Clamp page to valid range
         const safePage = Math.min(page, totalPages);
         const skip = (safePage - 1) * limit;
 
@@ -432,7 +427,7 @@ export const searchTournaments = asyncHandler(
             orderBy: { startTime: "desc" },
             skip,
             take: limit,
-            
+
         });
 
         res.json({
