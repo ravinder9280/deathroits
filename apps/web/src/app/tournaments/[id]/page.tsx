@@ -105,13 +105,10 @@ const TournamentDetailPage = () => {
               className="cursor-pointer w-full object-cover"
               src={tournament.bannerImage ?? "/game3.png"}
             />
-            <div className="absolute right-0 top-0 p-2">
-              <StatusBadge status={tournament.status} />
-            </div>
+           
             <div className="absolute bottom-0 w-full p-4 bg-gradient-to-t from-background via-background/70 to-background/40">
-              <h2 className="text-xl font-bold text-foreground tracking-[-0.02em] leading-[0.95] ">
-                {tournament.title}
-              </h2>
+                           <StatusBadge status={tournament.status} />
+
             </div>
           </div>
 
@@ -137,8 +134,10 @@ const TournamentDetailPage = () => {
 
             <div>
               <div className="mb-6">
-                {/* <h2 className=" text-[20px] leading-relaxed font-semibold mb-2">Description</h2> */}
-                <p className="text-[16px] text-muted-foreground  leading-relaxed line-clamp-3">
+                 <h2 className="text-xl font-bold text-foreground tracking-[-0.02em] leading-[0.95] ">
+                {tournament.title}
+              </h2>
+                <p className="text-[16px] text-muted-foreground  leading-relaxed mt-2 line-clamp-3">
 
                   {tournament.description}
                 </p>
@@ -147,7 +146,7 @@ const TournamentDetailPage = () => {
               <div className="grid grid-cols-3 gap-2">
                 <div className="flex flex-col items-center justify-center bg-muted p-2 rounded-md">
                   <CreditCard size={24} className="mb-2 text-primary" />
-                  <h3 className="font-semibold font-sans">
+                  <h3 className="text-[18px] font-[800] font-sans">
                     {tournament.entryFee > 0
                       ? `₹${tournament.entryFee}`
                       : "Free"}
@@ -156,14 +155,14 @@ const TournamentDetailPage = () => {
                 </div>
                 <div className="flex flex-col items-center justify-center bg-muted p-2 rounded-md">
                   <Trophy size={24} className="mb-2 text-primary" />
-                  <h3 className="text-green-500 font-semibold font-sans">
+                  <h3 className="text-green-500 text-[18px] font-[800] font-sans">
                     ₹{tournament.prizePool}
                   </h3>
                   <p className="text-muted-foreground text-xs">Prize Pool</p>
                 </div>
                 <div className="flex flex-col items-center justify-center bg-muted p-2 rounded-md">
                   <Users size={24} className="mb-2 text-primary" />
-                  <h3 className="font-semibold font-sans">
+                  <h3 className="text-[18px] font-[800] font-sans">
                     {tournament.joinedPlayersCount}/{tournament.maxPlayers}
                   </h3>
                   <p className="text-muted-foreground text-xs">Players</p>
