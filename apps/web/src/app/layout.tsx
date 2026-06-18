@@ -3,7 +3,7 @@ import Navbar from "@/components/Home/Navbar";
 import { Toaster } from 'sonner';
 import type { Metadata } from "next";
 import { JetBrains_Mono, Space_Grotesk } from "next/font/google";
-
+import NextTopLoader from 'nextjs-toploader';
 import { ThemeProvider } from "../providers/theme-provider";
 import { QueryProvider } from "@/providers/query-provider";
 const space_grotesk_display = Space_Grotesk({
@@ -49,6 +49,18 @@ export default function RootLayout({
       />
       <Toaster richColors closeButton />
       <body className="font-body">
+         <NextTopLoader 
+         
+          color="#2563eb"
+          initialPosition={0.08}
+          crawlSpeed={200}
+          height={3}
+          crawl={true}
+          showSpinner={false}
+          easing="ease"
+          speed={200}
+          shadow="0 0 10px #2563eb,0 0 5px #2563eb"
+        />
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem >
           <Navbar />
           <QueryProvider>

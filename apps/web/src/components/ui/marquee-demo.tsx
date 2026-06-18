@@ -89,40 +89,30 @@ const Logos = {
 const gamingLogos = [
   {
     name: "PUBG Mobile",
-    imageUrl: "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=400&auto=format&fit=crop",
+    imageUrl: "/bgmi.png",
     icon: Target,
     colorClass: "text-amber-500 border-amber-500/30",
   },
   {
     name: "Free Fire",
-    imageUrl: "https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=400&auto=format&fit=crop",
+    imageUrl: "/ff.jpg",
     icon: Flame,
     colorClass: "text-orange-500 border-orange-500/30",
   },
   {
     name: "Call of Duty",
-    imageUrl: "https://images.unsplash.com/photo-1552820728-8b83bb6b773f?q=80&w=400&auto=format&fit=crop",
+    imageUrl: "/cod.png",
     icon: Shield,
     colorClass: "text-red-500 border-red-500/30",
   },
-  {
-    name: "Valorant",
-    imageUrl: "https://images.unsplash.com/photo-1612287230202-1bf1d85d1bdf?q=80&w=400&auto=format&fit=crop",
-    icon: Trophy,
-    colorClass: "text-rose-500 border-rose-500/30",
-  },
+
   {
     name: "Minecraft",
-    imageUrl: "https://images.unsplash.com/photo-1589244159943-460088ed5c92?q=80&w=400&auto=format&fit=crop",
+    imageUrl: "/minecraft.svg",
     icon: Sword,
     colorClass: "text-emerald-500 border-emerald-500/30",
   },
-  {
-    name: "Apex Legends",
-    imageUrl: "https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=400&auto=format&fit=crop",
-    icon: Crown,
-    colorClass: "text-yellow-500 border-yellow-500/30",
-  },
+ 
 ]
 
 export function MarqueeDemo() {
@@ -136,17 +126,17 @@ export function MarqueeDemo() {
             return (
               <div
                 key={index}
-                className="relative flex items-center gap-4 mx-4 py-3 px-6 rounded-2xl border bg-zinc-900/40 border-zinc-800 backdrop-blur-md overflow-hidden min-w-[240px] shadow-lg group hover:border-zinc-700/60 transition-all duration-300"
+                className="relative flex items-center gap-4 mx-4 py-3 px-6 rounded-2xl  bg-zinc-900/40 border-zinc-800 backdrop-blur-md overflow-hidden min-w-[240px] shadow-lg group hover:border-zinc-700/60 transition-all duration-300"
               >
                 {/* Background image overlay */}
                 <div 
-                  className="absolute inset-0 bg-cover bg-center opacity-10 group-hover:opacity-20 transition-opacity duration-300" 
+                  className="absolute inset-0 bg-cover bg-center opacity-20 group-hover:opacity-20 transition-opacity duration-300" 
                   style={{ backgroundImage: `url('${game.imageUrl}')` }}
                 />
                 
                 {/* Icon & Details */}
                 <div className={`p-2 rounded-xl bg-zinc-800/80 ${game.colorClass}`}>
-                  <Icon className="w-6 h-6" />
+                <img className="size-10 rounded" src={game.imageUrl} alt={game.name} />
                 </div>
                 <div className="flex flex-col z-10">
                   <span className="font-bold text-white text-base tracking-wide">
