@@ -25,7 +25,7 @@ import {
 import { Search, X, Trophy } from "lucide-react";
 import { useSearchTournaments } from "@/hooks/useSearchTournaments";
 import useDebounce from "@/hooks/useDebounceHook";
-import { GAMES, GAME_LABELS } from "@monorepo/utils";
+import { GAME_KEYS, GAME_LABELS } from "@monorepo/utils";
 
 const LIMIT = 12;
 
@@ -205,7 +205,7 @@ const TournamentsPage = () => {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Games</SelectItem>
-              {GAMES.map((g) => (
+              {GAME_KEYS.map((g) => (
                 <SelectItem key={g} value={g}>
                   {GAME_LABELS[g]}
                 </SelectItem>

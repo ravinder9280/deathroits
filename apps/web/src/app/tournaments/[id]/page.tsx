@@ -1,7 +1,7 @@
 "use client";
 
-import { format } from "date-fns";
-import { GAME_LABELS } from "@monorepo/utils";
+import { format, formatDistanceToNow } from "date-fns";
+import { GAME_LABELS, GAMES } from "@monorepo/utils";
 import { useParams } from "next/navigation";
 import { Calendar, CreditCard, Gamepad, Trophy, Users } from "lucide-react";
 import { useTournament } from "@/hooks/useTournament";
@@ -12,6 +12,9 @@ import TournamentDetailSkeleton from "../_components/TournamentDetailSkeleton";
 import StatusBadge from "../_components/StatusBadge";
 import CountdownCard from "../_components/CountdownCard";
 import ActionPanel from "../_components/ActionPanel";
+import Image from "next/image";
+import { Avatar, AvatarFallback, AvatarImage } from "@monorepo/ui/components/avatar";
+import { Badge } from "@monorepo/ui/components/badge";
 
 const TournamentDetailPage = () => {
   const { id } = useParams();
@@ -93,7 +96,7 @@ const TournamentDetailPage = () => {
 
   return (
     <main className="min-h-screen relative ">
-      <div className="container md:border border-white/10 mt-[56px] mx-auto max-w-xl">
+      <div className="container md:border-x border-white/10 mt-[56px] mx-auto max-w-xl">
         <div className="pb-[56px]">
           {/* Banner */}
           <div className="relative">
@@ -106,17 +109,16 @@ const TournamentDetailPage = () => {
               <StatusBadge status={tournament.status} />
             </div>
             <div className="absolute bottom-0 w-full p-4 bg-gradient-to-t from-background via-background/70 to-background/40">
-  <h2 className="text-xl font-bold text-foreground tracking-[-0.02em] leading-[0.95] ">
-    {tournament.title}
-  </h2>
-</div>
+              <h2 className="text-xl font-bold text-foreground tracking-[-0.02em] leading-[0.95] ">
+                {tournament.title}
+              </h2>
+            </div>
           </div>
 
 
           <div
-            className={`container mx-auto px-4 py-4 space-y-4 ${
-              isFixedBottomAction ? "pb-24" : ""
-            }`}
+            className={`container mx-auto px-4 py-4 space-y-8  ${isFixedBottomAction ? "pb-12" : ""
+              }`}
           >
             {/* Countdown */}
             {shouldShowCountdown && (
@@ -135,8 +137,9 @@ const TournamentDetailPage = () => {
 
             <div>
               <div className="mb-6">
-                <h2 className=" font-semibold">Overview</h2>
-                <p className="text-sm text-muted-foreground line-clamp-5">
+                {/* <h2 className=" text-[20px] leading-relaxed font-semibold mb-2">Description</h2> */}
+                <p className="text-[16px] text-muted-foreground  leading-relaxed line-clamp-3">
+
                   {tournament.description}
                 </p>
               </div>
@@ -169,19 +172,39 @@ const TournamentDetailPage = () => {
             </div>
 
             <div className="space-y-3">
-              <div>
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Gamepad size={14} />
-                  Game
+              <div className="p-4 rounded-lg bg-muted flex items-center gap-2">
+                <Avatar className="size-[50px]">
+                  <AvatarImage alt="U" src={GAMES[tournament.game as keyof typeof GAMES]?.image} />
+                  <AvatarFallback>
+
+                    U
+                  </AvatarFallback>
+                </Avatar>
+
+
+                <div className="">
+                  <span className="text-muted-foreground text-[14px]">
+
+                    Game
+                  </span>
+                  <p className="text-[18px] font-[800]">{GAME_LABELS[tournament.game as keyof typeof GAME_LABELS] ?? tournament.game}</p>
                 </div>
-                <p>{GAME_LABELS[tournament.game as keyof typeof GAME_LABELS] ?? tournament.game}</p>
               </div>
-              <div>
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Calendar size={14} />
+              <div className="bg-muted p-4 rounded-lg ">
+                <div className="flex items-center justify-between">
+
+                <h3 className="text-[20px] leading-relaxed font-semibold">
+
+
                   Start At
+                </h3>
+                 <Badge className="shrink-0" variant="secondary">
+            {formatDistanceToNow(new Date(tournament.startTime), { addSuffix: true })}
+          </Badge>
+
                 </div>
-                <p>
+                <p className="text-[16px] text-muted-foreground  leading-relaxed">
+
                   {format(
                     new Date(tournament.startTime),
                     "do MMM, hh:mm a"
@@ -191,28 +214,69 @@ const TournamentDetailPage = () => {
             </div>
 
             <div>
-              <h3 className="text-muted-foreground font-semibold">
+              <h3 className="text-[14px] font-[700]">
                 Prize Breakdown
               </h3>
-              <div className="grid gap-2 mt-2">
-                <div className="flex items-center gap-2 rounded-lg border border-white/20 px-3 py-2 text-sm">
-                  <span>🥇</span>
-                  1st: ₹50
+              <div className="space-y-4 mt-4 ">
+
+                <div className="grid gap-2 grid-cols-2 mt-2 bg-muted rounded-lg">
+                  <div className="flex items-center gap-2  border-r border-white/20  px-3 py-2 ">
+                    <span className="text-xl">
+
+                      🥇
+                    </span>
+                    <span className="text-[20px] font-[800]">
+
+                      1st
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-center">
+                    <h4 className="text-xl font-[800]">₹70</h4>
+
+                  </div>
+
                 </div>
-                <div className="flex items-center gap-2 rounded-lg border border-white/20 px-3 py-2 text-sm">
-                  <span>🥈</span>
-                  2nd: ₹30
+                <div className="grid gap-2 grid-cols-2 mt-2 bg-muted rounded-lg">
+                  <div className="flex items-center gap-2  border-r border-white/20  px-3 py-2 ">
+                    <span className="text-xl">
+
+                      🥈
+                    </span>
+                    <span className="text-[20px] font-[800]">
+
+                      2nd
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-center">
+                    <h4 className="text-xl font-[800]">₹30</h4>
+
+                  </div>
+
                 </div>
-                <div className="flex items-center gap-2 rounded-lg border border-white/20 px-3 py-2 text-sm">
-                  <span>🥉</span>
-                  3rd: ₹20
+                <div className="grid gap-2 grid-cols-2 mt-2 bg-muted rounded-lg">
+                  <div className="flex items-center gap-2  border-r border-white/20  px-3 py-2 ">
+                    <span className="text-xl">
+
+                      🥉
+                    </span>
+                    <span className="text-[20px] font-[800]">
+
+                      3rd
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-center">
+                    <h4 className="text-xl font-[800]">₹20</h4>
+
+                  </div>
+
                 </div>
               </div>
             </div>
 
-            <div>
-              <h3 className="text-sm leading-relaxed">Rules</h3>
-              <p className="text-sm text-muted-foreground">
+            <div className="bg-muted rounded-md p-4">
+              <h3 className="text-[20px] leading-relaxed font-semibold">
+                Rules</h3>
+              <p className="text-[16px] text-muted-foreground mt-2 leading-relaxed">
                 {tournament.rules}
               </p>
             </div>

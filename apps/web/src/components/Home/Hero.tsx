@@ -53,8 +53,8 @@ bg-red-400
             organizers, and growing esports communities.
           </p>
         </div>
-        <div className="flex flex-col md:flex-row justify-center mt-8 gap-2">
-          <Button size={"xl"}>
+        <div className="grid grid-cols-1 md:grid-cols-2 mt-8 gap-2">
+          <Button size={"xl"} asChild>
             <Link href={"/sign-in"}>
               Start Competing
 

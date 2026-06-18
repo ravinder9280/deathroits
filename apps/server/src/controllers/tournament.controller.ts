@@ -3,7 +3,7 @@ import { asyncHandler } from "../utils/async-handler";
 import type { Request, Response } from "express";
 import { fromNodeHeaders } from "better-auth/node";
 import { auth } from "../lib/auth";
-import { GAMES } from "@monorepo/utils";
+import { GAME_KEYS } from "@monorepo/utils";
 import { z } from "zod";
 import { TournamentWhereInput } from "../db/prisma/generated/models";
 
@@ -17,7 +17,7 @@ export const searchTournamentSchema = z.object({
     type: z.enum(["free", "paid"]).optional(),
     page: z.coerce.number().int().min(1).default(1),
     limit: z.coerce.number().int().min(1).max(100).default(8),
-    game: z.enum(GAMES).optional(),
+    game: z.enum(GAME_KEYS).optional(),
 });
 
 // export const listTournament = asyncHandler(
