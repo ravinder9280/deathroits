@@ -37,17 +37,7 @@ const topPlayers = [
   },
 ];
 
-const otherPlayers = [
-  { rank: 4, name: "PhantomKill", team: "Ghost Squad", wins: 29, earnings: "₹6,000" },
-  { rank: 5, name: "IronClutch", team: "Team Delta", wins: 25, earnings: "₹4,500" },
-  { rank: 6, name: "QuantumAce", team: "Pixel Warriors", wins: 22, earnings: "₹3,000" },
-];
 
-const stats = [
-  { label: "Total Players", value: "12,000+", icon: "👥" },
-  { label: "Prize Distributed", value: "₹8L+", icon: "💸" },
-  { label: "Tournaments Done", value: "340+", icon: "🏆" },
-];
 
 const Leaderboard = () => {
   return (

@@ -4,7 +4,7 @@ import { Spinner } from '@monorepo/ui/components/spinner';
 
 const loading = () => {
     return (
-        <main className='h-screen w-screen flex items-center bg-custom-dark justify-center p-2'>
+        <main className='h-screen w-screen flex items-center  justify-center p-2'>
 
 
           <div>
