@@ -7,7 +7,6 @@ const Footer = () => {
             <div className='container max-w-[1200px] mx-auto'>
                 <div className='grid grid-cols-1 md:grid-cols-3 gap-10 mb-12'>
 
-                    {/* Brand Column */}
                     <div className='md:col-span-2'>
                         <div className='mb-4'>
 
@@ -27,7 +26,6 @@ const Footer = () => {
                         </p>
                     </div>
 
-                    {/* Platform Links */}
                     <div className='grid grid-cols-2 gap-10'>
 
                     <div>
@@ -53,7 +51,6 @@ const Footer = () => {
                         </ul>
                     </div>
 
-                    {/* Company Links */}
                     <div>
                         <h4 className='text-white/50 text-[11px] font-bold uppercase tracking-[0.12em] mb-5'>
                             Company

@@ -20,7 +20,6 @@ const Contact = ({ className }: { className?: string }) => {
 
         <div className='flex flex-col gap-5 text-left'>
 
-          {/* Name & Email Row */}
           <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
             <div className='flex flex-col gap-2'>
               <Label className='text-white/80 text-[13px] font-semibold  tracking-wide'>
@@ -43,7 +42,6 @@ const Contact = ({ className }: { className?: string }) => {
             </div>
           </div>
 
-          {/* Subject */}
           <div className='flex flex-col gap-2'>
             <Label className='text-white/80 text-[13px] font-semibold  tracking-wide'>
               Subject*
@@ -54,7 +52,6 @@ const Contact = ({ className }: { className?: string }) => {
             />
           </div>
 
-          {/* Message */}
           <div className='flex flex-col gap-2'>
             <Label className='text-white/80 text-[13px] font-semibold  tracking-wide'>
               Message*
@@ -66,12 +63,10 @@ const Contact = ({ className }: { className?: string }) => {
             />
           </div>
 
-          {/* Submit Button */}
           <Button className='w-full h-[52px] rounded-[12px] font-bold text-[16px]  tracking-wide mt-2'>
             Send Message 
           </Button>
 
-          {/* Footer Note */}
           <p className='text-center text-white/40 text-[13px]'>
             We typically respond within 24 hours. For urgent issues, reach us on WhatsApp.
           </p>

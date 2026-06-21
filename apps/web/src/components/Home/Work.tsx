@@ -1,4 +1,6 @@
+'use client'
 import React from 'react'
+import FadeIn from '../animations/Fade-in'
 
 const steps = [
   {
@@ -34,6 +36,8 @@ const Work = () => {
             Three simple steps to go from spectator to champion. Register, compete, and claim your winnings — all in one place.
           </p>
         </div>
+        <FadeIn direction='up'>
+
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
           {steps.map((step) => (
             <div key={step.id} className='text-center py-6 md:py-9 md:px-7 px-5 rounded-[20px] shadow-md bg-white'>
@@ -44,6 +48,7 @@ const Work = () => {
             </div>
           ))}
         </div>
+          </FadeIn>
       </div>
     </section>
   )

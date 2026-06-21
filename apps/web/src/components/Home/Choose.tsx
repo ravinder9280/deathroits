@@ -1,8 +1,10 @@
+'use client'
 import { Button } from "@monorepo/ui/components/button";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import FadeIn from "../animations/Fade-in";
 
 const topPlayers = [
   {
@@ -45,7 +47,6 @@ const Leaderboard = () => {
       <div className="container mx-auto max-w-[1200px]">
 
 
-        {/* Heading */}
         <div className="text-center mb-14">
           <h2 className="text-[40px] md:text-[64px] font-extrabold mb-4 uppercase tracking-[-0.08em] leading-[0.95] text-white">
             Top{" "}
@@ -56,9 +57,9 @@ const Leaderboard = () => {
           </p>
         </div>
 
-        {/* Main grid */}
         <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-start">
-          {/* Right — Image + stats */}
+          <FadeIn direction="right">
+            
           <div className="relative rounded-2xl overflow-hidden border border-white/10">
                 <Image
                   alt="Leaderboard champions"
@@ -66,16 +67,17 @@ const Leaderboard = () => {
                   height={380}
                   src={"/team.svg"}
                   width={600}
-                />
+                  />
               </div>
 
+                  </FadeIn>
+
+
+          <FadeIn direction="left">
 
 
 
-
-          {/* Left — Leaderboard table */}
           <div>
-            {/* Top 3 podium cards */}
             <div className="space-y-3 mb-4">
               {topPlayers.map((player) => (
                 <div
@@ -84,7 +86,7 @@ const Leaderboard = () => {
                       ? "bg-primary/10 border-primary/40"
                       : "bg-white/5 border-white/10"
                     }`}
-
+                    
                 >
                   <div className="flex items-center gap-2">
 
@@ -123,6 +125,7 @@ const Leaderboard = () => {
 
           </div>
 
+                    </FadeIn>
 
 
         </div>

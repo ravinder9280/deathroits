@@ -1,5 +1,7 @@
+'use client';
 import React from 'react'
-
+import { motion } from 'motion/react';
+import FadeIn from '../animations/Fade-in';
 const trustData = [
   {
     id: 1,
@@ -31,9 +33,13 @@ const Trust = () => {
         <p className='text-sm mb-6 tracking-[1px] text-[#6b6b6b] uppercase text-center font-medium'>
           Trusted by E-sports players everywhere
         </p>
+        <FadeIn >
+
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
           {trustData.map((card) => (
-            <div
+            <motion.div
+                whileHover={{ y: -5 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 22 }}
               key={card.id}
               className='flex items-center md:flex-col md:items-start gap-5 w-full py-6 md:py-9 md:px-7 px-5 rounded-[20px] shadow-md bg-white'
             >
@@ -51,9 +57,10 @@ const Trust = () => {
                   {card.description}
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
+        </FadeIn>
       </div>
     </section>
   )

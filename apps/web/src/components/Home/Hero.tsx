@@ -1,9 +1,12 @@
+'use client'
 import { Badge } from "@monorepo/ui/components/badge";
 import { Button } from "@monorepo/ui/components/button";
 import { Trophy } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
+import { motion } from 'motion/react';
+import { BlurShimmerText } from "../animations/blur-shimmer-text";
 const Hero = () => {
   return (
     <section className="max-w-5xl h-[100vh] flex items-center  mx-auto pt-28 py-20 md:py-28 px-2   ">
@@ -40,18 +43,59 @@ bg-red-400
         </Badge>
         <div className="text-center max-w-2xl  ">
           <h1 className=" text-5xl md:text-7xl font-bold mb-6 leading-[0.90]">
-            Where Champions Are Made
-            <br />
-            <span className="text-primary">
+            
 
-              Legends Compete.
-            </span>
+                    <BlurShimmerText
+            as={motion.span}
+            text="Where "
+            className=""
+            blur={8}
+            transition={{ duration: 0.8 }}
+          />
+
+                    <BlurShimmerText
+            as={motion.span}
+            text="Champions "
+            className=""
+            blur={8}
+            transition={{ duration: 0.8 }}
+          />
+                    <BlurShimmerText
+            as={motion.span}
+            text="Are Made"
+            className=""
+            blur={8}
+            transition={{ duration: 0.8 }}
+          />
+          <br className="hidden md:block" />
+          <BlurShimmerText
+            as={motion.span}
+            text="Legends "
+            className="text-primary"
+            blur={8}
+            delay={1}
+            transition={{ duration: 0.8 }}
+            interval={3.5}
+          />
+          <BlurShimmerText
+            as={motion.span}
+            text="Compete"
+            className="text-primary"
+            blur={8}
+            delay={1}
+            transition={{ duration: 0.8 }}
+            interval={3.5}
+          />
           </h1>
-          <p className=" md:text-xl text-zinc-800 dark:text-zinc-300 font-medium leading-[1.6]">
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1.7, duration: 0.8, ease: 'easeOut' }}
+        className=" md:text-xl text-zinc-800 dark:text-zinc-300 font-medium leading-[1.6]">
             Join custom tournaments, compete with top players, track live
             leaderboards, and prove your squad is the best. Built for gamers,
             organizers, and growing esports communities.
-          </p>
+          </motion.p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 mt-8 gap-2">
           <Button size={"xl"} asChild>

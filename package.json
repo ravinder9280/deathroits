@@ -15,7 +15,7 @@
     "clean": "turbo clean",
     "prepare": "husky",
     "test": "turbo test",
-    "db:generate":"cd packages/db && pnpm db:generate"
+    "db:generate":"cd apps/server && pnpm db:generate"
   },
   "dependencies": {
     "@changesets/changelog-github": "^0.5.1",
