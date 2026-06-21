@@ -101,10 +101,11 @@ export function BlurShimmerText({
           animate="animate"
           exit="exit"
         >
-          {texts[currentIndex].split('').map((char, i) => {
+          {(texts[currentIndex] ?? '').split('').map((char, i) => {
+            const currentText = texts[currentIndex] ?? '';
             const staggerDelay =
               (currentIndex === 0 ? (delay ?? 0) : 0) +
-              (i * duration) / texts[currentIndex].length;
+              (i * duration) / currentText.length;
 
             return (
               <motion.span
