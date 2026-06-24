@@ -18,6 +18,7 @@ import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import Link from "next/link";
 import { Skeleton } from "@monorepo/ui/components/skeleton";
+import Image from "next/image";
 
 const UserProfile = ({ isMobile = false }: { isMobile?: boolean }) => {
   const [open, setOpen] = useState(false);
@@ -47,7 +48,15 @@ if(isPending){
                 src={session?.user?.image ?? undefined}
                 width={32}
               />
-              <AvatarFallback>U</AvatarFallback>
+              <AvatarFallback >
+                <Image
+                  alt={session?.user?.name ?? ""}
+                  width={32}
+                  height={32}
+                  src={"/avatar-fallback.svg"}
+                  className="rounded-full"
+                />
+              </AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-[180px]" align="end">

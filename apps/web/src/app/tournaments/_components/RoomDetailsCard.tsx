@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@monorepo/ui/components/card";
 import { Button } from "@monorepo/ui/components/button";
 import { Badge } from "@monorepo/ui/components/badge";
@@ -14,7 +14,7 @@ type Props = {
   matchId: string;
 };
 
-export default function RoomDetailsCard({ matchId }: Props) {
+export default function RoomDetailsCard({ matchId }: Props): React.JSX.Element | null {
   const { data, isLoading, isError } = useMatchRoom(matchId);
   const [showPassword, setShowPassword] = useState(false);
 

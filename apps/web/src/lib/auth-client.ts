@@ -6,7 +6,7 @@ import { createAuthClient } from "better-auth/react";
 
 import { userAdditionalFields } from "../../../server/src/lib/auth-user-fields";
 
-export const authClient: ReturnType<typeof createAuthClient> = createAuthClient({
+const authClient = createAuthClient({
   baseURL: process.env.NEXT_PUBLIC_API_ORIGIN,
   basePath: '/api/auth',
   fetchOptions: {
@@ -20,4 +20,5 @@ export const authClient: ReturnType<typeof createAuthClient> = createAuthClient(
   ],
 });
 
-export const { signIn, signOut, useSession, signUp } = authClient;
+export { authClient };
+export const { signIn, signOut, useSession, emailOtp } = authClient;

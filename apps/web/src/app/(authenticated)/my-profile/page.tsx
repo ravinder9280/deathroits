@@ -104,7 +104,7 @@ const MyProfile = () => {
                     await refetch();
                     setOpen(false);
                 },
-                onError: (ctx) => {
+                onError: (ctx: { error: { message?: string } }) => {
                     const errMsg = ctx.error.message || "Failed to update profile";
                     toast.error(errMsg);
                     setError("root", {
@@ -259,7 +259,7 @@ const MyProfile = () => {
 
                 </section>
 
-                <section className="grid grid-cols-2 md:grid-cols-4 gap-4 overflow-auto px-4 py-10">
+                <section className="grid grid-cols-2 md:grid-cols-4 gap-4 overflow-auto px-4 md:px-0 py-10">
                     <div className="flex flex-col items-center justify-center bg-muted p-4 rounded-md">
                         <Award size={24} className="mb-2 text-primary" />
                         <h3 className="font-semibold font-sans text-center">
@@ -326,7 +326,7 @@ const MyProfile = () => {
                             ))}
                         </div>
                     ) : (
-                        <p className="text-muted-foreground text-sm">
+                        <p className="text-muted-foreground text-sm px-4">
                             You have no upcoming tournaments.
                         </p>
                     )}

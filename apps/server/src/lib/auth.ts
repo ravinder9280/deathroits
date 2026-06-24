@@ -3,6 +3,7 @@ import { prismaAdapter } from "better-auth/adapters/prisma";
 import { emailOTP } from "better-auth/plugins/email-otp";
 import { prisma } from "../db/client";
 import { userAdditionalFields } from "./auth-user-fields";
+import { sendOtpEmail } from "./email";
 
 const isProduction = process.env.BETTER_AUTH_URL === 'https://api.deathroit.ravindertech.me';
 
@@ -16,15 +17,12 @@ export const authOptions = {
   emailAndPassword: { enabled: true },
   plugins: [
     emailOTP({
-      async sendVerificationOTP({ email: _email, otp: _otp, type }) {
-        if (type === "sign-in") {
-          // Send the OTP for sign in
-        } else if (type === "email-verification") {
-          // Send the OTP for email verification
-        } else {
-          // Send the OTP for password reset
-        }
+      async sendVerificationOTP({ email, otp, type }) {
+        await sendOtpEmail({ to: email, otp, type });
       },
+      // OTP is valid for 10 minutes
+      otpLength: 6,
+      expiresIn: 600,
     }),
   ],
   secret: process.env.BETTER_AUTH_SECRET,

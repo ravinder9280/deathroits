@@ -12,11 +12,11 @@ const InputOTP = React.forwardRef<
   <OTPInput
     className={cn("disabled:cursor-not-allowed", className)}
     containerClassName={cn(
-      "flex items-center gap-2 has-[:disabled]:opacity-50",
+      "flex items-center gap-2 justify-between w-full has-[:disabled]:opacity-50",
       containerClassName,
     )}
     ref={ref}
-    {...props}
+    {...(props as any)}
   />
 ));
 InputOTP.displayName = "InputOTP";
@@ -34,12 +34,15 @@ const InputOTPSlot = React.forwardRef<
   React.ComponentPropsWithoutRef<"div"> & { index: number }
 >(({ className, index, ...props }, ref) => {
   const inputOTPContext = React.useContext(OTPInputContext);
-  const { char, hasFakeCaret, isActive } = inputOTPContext.slots[index];
+  const slot = inputOTPContext.slots[index];
+  const char = slot?.char;
+  const hasFakeCaret = slot?.hasFakeCaret;
+  const isActive = slot?.isActive;
 
   return (
     <div
       className={cn(
-        "relative flex h-9 w-9 items-center justify-center border-y border-r border-input text-sm shadow-sm transition-all first:rounded-l-md first:border-l last:rounded-r-md",
+        "relative flex h-12 w-12 items-center justify-center border  text-sm shadow-sm transition-all  border-white/30 first:rounded-l-md first:border-l last:rounded-r-md",
         isActive && "z-10 ring-1 ring-ring",
         className,
       )}

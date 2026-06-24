@@ -9,7 +9,7 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 
-import { authClient } from "@/lib/auth-client";
+import { useSession} from "@/lib/auth-client";
 
 import UserProfile from "../User/UserProfile";
 
@@ -45,7 +45,7 @@ const Navbar = () => {
     error, //error object
     isPending, //loading state
     refetch, //refetch the session
-  } = authClient.useSession();
+  } = useSession();
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 10);
