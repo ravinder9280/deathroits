@@ -22,36 +22,7 @@ export const requireAuth = async (
   next();
 };
 
-export async function requireOnboarded(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
-  const user = req.user;
 
-  if (!user) {
-    return res.status(401).json({ error: "Not authenticated" });
-  }
-
-  const sessionOnboarded = (user as OnboardingUserFields).onboarded;
-  const onboarded =
-    sessionOnboarded ??
-    (
-      await prisma.user.findUnique({
-        select: { onboarded: true },
-        where: { id: user.id },
-      })
-    )?.onboarded;
-
-  if (!onboarded) {
-    return res.status(403).json({
-      error: "Onboarding incomplete",
-      code: "NOT_ONBOARDED",
-    });
-  }
-
-  next();
-}
 
 export const requireOrganizer = async (
   req: Request,

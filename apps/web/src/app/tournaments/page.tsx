@@ -57,19 +57,16 @@ const TournamentsPage = () => {
   const query = searchParams.get("query") ?? "";
   const [searchVal, setSearchVal] = useState(query);
 
-  // Sync URL query to local state
   useEffect(() => {
     setSearchVal(query);
   }, [query]);
 
   const debouncedSearchVal = useDebounce(searchVal, 300);
 
-  // ── Derive all filter state from URL params ──
   const type = (searchParams.get("type") as "free" | "paid" | "") ?? "";
   const game = searchParams.get("game") ?? "";
   const page = Number(searchParams.get("page") ?? "1") || 1;
 
-  // ── Helper to update URL params (single source of truth) ──
   const updateParams = useCallback(
     (updates: Record<string, string | null>) => {
       const params = new URLSearchParams(searchParams.toString());
@@ -87,14 +84,12 @@ const TournamentsPage = () => {
     [router, searchParams]
   );
 
-  // Update URL params when debounced search value changes
   useEffect(() => {
     if (debouncedSearchVal !== query) {
       updateParams({ query: debouncedSearchVal || null, page: "1" });
     }
   }, [debouncedSearchVal, query, updateParams]);
 
-  // ── Query ──
   const { data, isLoading, isFetching, isError } = useSearchTournaments({
     query,
     type,
@@ -106,14 +101,7 @@ const TournamentsPage = () => {
   const tournaments = data?.data ?? [];
   const pagination = data?.pagination;
 
-  // ── Handlers (all just update URL) ──
-  const handleSearch = useCallback(
-    (formData: FormData) => {
-      const searchValue = (formData.get("search") as string)?.trim() ?? "";
-      updateParams({ query: searchValue || null, page: "1" });
-    },
-    [updateParams]
-  );
+
 
   const handleTypeChange = useCallback(
     (value: string) => {
@@ -152,7 +140,6 @@ const TournamentsPage = () => {
   return (
     <main className=" min-h-screen py-27 px-4">
       <div className="container mx-auto">
-        {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-3xl md:text-4xl font-semibold leading-loose">
             TOURNAMENTS
@@ -162,11 +149,9 @@ const TournamentsPage = () => {
           </p>
         </div>
 
-        {/* Search + Filters Bar */}
         <div
           className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8"
         >
-          {/* Search Input */}
           <div className="relative flex-1 col-span-2">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
             <Input
@@ -180,7 +165,6 @@ const TournamentsPage = () => {
 
           </div>
 
-          {/* Type Filter */}
           <Select value={type || "all"} onValueChange={handleTypeChange}>
             <SelectTrigger
               id="tournament-type-filter"
@@ -217,7 +201,6 @@ const TournamentsPage = () => {
 
         </div>
 
-        {/* Active Filters Indicator */}
         {hasActiveFilters && (
           <div className="flex items-center gap-2 mb-6 flex-wrap">
             <span className="text-sm text-muted-foreground">
@@ -226,8 +209,8 @@ const TournamentsPage = () => {
             {query && (
               <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-xs font-medium bg-primary/15 text-primary border border-primary/20">
                 Search: &quot;{query}&quot;
-                <button onClick={()=>{
-                  updateParams({query: null, page: "1"})
+                <button onClick={() => {
+                  updateParams({ query: null, page: "1" })
                 }} className="ml-1 cursor-pointer hover:text-destructive">
                   x
                 </button>
@@ -236,8 +219,8 @@ const TournamentsPage = () => {
             {type && (
               <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-xs font-medium bg-primary/15 text-primary border border-primary/20">
                 Type: {type === "free" ? "Free" : "Paid"}
-                <button onClick={()=>{
-                  updateParams({type: null})
+                <button onClick={() => {
+                  updateParams({ type: null })
                 }} className="ml-1 cursor-pointer hover:text-destructive">
                   x
                 </button>
@@ -246,8 +229,8 @@ const TournamentsPage = () => {
             {game && (
               <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-xs font-medium bg-primary/15 text-primary border border-primary/20">
                 Game: {GAME_LABELS[game as keyof typeof GAME_LABELS] ?? game}
-                <button className="ml-1 cursor-pointer hover:text-destructive" onClick={()=>{
-                  updateParams({game: null})
+                <button className="ml-1 cursor-pointer hover:text-destructive" onClick={() => {
+                  updateParams({ game: null })
                 }}>
                   x
                 </button>
@@ -259,12 +242,11 @@ const TournamentsPage = () => {
               variant={'outline'}
               size={'sm'}
             >
-              Clear all <X/>
+              Clear all <X />
             </Button>
           </div>
         )}
 
-        {/* Results Count */}
         {pagination && !isLoading && (
           <div className="flex items-center justify-between mb-4">
             <p className="text-sm text-muted-foreground">
@@ -281,7 +263,6 @@ const TournamentsPage = () => {
           </div>
         )}
 
-        {/* Error State */}
         {isError && (
           <div className="text-center py-20 space-y-4">
             <div className="inline-flex items-center justify-center size-16 rounded-full bg-destructive/10 mb-4">
@@ -297,7 +278,6 @@ const TournamentsPage = () => {
           </div>
         )}
 
-        {/* Loading State */}
         {(isLoading || isFetching) && (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-8">
             {Array.from({ length: LIMIT }).map((_, i) => (
@@ -306,7 +286,6 @@ const TournamentsPage = () => {
           </div>
         )}
 
-        {/* Empty State */}
         {!isLoading && !isError && tournaments.length === 0 && (
           <div className="text-center py-20 space-y-4">
             <div className="inline-flex items-center justify-center size-16 rounded-full bg-muted mb-4">
@@ -326,7 +305,6 @@ const TournamentsPage = () => {
           </div>
         )}
 
-        {/* Tournament Grid */}
         {!isLoading && !isFetching && !isError && tournaments.length > 0 && (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-8">
             {tournaments.map((t: TournamentCardType) => (
@@ -335,12 +313,10 @@ const TournamentsPage = () => {
           </div>
         )}
 
-        {/* Pagination — Static Prev / Page Numbers / Next */}
         {pagination && pagination.totalPages > 1 && !isLoading && (
           <div className="mt-12 pb-8">
             <Pagination>
               <PaginationContent>
-                {/* Previous */}
                 <PaginationItem>
                   <Button className="" asChild variant={'outline'}>
 
@@ -358,7 +334,6 @@ const TournamentsPage = () => {
                   </Button>
                 </PaginationItem>
 
-                {/* Static page numbers: always show all pages */}
                 {Array.from(
                   { length: pagination.totalPages },
                   (_, i) => i + 1
@@ -376,7 +351,6 @@ const TournamentsPage = () => {
                   </PaginationItem>
                 ))}
 
-                {/* Next */}
                 <PaginationItem>
                   <Button className="" asChild variant={'outline'}>
 
