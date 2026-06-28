@@ -62,7 +62,6 @@ export default function RootLayout({
           shadow="0 0 10px #2563eb,0 0 5px #2563eb"
         />
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem >
-          <Navbar />
           <QueryProvider>
 
 

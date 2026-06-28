@@ -6,6 +6,19 @@ import { auth } from "../lib/auth";
 import { GAME_KEYS } from "@monorepo/utils";
 import { z } from "zod";
 import { TournamentWhereInput } from "../db/prisma/generated/models";
+import { AppError } from "../utils/app-error";
+import { uploadFile, getPresignedUrl } from "../config/aws";
+import crypto from "crypto";
+
+/**
+ * Given a stored bannerImage S3 key (e.g. "demo/uuid.jpg"),
+ * returns a short-lived presigned GET URL for that object.
+ * Returns null if the key is absent/empty.
+ */
+async function resolvePresignedBanner(bannerImage: string | null | undefined): Promise<string | null> {
+    if (!bannerImage) return null;
+    return await getPresignedUrl(bannerImage);
+}
 
 export const joinTournamentSchema = z.object({
     ign: z.string().min(3),
@@ -19,6 +32,75 @@ export const searchTournamentSchema = z.object({
     limit: z.coerce.number().int().min(1).max(100).default(8),
     game: z.enum(GAME_KEYS).optional(),
 });
+
+export const createTournamentSchema = z.object({
+    title: z.string().min(3, "Title must be at least 3 characters").max(100),
+    description: z.string().max(2000).optional(),
+    game: z.enum(GAME_KEYS, { message: "Please select a valid game" }),
+    entryFee: z.coerce.number().min(0, "Entry fee cannot be negative"),
+    prizePool: z.coerce.number().min(0, "Prize pool cannot be negative"),
+    maxPlayers: z.coerce.number().int().min(2, "Must allow at least 2 players").max(10000),
+    roomSize: z.coerce.number().int().min(1).max(200).default(12),
+    startTime: z.string().datetime({ message: "Invalid date/time format" }),
+    rules: z.string().max(5000).optional(),
+    status: z.enum(["DRAFT", "REGISTRATION_OPEN"]).default("DRAFT"),
+});
+
+export const createTournament = asyncHandler(
+    async (req: Request, res: Response) => {
+        const userId = req.user?.id;
+        if (!userId) throw new AppError(401, "Unauthorized");
+
+        const parsed = createTournamentSchema.safeParse(req.body);
+        if (!parsed.success) {
+            throw new AppError(400, "Invalid input", "VALIDATION_ERROR");
+        }
+
+        const { title, description, game, entryFee, prizePool, maxPlayers, roomSize, startTime, rules, status } = parsed.data;
+
+        const file = req.file;
+
+        if (!file) {
+            throw new AppError(400, "image file is required");
+        }
+        
+        const nameRaw = Array.isArray(req.body.name)
+            ? req.body.name[0]
+            : req.body.name as string | undefined;
+
+        const name =
+            typeof nameRaw === "string" && nameRaw.trim().length > 0
+                ? nameRaw.trim()
+                : file.originalname;
+
+        const uploadedImage = await uploadFile(
+            "demo",
+            name as string,
+            file.mimetype as string,
+            file.buffer as Buffer,
+        );
+
+
+        const tournament = await prisma.tournament.create({
+            data: {
+                organizerId: userId,
+                title,
+                description,
+                game,
+                entryFee,
+                prizePool,
+                maxPlayers,
+                roomSize,
+                startTime: new Date(startTime),
+                rules,
+                status,
+                bannerImage: uploadedImage.key
+            },
+        });
+
+        res.status(201).json({ tournament });
+    },
+);
 
 // export const listTournament = asyncHandler(
 //     async (req: Request, res: Response) => {
@@ -65,8 +147,7 @@ export const getTournamentById = asyncHandler(
     async (req: Request, res: Response) => {
         const { id } = req.params;
         if (Array.isArray(id)) {
-            res.status(400).json({ error: "Invalid tournament ID" });
-            return;
+            throw new AppError(400, "Invalid Tournamnet ID");
         }
 
         const tournament = await prisma.tournament.findUnique({
@@ -87,34 +168,20 @@ export const getTournamentById = asyncHandler(
         });
 
         if (!tournament) {
-            res.status(404).json({ error: "Tournament not found" });
-            return;
-        }
-
-        // Hide DRAFT tournaments from non-organizers
-        if (tournament.status === "DRAFT") {
-            // Attempt auth to check if organizer
-            const session = await auth.api.getSession({
-                headers: fromNodeHeaders(req.headers),
-            }).catch(() => null);
-
-            const isOwner = session?.user?.id === tournament.organizerId;
-            if (!isOwner) {
-                res.status(404).json({ error: "Tournament not found" });
-                return;
-            }
+            throw new AppError(404, "Tournamnet not found");
         }
 
         const activeMatch = tournament.matches[0] ?? null;
+        const bannerImage = await resolvePresignedBanner(tournament.bannerImage);
 
         res.json({
             tournament: {
                 ...tournament,
+                bannerImage,
                 activeMatchId: activeMatch?.id ?? null,
                 activeMatchCredentialsVisibleAt: activeMatch?.credentialsVisibleAt ?? null,
                 matches: undefined,
             },
-            userState: null,
         });
     },
 );
@@ -427,11 +494,18 @@ export const searchTournaments = asyncHandler(
             orderBy: { startTime: "desc" },
             skip,
             take: limit,
-
         });
 
+        // Resolve presigned banner URLs in parallel
+        const tournamentsWithBanners = await Promise.all(
+            tournaments.map(async (t) => ({
+                ...t,
+                bannerImage: await resolvePresignedBanner(t.bannerImage),
+            }))
+        );
+
         res.json({
-            data: tournaments,
+            data: tournamentsWithBanners,
             pagination: {
                 currentPage: safePage,
                 totalPages,

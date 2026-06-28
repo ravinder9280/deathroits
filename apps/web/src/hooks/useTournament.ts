@@ -1,4 +1,4 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery} from "@tanstack/react-query";
 import axios from "axios";
 import type { TournamentDetailResponse } from "@monorepo/types";
 
@@ -9,11 +9,7 @@ export const tournamentKeys = {
   detail: (id: string) => [...tournamentKeys.all, id] as const,
 };
 
-/**
- * Fetches a single tournament with user-contextual state.
- * Sends credentials so the backend can resolve auth and return `userState`.
- * Uses adaptive polling based on tournament status.
- */
+
 export const useTournament = (id: string) => {
   return useQuery({
     queryKey: tournamentKeys.detail(id),

@@ -6,7 +6,7 @@ import { differenceInDays, format, formatDistanceToNow } from "date-fns";
 import { Progress } from "@monorepo/ui/components/progress";
 import { Button } from "@monorepo/ui/components/button";
 import Link from "next/link";
-import StatusBadge from "@/app/tournaments/_components/StatusBadge";
+import StatusBadge from "@/app/(user)/tournaments/_components/StatusBadge";
 import JoinTournamentModal from "./JoinTournamentModal";
 import type { TournamentCard as TournamentCardType } from "@monorepo/types";
 import { GAME_LABELS } from "@monorepo/utils";
@@ -21,9 +21,12 @@ const TournamentCard = ({ t }: { t: TournamentCardType }) => {
             <CardContent className="p-0 relative aspect-[2/1] w-full  rounded-lg  overflow-hidden">
 
                 <img
-                    alt={""}
+                    alt={t.title}
                     className="size-full object-cover"
-                    src={"/game3.png"}
+                    src={t.bannerImage ?? "/game3.png"}
+                    onError={(e) => {
+                        (e.currentTarget as HTMLImageElement).src = "/game3.png";
+                    }}
                 />
                 <div className="absolute bottom-3 left-3 rounded-r-xl">
                     <StatusBadge status={t.status} />
@@ -63,7 +66,7 @@ const TournamentCard = ({ t }: { t: TournamentCardType }) => {
                 <div className="grid grid-cols-3 gap-3 text-sm border-b px-3 py-2 ">
                     <div className="space-y-1 flex items-center flex-col">
                         <p className="text-muted-foreground">Game</p>
-                        <p className="font-semibold">{GAME_LABELS[t.game as keyof typeof GAME_LABELS] ?? t.game}</p> 
+                        <p className="font-semibold">{GAME_LABELS[t.game as keyof typeof GAME_LABELS] ?? t.game}</p>
                     </div>
                     <div className="space-y-1 flex items-center flex-col">
                         <p className="text-muted-foreground">Prize Pool</p>

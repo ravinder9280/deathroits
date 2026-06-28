@@ -12,7 +12,6 @@ import TournamentDetailSkeleton from "../_components/TournamentDetailSkeleton";
 import StatusBadge from "../_components/StatusBadge";
 import CountdownCard from "../_components/CountdownCard";
 import ActionPanel from "../_components/ActionPanel";
-import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "@monorepo/ui/components/avatar";
 import { Badge } from "@monorepo/ui/components/badge";
 
@@ -99,16 +98,17 @@ const TournamentDetailPage = () => {
       <div className="container md:border-x border-white/10 mt-[56px] mx-auto max-w-xl">
         <div className="pb-[56px]">
           {/* Banner */}
-          <div className="relative">
+          <div className="relative aspect-[2/1] w-full overflow-hidden">
             <img
-              alt=""
-              className="cursor-pointer w-full object-cover"
+              alt={tournament.title}
+              className="w-full h-full object-cover cursor-pointer"
               src={tournament.bannerImage ?? "/game3.png"}
+              onError={(e) => {
+                (e.currentTarget as HTMLImageElement).src = "/game3.png";
+              }}
             />
-           
             <div className="absolute bottom-0 w-full p-4 bg-gradient-to-t from-background via-background/70 to-background/40">
-                           <StatusBadge status={tournament.status} />
-
+              <StatusBadge status={tournament.status} />
             </div>
           </div>
 

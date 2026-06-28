@@ -1,4 +1,4 @@
-import type { TournamentStatus } from "@/app/(authenticated)/my-tournaments/page";
+import type { TournamentStatus } from "@/app/(user)/(authenticated)/my-tournaments/page";
 
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";

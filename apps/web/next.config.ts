@@ -9,7 +9,15 @@ const monorepoRoot = path.join(path.dirname(fileURLToPath(import.meta.url)), "..
 const nextConfig: NextConfig = {
   transpilePackages: ["@monorepo/ui", "@monorepo/types", "@monorepo/auth"],
   outputFileTracingRoot: monorepoRoot,
-  
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "zetroitdrive.s3.ap-south-1.amazonaws.com",
+        pathname: "/**",
+      },
+    ],
+  },
   webpack: (config) => {
     config.watchOptions = {
       ignored: [

@@ -30,7 +30,7 @@
   --chart-3: oklch(45% 0.1 120);
   --chart-4: oklch(40% 0.05 120);
   --chart-5: oklch(35% 0.02 120);
-  --sidebar: oklch(96% 0.005 286);
+  --sidebar: oklch(95.928% 0.00543 286.004);
   --sidebar-foreground: oklch(10% 0.01 286);
   --sidebar-primary: oklch(60% 0.2 120);
   --sidebar-primary-foreground: oklch(98% 0 0);
@@ -80,7 +80,7 @@
   --chart-3: oklch(60% 0.1 120);
   --chart-4: oklch(50% 0.05 120);
   --chart-5: oklch(40% 0.02 120);
-  --sidebar: oklch(10% 0.01 286);
+  --sidebar: #171717;
   --sidebar-foreground: oklch(98% 0 0);
   --sidebar-primary: oklch(20% 0.02 286);
   --sidebar-primary-foreground: oklch(98% 0 0);

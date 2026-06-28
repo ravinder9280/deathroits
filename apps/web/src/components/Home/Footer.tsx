@@ -10,9 +10,9 @@ const Footer = () => {
                     <div className='md:col-span-2'>
                         <div className='mb-4'>
 
-                        <Link className="" href={'/'} >
-                            <img alt="" height={24} src={"/logo.svg"} width={150} className="h-[24px] w-auto" />
-                        </Link>
+                            <Link className="" href={'/'} >
+                                <img alt="" height={24} src={"/logo.svg"} width={150} className="h-[24px] w-auto" />
+                            </Link>
                         </div>
 
                         <p className='text-white/50 text-[14px] leading-[1.7] max-w-[260px]'>
@@ -28,53 +28,54 @@ const Footer = () => {
 
                     <div className='grid grid-cols-2 gap-10'>
 
-                    <div>
-                        <h4 className='text-white/50 text-[11px] font-bold uppercase tracking-[0.12em] mb-5'>
-                            Platform
-                        </h4>
-                        <ul className='flex flex-col gap-3'>
-                            {[
-                                { label: 'Tournaments', href: '/tournaments' },
-                                { label: 'Leaderboard', href: '/leaderboard' },
-                                { label: 'Live Matches', href: '/live' },
-                                { label: 'Download App', href: '/download' },
-                            ].map((item) => (
-                                <li key={item.href}>
-                                    <Link
-                                        href={item.href}
-                                        className='text-white/70 text-[14px] hover:text-primary transition-colors duration-200'
-                                    >
-                                        {item.label}
-                                    </Link>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
+                        <div>
+                            <h4 className='text-white/50 text-[11px] font-bold uppercase tracking-[0.12em] mb-5'>
+                                Platform
+                            </h4>
+                            <ul className='flex flex-col gap-3'>
+                                {[
+                                    { label: 'Tournaments', href: '/tournaments' },
+                                    { label: 'Leaderboard', href: '/leaderboard' },
+                                    { label: 'Live Matches', href: '/live' },
+                                    { label: "Organizer", href: "/organizer" },
+                                    { label: 'Download App', href: '/download' },
+                                ].map((item) => (
+                                    <li key={item.href}>
+                                        <Link
+                                            href={item.href}
+                                            className='text-white/70 text-[14px] hover:text-primary transition-colors duration-200'
+                                        >
+                                            {item.label}
+                                        </Link>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
 
-                    <div>
-                        <h4 className='text-white/50 text-[11px] font-bold uppercase tracking-[0.12em] mb-5'>
-                            Company
-                        </h4>
-                        <ul className='flex flex-col gap-3'>
-                            {[
-                                { label: 'About', href: '/about' },
-                                { label: 'Blog', href: '/blog' },
-                                { label: 'FAQ', href: '/faq' },
-                                { label: 'Contact', href: '/contact' },
-                                { label: 'Privacy Policy', href: '/privacy' },
-                                { label: 'Terms of Service', href: '/terms' },
-                            ].map((item) => (
-                                <li key={item.href}>
-                                    <Link
-                                        href={item.href}
-                                        className='text-white/70 text-[14px] hover:text-primary transition-colors duration-200'
-                                    >
-                                        {item.label}
-                                    </Link>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
+                        <div>
+                            <h4 className='text-white/50 text-[11px] font-bold uppercase tracking-[0.12em] mb-5'>
+                                Company
+                            </h4>
+                            <ul className='flex flex-col gap-3'>
+                                {[
+                                    { label: 'About', href: '/about' },
+                                    { label: 'Blog', href: '/blog' },
+                                    { label: 'FAQ', href: '/faq' },
+                                    { label: 'Contact', href: '/contact' },
+                                    { label: 'Privacy Policy', href: '/privacy' },
+                                    { label: 'Terms of Service', href: '/terms' },
+                                ].map((item) => (
+                                    <li key={item.href}>
+                                        <Link
+                                            href={item.href}
+                                            className='text-white/70 text-[14px] hover:text-primary transition-colors duration-200'
+                                        >
+                                            {item.label}
+                                        </Link>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
                     </div>
 
 

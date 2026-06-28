@@ -20,7 +20,7 @@ import Link from "next/link";
 import { Skeleton } from "@monorepo/ui/components/skeleton";
 import Image from "next/image";
 
-const UserProfile = ({ isMobile = false }: { isMobile?: boolean }) => {
+const UserProfile = ({ size=8 }: { size?: number }) => {
   const [open, setOpen] = useState(false);
   const {
     data: session,
@@ -33,18 +33,18 @@ const UserProfile = ({ isMobile = false }: { isMobile?: boolean }) => {
 if(isPending){
   return (
 
-    <Skeleton className="rounded-full size-8"/>
+    <Skeleton className={`rounded-full size-${size}`}/>
   )
 }
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger className="ring-transparent cursor-pointer outline-none  ">
-        <Avatar className="size-8 ring-transparent border border-white/40 ">
+        <Avatar className={`size-${size} ring-transparent border border-white/40 `}>
         
               <AvatarImage
                 alt={"U"}
-                height={32}
+                height={size}
                 src={session?.user?.image ?? undefined}
                 width={32}
               />
