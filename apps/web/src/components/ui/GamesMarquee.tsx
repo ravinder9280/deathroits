@@ -40,14 +40,14 @@ export function GamesMarquee() {
             return (
               <div
                 key={index}
-                className="relative flex items-center gap-3  py-3 px-6 rounded-2xl    overflow-hidden min-w-[240px]   transition-all duration-300"
+                className="relative flex items-center gap-2  py-3 px-6 rounded-2xl    overflow-hidden min-w-[240px]   transition-all duration-300"
               >
                
                 
                 <div className={`p-2 rounded-xl  ${game.colorClass}`}>
                 <img className="size-10 rounded" src={game.imageUrl} alt={game.name} />
                 </div>
-                <div className="font-bold text-xl">
+                <div className="font-bold text-2xl">
                     {game.name}
                  
                 </div>

@@ -69,7 +69,7 @@ export default function MyTournamentsPage() {
           <TabsContent value={status}>
 
             {isLoading && (
-              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8">
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
 
                 {Array.from({
                   length: 4,
@@ -115,7 +115,7 @@ export default function MyTournamentsPage() {
               )}
 
 
-            <div className="grid grid-cols-1 sm:grid-cols-2  lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2  lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
               {tournaments?.map((t: MyTournament) => (
                 <MyTournamentsCard key={t.id} tournament={t} />
               ))}

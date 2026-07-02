@@ -8,7 +8,7 @@ import Trust from "@/components/Home/Trust";
 import Whatsapp from "@/components/Home/Whatsapp";
 import Work from "@/components/Home/Work";
 import Link from "next/link";
-import { MarqueeDemo } from "@/components/ui/marquee-demo";
+import { GamesMarquee } from "@/components/ui/GamesMarquee";
 
 export default function Page() {
   return (
@@ -35,7 +35,7 @@ export default function Page() {
 
         </div>
       </div>
-      <MarqueeDemo />
+      <GamesMarquee />
       <Trust />
       <Games />
       <Choose />
