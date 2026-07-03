@@ -1,0 +1,68 @@
+name: Deploy Backend
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'apps/server/**'
+      - 'packages/**'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
+      - '.github/workflows/deploy.yml'
+
+jobs:
+  deploy:
+    name: Deploy to DigitalOcean
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: root
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script_stop: true # Stop execution if any command fails
+          script: |
+            # Load environment paths for non-interactive shells
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            export PNPM_HOME="$HOME/.local/share/pnpm"
+            export PATH="$PNPM_HOME:$PATH"
+
+            echo "🚀 Starting Deployment..."
+            echo "🔍 Environment verification:"
+            echo "Node version: $(node -v 2>&1)"
+            echo "pnpm version: $(pnpm -v 2>&1)"
+            echo "PM2 version: $(pm2 -v 2>&1)"
+
+            # Navigate to the project root
+            cd ~/Deathroit
+
+            # Fetch latest changes
+            echo "📥 Fetching latest code from GitHub..."
+            git pull origin main
+
+            # Install dependencies
+            echo "📦 Installing workspace dependencies..."
+            pnpm install --frozen-lockfile
+
+            # Go to that folder
+            echo "Go to that folder"
+            cd apps/server
+
+            # Push the DB Schema
+            echo "Pushing DB Schema..."
+            pnpm run db:generate
+            pnpm run db:push
+
+            # Build the backend (generates Prisma Client and bundles with esbuild)
+            echo "🛠️ Building Deathroit..."
+            pnpm run build
+
+            # Restart the service in PM2 using its name
+            echo "🔄 Restarting PM2 process 'Deathroit'..."
+            pm2 restart Deathroit --update-env
+
+            echo "🎉 Deployment successful!"

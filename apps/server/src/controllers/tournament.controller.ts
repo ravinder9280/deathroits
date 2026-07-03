@@ -3,13 +3,41 @@ import { asyncHandler } from "../utils/async-handler";
 import type { Request, Response } from "express";
 import { fromNodeHeaders } from "better-auth/node";
 import { auth } from "../lib/auth";
-import { GAME_KEYS } from "@monorepo/utils";
 import { z } from "zod";
 import { TournamentWhereInput } from "../db/prisma/generated/models";
 import { AppError } from "../utils/app-error";
 import { uploadFile, getPresignedUrl } from "../config/aws";
 import crypto from "crypto";
 
+
+export const GAMES = {
+    BGMI: {
+        label: "BGMI",
+        image: "/bgmi.png",
+    },
+    COD_MOBILE: {
+        label: "Call of Duty",
+        image: "/cod.png",
+    },
+    FREE_FIRE: {
+        label: "Free Fire",
+        image: "/ff.jpg",
+    },
+    VALORANT: {
+        label: "Valorant",
+        image: "/minecraft.svg",
+    },
+};
+
+export type GameKey = keyof typeof GAMES;
+
+/** Tuple of all game keys — use with z.enum(GAME_KEYS) */
+export const GAME_KEYS = Object.keys(GAMES) as [GameKey, ...GameKey[]];
+
+/** Map of game key → display label */
+export const GAME_LABELS = Object.fromEntries(
+    Object.entries(GAMES).map(([key, val]) => [key, val.label])
+) as Record<GameKey, string>;
 /**
  * Given a stored bannerImage S3 key (e.g. "demo/uuid.jpg"),
  * returns a short-lived presigned GET URL for that object.

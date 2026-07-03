@@ -1,6 +1,15 @@
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+/** Lazily creates the Resend client so env vars are resolved at call-time, not at import-time. */
+let _resend: Resend | null = null;
+function getResend(): Resend {
+  if (!_resend) {
+    const key = process.env.RESEND_API_KEY;
+    if (!key) throw new Error("RESEND_API_KEY environment variable is not set");
+    _resend = new Resend(key);
+  }
+  return _resend;
+}
 
 /** Sender address – update once your domain is verified in Resend */
 const FROM_ADDRESS = "Deathroit <noreply@deathroit.ravindertech.me>";
@@ -109,7 +118,7 @@ function buildOtpHtml(otp: string, type: OtpType): string {
 export async function sendOtpEmail({ to, otp, type }: SendOtpEmailParams): Promise<void> {
   const meta = OTP_META[type];
 
-  const { error } = await resend.emails.send({
+  const { error } = await getResend().emails.send({
     from: FROM_ADDRESS,
     to: [to],
     subject: meta.subject,
@@ -134,7 +143,7 @@ export async function sendEmail({
   subject: string;
   html: string;
 }): Promise<void> {
-  const { error } = await resend.emails.send({
+  const { error } = await getResend().emails.send({
     from: FROM_ADDRESS,
     to: Array.isArray(to) ? to : [to],
     subject,
