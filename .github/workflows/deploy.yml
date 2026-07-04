@@ -5,11 +5,13 @@ on:
     branches:
       - main
     paths:
-      - 'apps/server/**'
-      - 'packages/**'
-      - 'pnpm-lock.yaml'
-      - 'pnpm-workspace.yaml'
-      - '.github/workflows/deploy.yml'
+      - "apps/server/**"
+      - "packages/**"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
+      - "turbo.json"
+      - "package.json"
+      - ".github/workflows/deploy.yml"
 
 jobs:
   deploy:
@@ -23,46 +25,54 @@ jobs:
           host: ${{ secrets.SERVER_IP }}
           username: root
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script_stop: true # Stop execution if any command fails
+          script_stop: true
+
           script: |
-            # Load environment paths for non-interactive shells
+            # Load Node environment
             export NVM_DIR="$HOME/.nvm"
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+            # Load pnpm
             export PNPM_HOME="$HOME/.local/share/pnpm"
             export PATH="$PNPM_HOME:$PATH"
 
-            echo "🚀 Starting Deployment..."
-            echo "🔍 Environment verification:"
-            echo "Node version: $(node -v 2>&1)"
-            echo "pnpm version: $(pnpm -v 2>&1)"
-            echo "PM2 version: $(pm2 -v 2>&1)"
+            echo "🚀 Starting Deathroit Deployment..."
 
-            # Navigate to the project root
+            echo "🔍 Versions:"
+            echo "Node: $(node -v)"
+            echo "pnpm: $(pnpm -v)"
+            echo "PM2: $(pm2 -v)"
+
+            # Move to monorepo
             cd ~/deathroits
 
-            # Fetch latest changes
-            echo "📥 Fetching latest code from GitHub..."
+
+            echo "📥 Pulling latest code..."
             git pull origin main
 
-            # Install dependencies
-            echo "📦 Installing workspace dependencies..."
+
+            echo "📦 Installing dependencies..."
             pnpm install --frozen-lockfile
 
-            # Go to that folder
-            echo "Go to that folder"
-            cd apps/server
 
-            # Push the DB Schema
-            echo "Pushing DB Schema..."
-            pnpm run db:generatep
-            pnpm run db:push
+            echo "🔧 Generating Prisma Client..."
+            pnpm --filter server db:generate
 
-            # Build the backend (generates Prisma Client and bundles with esbuild)
-            echo "🛠️ Building Deathroit..."
-            pnpm run build
 
-            # Restart the service in PM2 using its name
-            echo "🔄 Restarting PM2 process 'Deathroit'..."
+            echo "🗄 Running database migrations..."
+            pnpm --filter server db:deploy
+
+
+            echo "🏗 Building backend..."
+            pnpm build --filter=server
+
+
+            echo "🔄 Restarting PM2..."
             pm2 restart deathroit-server --update-env
 
-            echo "🎉 Deployment successful!"
+
+            echo "💾 Saving PM2 state..."
+            pm2 save
+
+
+            echo "🎉 Deployment completed successfully!"
