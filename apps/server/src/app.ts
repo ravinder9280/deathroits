@@ -32,7 +32,7 @@ app.get("/api/me", async (req, res) => {
 });
 
 app.get("/", (req, res) => {
-  res.send("server running v1");
+  res.send("server running v1.1");
 });
 
 app.use("/v1", routes);
