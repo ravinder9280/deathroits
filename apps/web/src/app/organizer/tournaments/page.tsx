@@ -1,10 +1,11 @@
 'use client'
-import TournamentCard from '@/app/(user)/tournaments/_components/TournamentCard'
+import StatusBadge from '@/app/(user)/tournaments/_components/StatusBadge'
 import { useMyTournaments } from '@/hooks/useMyTournaments'
 import { Button } from '@monorepo/ui/components/button'
 import { Input } from '@monorepo/ui/components/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@monorepo/ui/components/select'
-import { Logs, Menu, Plus, Search, Trophy } from 'lucide-react'
+import { format } from 'date-fns'
+import { Calendar, EllipsisVertical, Logs, Menu, Plus, Search, Trophy, Users } from 'lucide-react'
 import Image from 'next/image'
 import React from 'react'
 
@@ -85,26 +86,69 @@ const OrganizerTournamentsPage = () => {
                 </div>
             </header>
             <div className='p-4 sm:p-6 lg:p-8'>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {tournaments?.map((t: any) => (
-                        <div key={t.id} className='relative border p-4 md:p-5 bg-transparent backdrop-blur-sm rounded-lg hover:border-neutral-700/50 hover:cursor-pointer hover:bg-[#101010] transition-all duration-300 flex flex-col gap-4 border-neutral-800/50'>
+                        <div key={t.id} className='relative flex flex-col gap-4 border p-4 md:p-5 bg-transparent backdrop-blur-sm rounded-lg hover:border-neutral-700/50 hover:cursor-pointer hover:bg-[#101010] transition-all duration-300 flex flex-col gap-4 border-neutral-800/50'>
                             <div className='flex items-start gap-3'>
                                 <div className='shrink-0'>
-                                    <Image src={t.image || "/game3.png"} alt="" height={56} width={56} className='w-[56px] h-[56px] rounded-lg object-cover' />
+                                    <img src={t.image || "/game3.png"} alt="" height={56} width={56} className='w-[56px] h-[56px] rounded-lg object-cover' />
 
                                 </div>
-                                <div className='flex-1 min-w-0'>
-                                    <h3 className='font-medium text-white text-sm md:text-base hover:text-yellow-300 hover:underline truncate flex items-center gap-1.5'>
+                                <div className='flex-1 flex gap-2 items-center justify-between min-w-0'>
+                                   
+                                   
+                                    <h3 className='font-medium text-white text-sm md:text-base hover:text-yellow-300 hover:underline truncate '>
                                         {t.title}
 
                                     </h3>
-                                    <p className='text-xs text-muted-foreground mt-1 line-clamp-2'>
-                                        Your own personal AI assistant. Any OS. Any Platform. The lobster way.
-                                    </p>
+                                    <StatusBadge  status={t.tournamentStatus} />
+
+
+                                </div>
+                                <div>
+                                    <EllipsisVertical className='text-muted-foreground hover:text-white cursor-pointer size-5 ' />
+
 
                                 </div>
 
                             </div>
+                            <div className="flex items-center gap-2 font-medium text-muted-foreground text-sm">
+                                <Calendar className="size-4" />
+                                {format(new Date(t.startTime), "dd MMM yyyy, hh:mm a")}
+                            </div>
+                            <div className='flex items-center gap-2 justify-between'>
+                                <div className='space-y-1'>
+                                    <div className='flex items-center gap-2 justify-center  text-muted-foreground text-sm'>
+                                        <Users className='size-4' />
+                                        <span>Participants</span></div>
+                                    <p className='font-bold '>
+
+                                        {t.joinedPlayersCount} {" "}/{" "}
+
+                                        <span className='text-sm text-muted-foreground font-semibold'>
+                                            {t.maxPlayers}</span>
+
+                                    </p>
+                                </div>
+                                <div className='space-y-1'>
+                                    <div className='flex items-center gap-2 justify-center  text-muted-foreground text-sm'>
+                                        <Trophy className='size-4' />
+                                        <span>Prize Pool</span></div>
+                                    <p className='font-semibold text-white text-sm'>₹{t.prizePool}</p>
+                                </div>
+                                <div className='space-y-1'>
+                                    <div className='flex items-center gap-2 justify-center  text-muted-foreground text-sm'>
+                                        <Users className='size-4' />
+                                        <span>Participants</span></div>
+                                    <p className='font-semibold text-white text-sm'>₹{t.prizePool}</p>
+                                </div>
+
+
+                            </div>
+
+                            <Button variant={'outline'}>
+                                Manage Tournament
+                            </Button>
 
                         </div>
                     ))}
