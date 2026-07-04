@@ -161,6 +161,7 @@ const TournamentsPage = () => {
               value={searchVal}
               className="pl-10 bg-zinc-900 border border-white/10 "
               onChange={(e) => setSearchVal(e.target.value)}
+              style={{ 'borderImage': 'conic-gradient(rgb(212, 212, 212) 0deg, rgb(23, 23, 23) 90deg, rgb(212, 212, 212) 180deg, rgb(23, 23, 23) 270deg, rgb(212, 212, 212) 360deg) 1' }}
             />
 
           </div>

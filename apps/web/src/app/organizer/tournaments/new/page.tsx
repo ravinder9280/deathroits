@@ -242,7 +242,7 @@ export default function NewTournamentPage(): React.JSX.Element {
   return (
     <div className="  space-y-6 pb-12  ">
       {/* Header */}
-      <header className=" sticky top-0 z-10 w-full bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 flex items-center gap-4  border-b p-3 md:p-6">
+      <header className=" sticky top-0 z-10 w-full bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 flex items-center gap-4  border-b p-4 sm:p-6 lg:p-8 ">
         
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Create Tournament</h1>

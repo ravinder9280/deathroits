@@ -7,6 +7,7 @@
     "version:packages": "turbo build && changeset version",
     "add-shadcn-component": "turbo run add-shadcn-component -- --",
     "build": "turbo build",
+    "start": "turbo start",
     "dev": "turbo dev",
     "format": "turbo format --continue --",
     "format:fix": "turbo format --continue -- --write",
