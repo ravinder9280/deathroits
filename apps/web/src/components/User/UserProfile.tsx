@@ -59,7 +59,7 @@ if(isPending){
               </AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-[180px]" align="end">
+      <DropdownMenuContent className="w-[180px] z-100" align="end">
         <DropdownMenuLabel className="text-muted-foreground  truncate " >Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem

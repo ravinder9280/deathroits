@@ -1,5 +1,5 @@
 import { Input } from '@monorepo/ui/components/input';
-import { Search, Trophy } from 'lucide-react';
+import { IndianRupee, Search, Skull, Trophy } from 'lucide-react';
 import React from 'react'
 const topPlayers = [
   {
@@ -8,9 +8,10 @@ const topPlayers = [
     team: "Team Inferno",
     game: "Free Fire",
     wins: 48,
-    earnings: "₹24,500",
+    earnings: "24,500",
     avatar: "https://i.pinimg.com/1200x/82/ed/3c/82ed3ca0ee9ae0ada18d34cf132e71f0.jpg",
     badge: "#1",
+    totalKills: 55,
   },
   {
     rank: 2,
@@ -18,9 +19,10 @@ const topPlayers = [
     team: "Apex Wolves",
     game: "BGMI",
     wins: 41,
-    earnings: "₹18,000",
+    earnings: "18,000",
     avatar: "https://i.pinimg.com/736x/b1/8e/b8/b18eb8baabc8faa09da442cb29045680.jpg",
     badge: "#2",
+    totalKills: 49,
   },
   {
     rank: 3,
@@ -28,9 +30,10 @@ const topPlayers = [
     team: "Solo Rising",
     game: "Valorant",
     wins: 36,
-    earnings: "₹12,000",
+    earnings: "12,000",
     avatar: "https://i.pinimg.com/736x/44/ae/73/44ae7337bde014fc535d1cfbaa8d7584.jpg",
     badge: "#3",
+    totalKills: 43,
   },
   {
     rank: 4,
@@ -38,9 +41,10 @@ const topPlayers = [
     team: "Ghost Legion",
     game: "Free Fire",
     wins: 33,
-    earnings: "₹10,500",
+    earnings: "10,500",
     avatar: "https://i.pravatar.cc/150?img=4",
     badge: "#4",
+    totalKills: 40,
   },
   {
     rank: 5,
@@ -48,9 +52,10 @@ const topPlayers = [
     team: "Apex Wolves",
     game: "BGMI",
     wins: 31,
-    earnings: "₹9,800",
+    earnings: "9,800",
     avatar: "https://i.pinimg.com/736x/f7/6a/2d/f76a2dc5e1f48b8f133decbf60b0f43c.jpg",
     badge: "#5",
+    totalKills: 37,
   },
   {
     rank: 6,
@@ -58,9 +63,10 @@ const topPlayers = [
     team: "Team Inferno",
     game: "Valorant",
     wins: 29,
-    earnings: "₹9,200",
+    earnings: "9,200",
     avatar: "https://i.pravatar.cc/150?img=6",
     badge: "#6",
+    totalKills: 35,
   },
   {
     rank: 7,
@@ -68,9 +74,10 @@ const topPlayers = [
     team: "Solo Rising",
     game: "Free Fire",
     wins: 27,
-    earnings: "₹8,700",
+    earnings: "8,700",
     avatar: "https://i.pravatar.cc/150?img=7",
     badge: "#7",
+    totalKills: 32,
   },
   {
     rank: 8,
@@ -78,9 +85,10 @@ const topPlayers = [
     team: "Ghost Legion",
     game: "BGMI",
     wins: 26,
-    earnings: "₹8,300",
+    earnings: "8,300",
     avatar: "https://i.pravatar.cc/150?img=8",
     badge: "#8",
+    totalKills: 31,
   },
   {
     rank: 9,
@@ -88,9 +96,10 @@ const topPlayers = [
     team: "Apex Wolves",
     game: "Valorant",
     wins: 24,
-    earnings: "₹7,900",
+    earnings: "7,900",
     avatar: "https://i.pravatar.cc/150?img=9",
     badge: "#9",
+    totalKills: 29,
   },
   {
     rank: 10,
@@ -98,9 +107,10 @@ const topPlayers = [
     team: "Team Inferno",
     game: "Free Fire",
     wins: 23,
-    earnings: "₹7,400",
+    earnings: "7,400",
     avatar: "https://i.pravatar.cc/150?img=10",
     badge: "#10",
+    totalKills: 27,
   },
   {
     rank: 11,
@@ -108,9 +118,10 @@ const topPlayers = [
     team: "Solo Rising",
     game: "BGMI",
     wins: 22,
-    earnings: "₹7,000",
+    earnings: "7,000",
     avatar: "https://i.pravatar.cc/150?img=11",
     badge: "#11",
+    totalKills: 26,
   },
   {
     rank: 12,
@@ -118,9 +129,10 @@ const topPlayers = [
     team: "Ghost Legion",
     game: "Valorant",
     wins: 21,
-    earnings: "₹6,600",
+    earnings: "6,600",
     avatar: "https://i.pravatar.cc/150?img=12",
     badge: "#12",
+    totalKills: 25,
   },
   {
     rank: 13,
@@ -128,9 +140,10 @@ const topPlayers = [
     team: "Apex Wolves",
     game: "Free Fire",
     wins: 20,
-    earnings: "₹6,200",
+    earnings: "6,200",
     avatar: "https://i.pravatar.cc/150?img=13",
     badge: "#13",
+    totalKills: 24,
   },
   {
     rank: 14,
@@ -138,9 +151,10 @@ const topPlayers = [
     team: "Team Inferno",
     game: "BGMI",
     wins: 19,
-    earnings: "₹5,900",
+    earnings: "5,900",
     avatar: "https://i.pravatar.cc/150?img=14",
     badge: "#14",
+    totalKills: 22,
   },
   {
     rank: 15,
@@ -148,9 +162,10 @@ const topPlayers = [
     team: "Solo Rising",
     game: "Valorant",
     wins: 18,
-    earnings: "₹5,500",
+    earnings: "5,500",
     avatar: "https://i.pravatar.cc/150?img=15",
     badge: "#15",
+    totalKills: 21,
   },
   {
     rank: 16,
@@ -158,9 +173,10 @@ const topPlayers = [
     team: "Ghost Legion",
     game: "Free Fire",
     wins: 17,
-    earnings: "₹5,100",
+    earnings: "5,100",
     avatar: "https://i.pravatar.cc/150?img=16",
     badge: "#16",
+    totalKills: 20,
   },
   {
     rank: 17,
@@ -168,9 +184,10 @@ const topPlayers = [
     team: "Apex Wolves",
     game: "BGMI",
     wins: 16,
-    earnings: "₹4,800",
+    earnings: "4,800",
     avatar: "https://i.pinimg.com/736x/33/49/67/3349672539732cb2e2d9a9d213e2141c.jpg",
     badge: "#17",
+    totalKills: 19,
   },
   {
     rank: 18,
@@ -178,9 +195,10 @@ const topPlayers = [
     team: "Team Inferno",
     game: "Valorant",
     wins: 15,
-    earnings: "₹4,400",
+    earnings: "4,400",
     avatar: "https://i.pravatar.cc/150?img=18",
     badge: "#18",
+    totalKills: 18,
   },
   {
     rank: 19,
@@ -188,9 +206,10 @@ const topPlayers = [
     team: "Solo Rising",
     game: "Free Fire",
     wins: 14,
-    earnings: "₹4,000",
+    earnings: "4,000",
     avatar: "https://i.pravatar.cc/150?img=19",
     badge: "#19",
+    totalKills: 17,
   },
   {
     rank: 20,
@@ -198,9 +217,10 @@ const topPlayers = [
     team: "Ghost Legion",
     game: "BGMI",
     wins: 13,
-    earnings: "₹3,700",
+    earnings: "3,700",
     avatar: "https://i.pravatar.cc/150?img=20",
     badge: "#20",
+    totalKills: 16,
   },
 ];
 
@@ -276,6 +296,8 @@ const LeaderboardPage = () => {
                   <div className="font-semibold text-sm sm:text-base md:text-lg truncate transition-colors flex items-center gap-1.5 sm:gap-2">{player.name}</div>
                   <div className="text-muted-foreground text-xs">{player.team} · {player.game}</div>
                 </div>
+                <div className='flex items-center gap-4 xl:gap-6 text-sm'>
+
 
                 {/* Info */}
 
@@ -293,6 +315,37 @@ const LeaderboardPage = () => {
 
                   </div>
 
+                </div>
+                <div className='text-center hidden md:block'>
+                  <div className='flex items-center gap-1 text-red-400 mb-1'>
+                    <Skull className='size-4 ' />
+                    <span className='font-bold  leading-[20px]'>
+                      {player.totalKills}
+
+                    </span>
+
+                  </div>
+                  <div className='text-muted-foreground text-xs'>
+                    Kills
+
+                  </div>
+
+                </div>
+                <div className='text-center hidden md:block'>
+                  <div className='flex items-center gap-1 text-green-400 mb-1'>
+                    <IndianRupee className='size-4 ' />
+                    <span className='font-bold leading-[20px]'>
+                      {player.earnings}
+
+                    </span>
+
+                  </div>
+                  <div className='text-muted-foreground text-xs'>
+                    Earnings
+
+                  </div>
+
+                </div>
                 </div>
 
                 {/* <div className="text-center ">

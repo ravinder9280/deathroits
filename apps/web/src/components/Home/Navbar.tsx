@@ -62,7 +62,7 @@ const Navbar = () => {
   return (
     <header
       className={cn(
-        "fixed top-0 h-14 flex items-center justify-center  w-full z-100 border-b transition-all duration-300",
+        "fixed top-0 h-14 flex items-center justify-center  w-full z-80 border-b transition-all duration-300",
         (pathname === "/" ? scrolled : true)
           ? "bg-background/50 backdrop-blur-md shadow-sm border-white/20"
           : "bg-transparent border-transparent",
