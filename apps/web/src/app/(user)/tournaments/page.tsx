@@ -138,7 +138,7 @@ const TournamentsPage = () => {
   const hasActiveFilters = query || type || game;
 
   return (
-    <main className=" min-h-screen py-27 px-4">
+    <main className=" min-h-screen pt-20 pb-3 md:pb-6 px-3 md:px-6">
       <div className="container mx-auto">
         <div className="text-center mb-8">
           <h1 className="text-3xl md:text-4xl font-semibold leading-loose">

@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { format } from 'date-fns'
 import { Calendar, EllipsisVertical, Logs, Menu, Plus, Search, Trophy, Users } from 'lucide-react'
 import Image from 'next/image'
+import Link from 'next/link'
 import React from 'react'
 
 const OrganizerTournamentsPage = () => {
@@ -38,9 +39,11 @@ const OrganizerTournamentsPage = () => {
                                 <SelectItem value="bgmi">BGMI</SelectItem>
                             </SelectContent>
                         </Select>
-                        <Button>
+                        <Button asChild>
+                            <Link href="/organizer/tournaments/new" >
                             <Plus size={20} />
                             Create Tournament
+                            </Link>
                         </Button>
                     </div>
                 </div>
