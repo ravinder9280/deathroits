@@ -4,12 +4,12 @@ import React from 'react'
 const topPlayers = [
   {
     rank: 1,
-    name: "ShadowStrike",
+    name: "Zetroit",
     team: "Team Inferno",
     game: "Free Fire",
     wins: 48,
     earnings: "₹24,500",
-    avatar: "https://i.pravatar.cc/150?img=1",
+    avatar: "https://i.pinimg.com/1200x/82/ed/3c/82ed3ca0ee9ae0ada18d34cf132e71f0.jpg",
     badge: "#1",
   },
   {
@@ -19,7 +19,7 @@ const topPlayers = [
     game: "BGMI",
     wins: 41,
     earnings: "₹18,000",
-    avatar: "https://i.pravatar.cc/150?img=2",
+    avatar: "https://i.pinimg.com/736x/b1/8e/b8/b18eb8baabc8faa09da442cb29045680.jpg",
     badge: "#2",
   },
   {
@@ -29,7 +29,7 @@ const topPlayers = [
     game: "Valorant",
     wins: 36,
     earnings: "₹12,000",
-    avatar: "https://i.pravatar.cc/150?img=3",
+    avatar: "https://i.pinimg.com/736x/44/ae/73/44ae7337bde014fc535d1cfbaa8d7584.jpg",
     badge: "#3",
   },
   {
@@ -49,7 +49,7 @@ const topPlayers = [
     game: "BGMI",
     wins: 31,
     earnings: "₹9,800",
-    avatar: "https://i.pravatar.cc/150?img=5",
+    avatar: "https://i.pinimg.com/736x/f7/6a/2d/f76a2dc5e1f48b8f133decbf60b0f43c.jpg",
     badge: "#5",
   },
   {
@@ -169,7 +169,7 @@ const topPlayers = [
     game: "BGMI",
     wins: 16,
     earnings: "₹4,800",
-    avatar: "https://i.pravatar.cc/150?img=17",
+    avatar: "https://i.pinimg.com/736x/33/49/67/3349672539732cb2e2d9a9d213e2141c.jpg",
     badge: "#17",
   },
   {
@@ -289,7 +289,7 @@ const LeaderboardPage = () => {
 
                   </div>
                   <div className='text-muted-foreground text-xs'>
-                    Won
+                    Wins
 
                   </div>
 
