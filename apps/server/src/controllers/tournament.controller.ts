@@ -61,6 +61,19 @@ export const searchTournamentSchema = z.object({
     game: z.enum(GAME_KEYS).optional(),
 });
 
+export const TOURNAMENT_STATUS_VALUES = [
+    "DRAFT",
+    "REGISTRATION_OPEN",
+    "REGISTRATION_CLOSED",
+    "ONGOING",
+    "COMPLETED",
+    "CANCELLED",
+] as const;
+
+export const getOrganizerTournamentSchema = searchTournamentSchema.extend({
+    status: z.enum(TOURNAMENT_STATUS_VALUES).optional(),
+});
+
 export const createTournamentSchema = z.object({
     title: z.string().min(3, "Title must be at least 3 characters").max(100),
     description: z.string().max(2000).optional(),
@@ -472,6 +485,93 @@ export const getMyTournaments = async (
         });
     }
 };
+
+export const getOrganizerTournaments = asyncHandler(
+    async (req: Request, res: Response) => {
+        const userId = req.user?.id;
+        if (!userId) throw new AppError(401, "Unauthorized");
+
+        const parsed = getOrganizerTournamentSchema.safeParse(req.query);
+
+        if (!parsed.success) {
+            res.status(400).json({
+                error: "Invalid query parameters",
+                details: parsed.error.flatten().fieldErrors,
+            });
+            return;
+        }
+
+        const { query, type, page, limit, game, status } = parsed.data;
+
+        const where: TournamentWhereInput = {
+            organizerId: userId,
+        };
+
+        // Status filter — when omitted, return all statuses
+        if (status) {
+            where.status = { equals: status as any };
+        }
+
+        // Entry-fee filter
+        if (type === "free") {
+            where.entryFee = { equals: 0 };
+        } else if (type === "paid") {
+            where.entryFee = { gt: 0 };
+        }
+
+        // Game filter
+        if (game) {
+            where.game = game;
+        }
+
+        // Full-text search across title / description
+        if (query && query.trim().length > 0) {
+            const trimmedQuery = query.trim();
+            where.OR = [
+                { title: { contains: trimmedQuery, mode: "insensitive" } },
+                { description: { contains: trimmedQuery, mode: "insensitive" } },
+            ];
+        }
+
+        const totalCount = await prisma.tournament.count({ where: where as any });
+        const totalPages = Math.max(1, Math.ceil(totalCount / limit));
+        const safePage = Math.min(page, totalPages);
+        const skip = (safePage - 1) * limit;
+
+        const tournaments = await prisma.tournament.findMany({
+            where: where as any,
+            orderBy: { startTime: "desc" },
+            skip,
+            take: limit,
+        });
+
+        // Resolve presigned banner URLs in parallel
+        const tournamentsWithBanners = await Promise.all(
+            tournaments.map(async (t) => ({
+                ...t,
+                bannerImage: await resolvePresignedBanner(t.bannerImage),
+            }))
+        );
+
+        res.json({
+            data: tournamentsWithBanners,
+            pagination: {
+                currentPage: safePage,
+                totalPages,
+                totalCount,
+                limit,
+                hasNextPage: safePage < totalPages,
+                hasPreviousPage: safePage > 1,
+            },
+            filters: {
+                status: status ?? null,
+                type: type ?? null,
+                query: query || null,
+                game: game ?? null,
+            },
+        });
+    },
+);
 
 export const searchTournaments = asyncHandler(
     async (req: Request, res: Response) => {
