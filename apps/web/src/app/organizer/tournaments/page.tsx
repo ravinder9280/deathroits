@@ -188,23 +188,23 @@ const OrganizerTournamentsPage = () => {
           {/* Search */}
           <div className="flex-1">
 
-          
-          <div className="relative  min-w-[200px] max-w-lg ">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
-            <Input
-              id="organizer-tournament-search"
-              name="search"
-              placeholder="Search tournaments…"
-              value={searchVal}
-              onChange={(e) => setSearchVal(e.target.value)}
-              className="pl-10 bg-zinc-900 border border-white/10 h-12"
-              style={{
-                borderImage:
-                  "conic-gradient(rgb(212,212,212) 0deg,rgb(23,23,23) 90deg,rgb(212,212,212) 180deg,rgb(23,23,23) 270deg,rgb(212,212,212) 360deg) 1",
+
+            <div className="relative  min-w-[200px] max-w-lg ">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+              <Input
+                id="organizer-tournament-search"
+                name="search"
+                placeholder="Search tournaments…"
+                value={searchVal}
+                onChange={(e) => setSearchVal(e.target.value)}
+                className="pl-10 bg-zinc-900 border border-white/10 h-12"
+                style={{
+                  borderImage:
+                    "conic-gradient(rgb(212,212,212) 0deg,rgb(23,23,23) 90deg,rgb(212,212,212) 180deg,rgb(23,23,23) 270deg,rgb(212,212,212) 360deg) 1",
                 }}
-            />
+              />
+            </div>
           </div>
-                </div>
 
           {/* Status */}
           <Select value={status || "all"} onValueChange={handleStatusChange}>
@@ -398,8 +398,8 @@ const OrganizerTournamentsPage = () => {
         {/* Cards */}
         {!isLoading && !isFetching && !isError && tournaments.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-           
-          
+
+
             {tournaments.map((t) => (
               <div
                 key={t.id}
@@ -418,24 +418,25 @@ const OrganizerTournamentsPage = () => {
                   </div>
                   <div className="flex-1">
 
-                  <div className=" flex gap-2 items-center justify-between min-w-0">
-                    <h3 className="font-medium text-white text-sm md:text-base hover:text-yellow-300 hover:underline truncate">
-                      {t.title}
-                    </h3>
-                    <div className="flex items-center gap-2">
+                    <div className=" flex gap-2 items-center justify-between min-w-0">
+                      <h3 className="font-medium text-white text-sm md:text-base hover:text-yellow-300 hover:underline truncate">
+                        {t.title}
+                      </h3>
+                      <div className="flex items-center gap-2">
 
-                    <StatusBadge status={t.status} />
-                  <div>
-                    <EllipsisVertical className="text-muted-foreground hover:text-white cursor-pointer size-5" />
-                  </div>
+                        <StatusBadge status={t.status} />
+                        <div>
+                          <EllipsisVertical className="text-muted-foreground hover:text-white cursor-pointer size-5" />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="font-bold text-muted-foreground">
+                      {GAME_LABELS[t.game as keyof typeof GAME_LABELS] ?? t.game}
+
                     </div>
                   </div>
-                  <div className="font-bold text-muted-foreground">
-                  {GAME_LABELS[t.game as Game]}
                 </div>
-                  </div>
-                </div>
-                
+
 
                 {/* Date */}
                 <div className="flex items-center gap-2 font-medium text-muted-foreground text-sm">
