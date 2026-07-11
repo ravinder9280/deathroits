@@ -8,6 +8,7 @@ import {
   searchTournaments,
   createTournament,
   getOrganizerTournaments,
+  getOrganizerDashboard,
 } from "../controllers/tournament.controller";
 
 import {
@@ -30,6 +31,7 @@ router.get("/:id/entry", getTournamentEntry);
 router.post("/:tournamentId/join", requireAuth, joinTournament);
 
 // Organizer-only
+router.get("/organizer/dashboard", requireAuth, requireOrganizer, getOrganizerDashboard);
 router.get("/organizer/tournaments", requireAuth, requireOrganizer, getOrganizerTournaments);
 router.post("/", requireAuth, requireOrganizer, uploadMiddleware, createTournament);
 

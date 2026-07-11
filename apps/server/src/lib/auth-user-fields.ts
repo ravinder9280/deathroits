@@ -1,4 +1,11 @@
 export const userAdditionalFields = {
+  username: {
+    type: "string",
+    required: true,
+    unique: true,
+    fieldName: "username",
+  },
+  
   gameId: {
     type: "string",
     required: false,

@@ -60,7 +60,7 @@ type Props = {
 };
 
 export default function StatusBadge({ status }: Props) {
-  const config = statusConfig[status] ?? {
+  const config = statusConfig[status as TournamentStatus] ?? {
     label: (status || "").replace(/_/g, " "),
     variant: "outline" as const,
     icon: null,

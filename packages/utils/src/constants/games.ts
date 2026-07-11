@@ -1,5 +1,3 @@
-
-
 export const GAMES = {
     BGMI: {
         label: "BGMI",

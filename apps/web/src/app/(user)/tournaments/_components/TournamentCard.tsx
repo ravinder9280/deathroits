@@ -18,7 +18,7 @@ const TournamentCard = ({ t }: { t: TournamentCardType }) => {
             key={t.id}
 
         >
-            <CardContent className="p-0 relative aspect-[2/1] w-full  rounded-lg  overflow-hidden">
+            <CardContent className="p-0 relative aspect-[2/1] w-full    overflow-hidden">
 
                 <img
                     alt={t.title}

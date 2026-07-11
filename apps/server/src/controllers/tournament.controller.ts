@@ -650,3 +650,148 @@ export const searchTournaments = asyncHandler(
         });
     },
 );
+
+// ─── Organizer Dashboard ──────────────────────────────────────────────────────
+
+const SOON_HOURS = 24; // flag tournaments starting within this many hours
+
+export const getOrganizerDashboard = asyncHandler(
+    async (req: Request, res: Response) => {
+        const userId = req.user?.id;
+        if (!userId) throw new AppError(401, "Unauthorized");
+
+        const now = new Date();
+        const soonThreshold = new Date(now.getTime() + SOON_HOURS * 60 * 60 * 1000);
+
+        // Run all queries in parallel for a single network round-trip
+        const [allTournaments, totalMatchCount, recentEntries] =
+            await Promise.all([
+                // All tournaments for this organizer (stats + alert derivation)
+                prisma.tournament.findMany({
+                    where: { organizerId: userId },
+                    select: {
+                        id: true,
+                        title: true,
+                        status: true,
+                        startTime: true,
+                        joinedPlayersCount: true,
+                        maxPlayers: true,
+                    },
+                }),
+
+                // Total matches across organizer's tournaments
+                prisma.match.count({
+                    where: { tournament: { organizerId: userId } },
+                }),
+
+                // 8 most recent confirmed registrations
+                prisma.tournamentEntry.findMany({
+                    where: {
+                        status: "CONFIRMED",
+                        tournament: { organizerId: userId },
+                    },
+                    orderBy: { joinedAt: "desc" },
+                    take: 8,
+                    select: {
+                        id: true,
+                        ign: true,
+                        joinedAt: true,
+                        user: { select: { id: true, name: true, image: true, displayUsername: true } },
+                        tournament: { select: { id: true, title: true } },
+                    },
+                }),
+            ]);
+
+        // ── Stats ────────────────────────────────────────────────────────────
+        const byStatus: Record<string, number> = {};
+        let totalParticipants = 0;
+        let activeTournaments = 0;
+
+        for (const t of allTournaments) {
+            byStatus[t.status] = (byStatus[t.status] ?? 0) + 1;
+            totalParticipants += t.joinedPlayersCount;
+            if (t.status === "ONGOING" || t.status === "REGISTRATION_OPEN") activeTournaments++;
+        }
+
+        const stats = {
+            totalTournaments: allTournaments.length,
+            activeTournaments,
+            totalParticipants,
+            totalMatches: totalMatchCount,
+            byStatus,
+        };
+
+        // ── Attention Alerts ─────────────────────────────────────────────────
+        type Alert = {
+            kind: string;
+            tournamentId: string;
+            tournamentTitle: string;
+            message: string;
+        };
+        const attentionAlerts: Alert[] = [];
+
+        for (const t of allTournaments) {
+            // Draft — not published yet
+            if (t.status === "DRAFT") {
+                // Starting soon but still a draft
+                if (t.startTime <= soonThreshold) {
+                    attentionAlerts.push({
+                        kind: "STARTING_SOON_DRAFT",
+                        tournamentId: t.id,
+                        tournamentTitle: t.title,
+                        message: `Starts within ${SOON_HOURS}h but still in Draft.`,
+                    });
+                } else {
+                    attentionAlerts.push({
+                        kind: "DRAFT_NOT_PUBLISHED",
+                        tournamentId: t.id,
+                        tournamentTitle: t.title,
+                        message: "Still in Draft — publish to open registrations.",
+                    });
+                }
+                continue;
+            }
+
+            // Registration open but fully booked
+            if (
+                t.status === "REGISTRATION_OPEN" &&
+                t.joinedPlayersCount >= t.maxPlayers
+            ) {
+                attentionAlerts.push({
+                    kind: "FULL_TOURNAMENT",
+                    tournamentId: t.id,
+                    tournamentTitle: t.title,
+                    message: "Tournament is full — consider closing registrations.",
+                });
+            }
+
+            // Registration open but zero sign-ups
+            if (
+                t.status === "REGISTRATION_OPEN" &&
+                t.joinedPlayersCount === 0
+            ) {
+                attentionAlerts.push({
+                    kind: "ZERO_REGISTRATIONS",
+                    tournamentId: t.id,
+                    tournamentTitle: t.title,
+                    message: "No registrations yet — promote this tournament.",
+                });
+            }
+        }
+
+        // ── Recent Registrations ─────────────────────────────────────────────
+        const recentRegistrations = recentEntries.map((e) => ({
+            entryId: e.id,
+            userId: e.user.id,
+            userName: e.user.name,
+            userImage: e.user.image,
+            displayUsername: e.user.displayUsername,
+            ign: e.ign,
+            tournamentId: e.tournament.id,
+            tournamentTitle: e.tournament.title,
+            joinedAt: e.joinedAt,
+        }));
+
+        res.json({ stats, attentionAlerts, recentRegistrations });
+    },
+);

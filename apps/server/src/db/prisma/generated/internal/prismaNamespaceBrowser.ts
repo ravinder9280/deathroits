@@ -85,6 +85,8 @@ export const UserScalarFieldEnum = {
   email: 'email',
   emailVerified: 'emailVerified',
   image: 'image',
+  username: 'username',
+  displayUsername: 'displayUsername',
   ign: 'ign',
   gameUid: 'gameUid',
   upiId: 'upiId',

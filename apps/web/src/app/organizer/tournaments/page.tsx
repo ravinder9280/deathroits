@@ -184,7 +184,7 @@ const OrganizerTournamentsPage = () => {
         </div>
 
         {/* Filter row */}
-        <div className="flex  items-center gap-3">
+        <div className="flex flex-col md:flex-row  md:items-center gap-3">
           {/* Search */}
           <div className="flex-1">
 
@@ -419,9 +419,11 @@ const OrganizerTournamentsPage = () => {
                   <div className="flex-1">
 
                     <div className=" flex gap-2 items-center justify-between min-w-0">
-                      <h3 className="font-medium text-white text-sm md:text-base hover:text-yellow-300 hover:underline truncate">
-                        {t.title}
-                      </h3>
+                      <Link href={`/tournaments/${t.id}`}>
+                        <h3 className="font-medium text-white text-sm md:text-base hover:text-yellow-300 hover:underline truncate">
+                          {t.title}
+                        </h3>
+                      </Link>
                       <div className="flex items-center gap-2">
 
                         <StatusBadge status={t.status} />
