@@ -119,7 +119,6 @@ export default function MyTournamentsPage() {
               {tournaments?.map((t: MyTournament) => (
                 <MyTournamentsCard key={t.id} tournament={t} />
               ))}
-              z
             </div>
           </TabsContent>
         </Tabs>

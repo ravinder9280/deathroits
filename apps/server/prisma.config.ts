@@ -9,4 +9,5 @@ export default defineConfig({
     path: "src/db/prisma/migrations",
   },
   schema: "src/db/prisma/schema.prisma",
+  
 })

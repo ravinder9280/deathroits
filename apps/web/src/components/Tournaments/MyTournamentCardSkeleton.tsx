@@ -4,7 +4,7 @@ import React from 'react'
 
 const MyTournamentCardSkeleton = () => {
     return (
-        <div className="w-full space-y-4  p-4 bg-secondary rounded-md">
+        <div className="w-full space-y-4  p-4 border rounded-md">
             <div className="flex w-full  justify-between">
                 <div className="w-full space-y-4">
                     <div className="w-full space-y-2">
