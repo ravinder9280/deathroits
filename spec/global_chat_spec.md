@@ -143,7 +143,7 @@ Only successfully persisted messages are broadcast.
 ``` prisma
 model ChatMessage {
   id         String   @id @default(cuid())
-  content    String
+  message    String
 
   userId     String?
   guestId    String?
@@ -199,26 +199,8 @@ Returns messages ordered by newest first.
 
 ------------------------------------------------------------------------
 
-# Folder Structure
 
-``` text
-apps/
-├── web/
-│   ├── components/chat/
-│   ├── hooks/useGlobalChat.ts
-│   └── services/chat.ts
-│
-└── server/
-    ├── socket/
-    │   ├── handlers/chat.handler.ts
-    │   ├── middleware.ts
-    │   └── index.ts
-    ├── services/chat.service.ts
-    ├── validators/chat.validator.ts
-    └── repositories/chat.repository.ts
-```
 
-------------------------------------------------------------------------
 
 # Future Enhancements
 

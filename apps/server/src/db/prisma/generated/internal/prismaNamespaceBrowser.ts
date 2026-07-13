@@ -60,7 +60,8 @@ export const ModelName = {
   Match: 'Match',
   MatchSubmission: 'MatchSubmission',
   Payment: 'Payment',
-  PrizePayout: 'PrizePayout'
+  PrizePayout: 'PrizePayout',
+  ChatMessage: 'ChatMessage'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -243,6 +244,19 @@ export const PrizePayoutScalarFieldEnum = {
 } as const
 
 export type PrizePayoutScalarFieldEnum = (typeof PrizePayoutScalarFieldEnum)[keyof typeof PrizePayoutScalarFieldEnum]
+
+
+export const ChatMessageScalarFieldEnum = {
+  id: 'id',
+  message: 'message',
+  userId: 'userId',
+  guestId: 'guestId',
+  guestName: 'guestName',
+  createdAt: 'createdAt',
+  isDeleted: 'isDeleted'
+} as const
+
+export type ChatMessageScalarFieldEnum = (typeof ChatMessageScalarFieldEnum)[keyof typeof ChatMessageScalarFieldEnum]
 
 
 export const SortOrder = {

@@ -43,6 +43,7 @@ model User {
   payments               Payment[]
   payouts                PrizePayout[]
   organizedTournaments   Tournament[]      @relation("organizer")
+  chatMessages           ChatMessage[]
 
   @@unique([email])
   @@map("user")
@@ -302,4 +303,21 @@ enum PayoutStatus {
   PENDING
   PAID
   FAILED
+}
+
+model ChatMessage {
+  id        String   @id @default(cuid())
+  message   String
+
+  userId    String?          // null for guests
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  guestId   String?          // null for authenticated users
+  guestName String?          // null for authenticated users
+
+  createdAt DateTime @default(now())
+  isDeleted Boolean  @default(false)
+
+  @@index([userId])
+  @@index([createdAt])
 }

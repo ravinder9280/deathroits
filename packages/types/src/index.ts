@@ -1,4 +1,5 @@
 export * from "./auth";
+export * from "./chat";
 export * from "./enums";
 export * from "./user";
 export * from "./session";
@@ -13,3 +14,4 @@ export * from "./relations/tournament";
 export * from "./ui/tournament";
 export * from "./ui/tournament-detail";
 export * from "./ui/organizer-dashboard";
+

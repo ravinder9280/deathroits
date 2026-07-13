@@ -89,3 +89,8 @@ export type Payment = Prisma.PaymentModel
  * 
  */
 export type PrizePayout = Prisma.PrizePayoutModel
+/**
+ * Model ChatMessage
+ * 
+ */
+export type ChatMessage = Prisma.ChatMessageModel

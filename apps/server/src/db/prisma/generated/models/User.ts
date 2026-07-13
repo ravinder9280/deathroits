@@ -277,6 +277,7 @@ export type UserWhereInput = {
   payments?: Prisma.PaymentListRelationFilter
   payouts?: Prisma.PrizePayoutListRelationFilter
   organizedTournaments?: Prisma.TournamentListRelationFilter
+  chatMessages?: Prisma.ChatMessageListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -303,6 +304,7 @@ export type UserOrderByWithRelationInput = {
   payments?: Prisma.PaymentOrderByRelationAggregateInput
   payouts?: Prisma.PrizePayoutOrderByRelationAggregateInput
   organizedTournaments?: Prisma.TournamentOrderByRelationAggregateInput
+  chatMessages?: Prisma.ChatMessageOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -332,6 +334,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   payments?: Prisma.PaymentListRelationFilter
   payouts?: Prisma.PrizePayoutListRelationFilter
   organizedTournaments?: Prisma.TournamentListRelationFilter
+  chatMessages?: Prisma.ChatMessageListRelationFilter
 }, "id" | "username" | "gameUid" | "gameId" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -402,6 +405,7 @@ export type UserCreateInput = {
   payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
   payouts?: Prisma.PrizePayoutCreateNestedManyWithoutUserInput
   organizedTournaments?: Prisma.TournamentCreateNestedManyWithoutOrganizerInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -428,6 +432,7 @@ export type UserUncheckedCreateInput = {
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
   payouts?: Prisma.PrizePayoutUncheckedCreateNestedManyWithoutUserInput
   organizedTournaments?: Prisma.TournamentUncheckedCreateNestedManyWithoutOrganizerInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -454,6 +459,7 @@ export type UserUpdateInput = {
   payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
   payouts?: Prisma.PrizePayoutUpdateManyWithoutUserNestedInput
   organizedTournaments?: Prisma.TournamentUpdateManyWithoutOrganizerNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -480,6 +486,7 @@ export type UserUncheckedUpdateInput = {
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
   payouts?: Prisma.PrizePayoutUncheckedUpdateManyWithoutUserNestedInput
   organizedTournaments?: Prisma.TournamentUncheckedUpdateManyWithoutOrganizerNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -726,6 +733,22 @@ export type UserUpdateOneRequiredWithoutPayoutsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPayoutsInput, Prisma.UserUpdateWithoutPayoutsInput>, Prisma.UserUncheckedUpdateWithoutPayoutsInput>
 }
 
+export type UserCreateNestedOneWithoutChatMessagesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutChatMessagesInput, Prisma.UserUncheckedCreateWithoutChatMessagesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutChatMessagesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutChatMessagesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutChatMessagesInput, Prisma.UserUncheckedCreateWithoutChatMessagesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutChatMessagesInput
+  upsert?: Prisma.UserUpsertWithoutChatMessagesInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutChatMessagesInput, Prisma.UserUpdateWithoutChatMessagesInput>, Prisma.UserUncheckedUpdateWithoutChatMessagesInput>
+}
+
 export type UserCreateWithoutSessionsInput = {
   id: string
   name: string
@@ -749,6 +772,7 @@ export type UserCreateWithoutSessionsInput = {
   payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
   payouts?: Prisma.PrizePayoutCreateNestedManyWithoutUserInput
   organizedTournaments?: Prisma.TournamentCreateNestedManyWithoutOrganizerInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -774,6 +798,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
   payouts?: Prisma.PrizePayoutUncheckedCreateNestedManyWithoutUserInput
   organizedTournaments?: Prisma.TournamentUncheckedCreateNestedManyWithoutOrganizerInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -815,6 +840,7 @@ export type UserUpdateWithoutSessionsInput = {
   payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
   payouts?: Prisma.PrizePayoutUpdateManyWithoutUserNestedInput
   organizedTournaments?: Prisma.TournamentUpdateManyWithoutOrganizerNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -840,6 +866,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
   payouts?: Prisma.PrizePayoutUncheckedUpdateManyWithoutUserNestedInput
   organizedTournaments?: Prisma.TournamentUncheckedUpdateManyWithoutOrganizerNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAccountsInput = {
@@ -865,6 +892,7 @@ export type UserCreateWithoutAccountsInput = {
   payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
   payouts?: Prisma.PrizePayoutCreateNestedManyWithoutUserInput
   organizedTournaments?: Prisma.TournamentCreateNestedManyWithoutOrganizerInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAccountsInput = {
@@ -890,6 +918,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
   payouts?: Prisma.PrizePayoutUncheckedCreateNestedManyWithoutUserInput
   organizedTournaments?: Prisma.TournamentUncheckedCreateNestedManyWithoutOrganizerInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAccountsInput = {
@@ -931,6 +960,7 @@ export type UserUpdateWithoutAccountsInput = {
   payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
   payouts?: Prisma.PrizePayoutUpdateManyWithoutUserNestedInput
   organizedTournaments?: Prisma.TournamentUpdateManyWithoutOrganizerNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -956,6 +986,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
   payouts?: Prisma.PrizePayoutUncheckedUpdateManyWithoutUserNestedInput
   organizedTournaments?: Prisma.TournamentUncheckedUpdateManyWithoutOrganizerNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutOrganizedTournamentsInput = {
@@ -981,6 +1012,7 @@ export type UserCreateWithoutOrganizedTournamentsInput = {
   submissions?: Prisma.MatchSubmissionCreateNestedManyWithoutUserInput
   payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
   payouts?: Prisma.PrizePayoutCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutOrganizedTournamentsInput = {
@@ -1006,6 +1038,7 @@ export type UserUncheckedCreateWithoutOrganizedTournamentsInput = {
   submissions?: Prisma.MatchSubmissionUncheckedCreateNestedManyWithoutUserInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
   payouts?: Prisma.PrizePayoutUncheckedCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutOrganizedTournamentsInput = {
@@ -1047,6 +1080,7 @@ export type UserUpdateWithoutOrganizedTournamentsInput = {
   submissions?: Prisma.MatchSubmissionUpdateManyWithoutUserNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
   payouts?: Prisma.PrizePayoutUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutOrganizedTournamentsInput = {
@@ -1072,6 +1106,7 @@ export type UserUncheckedUpdateWithoutOrganizedTournamentsInput = {
   submissions?: Prisma.MatchSubmissionUncheckedUpdateManyWithoutUserNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
   payouts?: Prisma.PrizePayoutUncheckedUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutEntriesInput = {
@@ -1097,6 +1132,7 @@ export type UserCreateWithoutEntriesInput = {
   payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
   payouts?: Prisma.PrizePayoutCreateNestedManyWithoutUserInput
   organizedTournaments?: Prisma.TournamentCreateNestedManyWithoutOrganizerInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutEntriesInput = {
@@ -1122,6 +1158,7 @@ export type UserUncheckedCreateWithoutEntriesInput = {
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
   payouts?: Prisma.PrizePayoutUncheckedCreateNestedManyWithoutUserInput
   organizedTournaments?: Prisma.TournamentUncheckedCreateNestedManyWithoutOrganizerInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutEntriesInput = {
@@ -1163,6 +1200,7 @@ export type UserUpdateWithoutEntriesInput = {
   payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
   payouts?: Prisma.PrizePayoutUpdateManyWithoutUserNestedInput
   organizedTournaments?: Prisma.TournamentUpdateManyWithoutOrganizerNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutEntriesInput = {
@@ -1188,6 +1226,7 @@ export type UserUncheckedUpdateWithoutEntriesInput = {
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
   payouts?: Prisma.PrizePayoutUncheckedUpdateManyWithoutUserNestedInput
   organizedTournaments?: Prisma.TournamentUncheckedUpdateManyWithoutOrganizerNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSubmissionsInput = {
@@ -1213,6 +1252,7 @@ export type UserCreateWithoutSubmissionsInput = {
   payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
   payouts?: Prisma.PrizePayoutCreateNestedManyWithoutUserInput
   organizedTournaments?: Prisma.TournamentCreateNestedManyWithoutOrganizerInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSubmissionsInput = {
@@ -1238,6 +1278,7 @@ export type UserUncheckedCreateWithoutSubmissionsInput = {
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
   payouts?: Prisma.PrizePayoutUncheckedCreateNestedManyWithoutUserInput
   organizedTournaments?: Prisma.TournamentUncheckedCreateNestedManyWithoutOrganizerInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSubmissionsInput = {
@@ -1279,6 +1320,7 @@ export type UserUpdateWithoutSubmissionsInput = {
   payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
   payouts?: Prisma.PrizePayoutUpdateManyWithoutUserNestedInput
   organizedTournaments?: Prisma.TournamentUpdateManyWithoutOrganizerNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSubmissionsInput = {
@@ -1304,6 +1346,7 @@ export type UserUncheckedUpdateWithoutSubmissionsInput = {
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
   payouts?: Prisma.PrizePayoutUncheckedUpdateManyWithoutUserNestedInput
   organizedTournaments?: Prisma.TournamentUncheckedUpdateManyWithoutOrganizerNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutPaymentsInput = {
@@ -1329,6 +1372,7 @@ export type UserCreateWithoutPaymentsInput = {
   submissions?: Prisma.MatchSubmissionCreateNestedManyWithoutUserInput
   payouts?: Prisma.PrizePayoutCreateNestedManyWithoutUserInput
   organizedTournaments?: Prisma.TournamentCreateNestedManyWithoutOrganizerInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutPaymentsInput = {
@@ -1354,6 +1398,7 @@ export type UserUncheckedCreateWithoutPaymentsInput = {
   submissions?: Prisma.MatchSubmissionUncheckedCreateNestedManyWithoutUserInput
   payouts?: Prisma.PrizePayoutUncheckedCreateNestedManyWithoutUserInput
   organizedTournaments?: Prisma.TournamentUncheckedCreateNestedManyWithoutOrganizerInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutPaymentsInput = {
@@ -1395,6 +1440,7 @@ export type UserUpdateWithoutPaymentsInput = {
   submissions?: Prisma.MatchSubmissionUpdateManyWithoutUserNestedInput
   payouts?: Prisma.PrizePayoutUpdateManyWithoutUserNestedInput
   organizedTournaments?: Prisma.TournamentUpdateManyWithoutOrganizerNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPaymentsInput = {
@@ -1420,6 +1466,7 @@ export type UserUncheckedUpdateWithoutPaymentsInput = {
   submissions?: Prisma.MatchSubmissionUncheckedUpdateManyWithoutUserNestedInput
   payouts?: Prisma.PrizePayoutUncheckedUpdateManyWithoutUserNestedInput
   organizedTournaments?: Prisma.TournamentUncheckedUpdateManyWithoutOrganizerNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutPayoutsInput = {
@@ -1445,6 +1492,7 @@ export type UserCreateWithoutPayoutsInput = {
   submissions?: Prisma.MatchSubmissionCreateNestedManyWithoutUserInput
   payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
   organizedTournaments?: Prisma.TournamentCreateNestedManyWithoutOrganizerInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutPayoutsInput = {
@@ -1470,6 +1518,7 @@ export type UserUncheckedCreateWithoutPayoutsInput = {
   submissions?: Prisma.MatchSubmissionUncheckedCreateNestedManyWithoutUserInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
   organizedTournaments?: Prisma.TournamentUncheckedCreateNestedManyWithoutOrganizerInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutPayoutsInput = {
@@ -1511,6 +1560,7 @@ export type UserUpdateWithoutPayoutsInput = {
   submissions?: Prisma.MatchSubmissionUpdateManyWithoutUserNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
   organizedTournaments?: Prisma.TournamentUpdateManyWithoutOrganizerNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPayoutsInput = {
@@ -1536,6 +1586,127 @@ export type UserUncheckedUpdateWithoutPayoutsInput = {
   submissions?: Prisma.MatchSubmissionUncheckedUpdateManyWithoutUserNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
   organizedTournaments?: Prisma.TournamentUncheckedUpdateManyWithoutOrganizerNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutChatMessagesInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  username?: string | null
+  displayUsername?: string | null
+  ign?: string | null
+  gameUid?: string | null
+  upiId?: string | null
+  gameId?: string | null
+  onboarded?: boolean
+  role?: $Enums.UserRole
+  isBanned?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  entries?: Prisma.TournamentEntryCreateNestedManyWithoutUserInput
+  submissions?: Prisma.MatchSubmissionCreateNestedManyWithoutUserInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
+  payouts?: Prisma.PrizePayoutCreateNestedManyWithoutUserInput
+  organizedTournaments?: Prisma.TournamentCreateNestedManyWithoutOrganizerInput
+}
+
+export type UserUncheckedCreateWithoutChatMessagesInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  username?: string | null
+  displayUsername?: string | null
+  ign?: string | null
+  gameUid?: string | null
+  upiId?: string | null
+  gameId?: string | null
+  onboarded?: boolean
+  role?: $Enums.UserRole
+  isBanned?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  entries?: Prisma.TournamentEntryUncheckedCreateNestedManyWithoutUserInput
+  submissions?: Prisma.MatchSubmissionUncheckedCreateNestedManyWithoutUserInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
+  payouts?: Prisma.PrizePayoutUncheckedCreateNestedManyWithoutUserInput
+  organizedTournaments?: Prisma.TournamentUncheckedCreateNestedManyWithoutOrganizerInput
+}
+
+export type UserCreateOrConnectWithoutChatMessagesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutChatMessagesInput, Prisma.UserUncheckedCreateWithoutChatMessagesInput>
+}
+
+export type UserUpsertWithoutChatMessagesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutChatMessagesInput, Prisma.UserUncheckedUpdateWithoutChatMessagesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutChatMessagesInput, Prisma.UserUncheckedCreateWithoutChatMessagesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutChatMessagesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutChatMessagesInput, Prisma.UserUncheckedUpdateWithoutChatMessagesInput>
+}
+
+export type UserUpdateWithoutChatMessagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayUsername?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ign?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gameUid?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  upiId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gameId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  entries?: Prisma.TournamentEntryUpdateManyWithoutUserNestedInput
+  submissions?: Prisma.MatchSubmissionUpdateManyWithoutUserNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
+  payouts?: Prisma.PrizePayoutUpdateManyWithoutUserNestedInput
+  organizedTournaments?: Prisma.TournamentUpdateManyWithoutOrganizerNestedInput
+}
+
+export type UserUncheckedUpdateWithoutChatMessagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayUsername?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ign?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gameUid?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  upiId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gameId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  entries?: Prisma.TournamentEntryUncheckedUpdateManyWithoutUserNestedInput
+  submissions?: Prisma.MatchSubmissionUncheckedUpdateManyWithoutUserNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
+  payouts?: Prisma.PrizePayoutUncheckedUpdateManyWithoutUserNestedInput
+  organizedTournaments?: Prisma.TournamentUncheckedUpdateManyWithoutOrganizerNestedInput
 }
 
 
@@ -1551,6 +1722,7 @@ export type UserCountOutputType = {
   payments: number
   payouts: number
   organizedTournaments: number
+  chatMessages: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1561,6 +1733,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   payments?: boolean | UserCountOutputTypeCountPaymentsArgs
   payouts?: boolean | UserCountOutputTypeCountPayoutsArgs
   organizedTournaments?: boolean | UserCountOutputTypeCountOrganizedTournamentsArgs
+  chatMessages?: boolean | UserCountOutputTypeCountChatMessagesArgs
 }
 
 /**
@@ -1622,6 +1795,13 @@ export type UserCountOutputTypeCountOrganizedTournamentsArgs<ExtArgs extends run
   where?: Prisma.TournamentWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountChatMessagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ChatMessageWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1647,6 +1827,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   payments?: boolean | Prisma.User$paymentsArgs<ExtArgs>
   payouts?: boolean | Prisma.User$payoutsArgs<ExtArgs>
   organizedTournaments?: boolean | Prisma.User$organizedTournamentsArgs<ExtArgs>
+  chatMessages?: boolean | Prisma.User$chatMessagesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1716,6 +1897,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   payments?: boolean | Prisma.User$paymentsArgs<ExtArgs>
   payouts?: boolean | Prisma.User$payoutsArgs<ExtArgs>
   organizedTournaments?: boolean | Prisma.User$organizedTournamentsArgs<ExtArgs>
+  chatMessages?: boolean | Prisma.User$chatMessagesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1731,6 +1913,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     payments: Prisma.$PaymentPayload<ExtArgs>[]
     payouts: Prisma.$PrizePayoutPayload<ExtArgs>[]
     organizedTournaments: Prisma.$TournamentPayload<ExtArgs>[]
+    chatMessages: Prisma.$ChatMessagePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2150,6 +2333,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   payments<T extends Prisma.User$paymentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$paymentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   payouts<T extends Prisma.User$payoutsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$payoutsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PrizePayoutPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   organizedTournaments<T extends Prisma.User$organizedTournamentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$organizedTournamentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TournamentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  chatMessages<T extends Prisma.User$chatMessagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$chatMessagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ChatMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2753,6 +2937,30 @@ export type User$organizedTournamentsArgs<ExtArgs extends runtime.Types.Extensio
   take?: number
   skip?: number
   distinct?: Prisma.TournamentScalarFieldEnum | Prisma.TournamentScalarFieldEnum[]
+}
+
+/**
+ * User.chatMessages
+ */
+export type User$chatMessagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ChatMessage
+   */
+  select?: Prisma.ChatMessageSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ChatMessage
+   */
+  omit?: Prisma.ChatMessageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ChatMessageInclude<ExtArgs> | null
+  where?: Prisma.ChatMessageWhereInput
+  orderBy?: Prisma.ChatMessageOrderByWithRelationInput | Prisma.ChatMessageOrderByWithRelationInput[]
+  cursor?: Prisma.ChatMessageWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ChatMessageScalarFieldEnum | Prisma.ChatMessageScalarFieldEnum[]
 }
 
 /**
