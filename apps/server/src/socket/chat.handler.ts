@@ -1,8 +1,9 @@
 import { RateLimiterMemory } from "rate-limiter-flexible";
 import type { Server, Socket } from "socket.io";
+import { type DefaultEventsMap } from "socket.io";
 
 import { prisma } from "../db/client";
-import { auth } from "../lib/auth";
+import type { SocketData } from "../types/socket.types";
 import { chatSendSchema } from "./chat.schema";
 
 const rateLimiter = new RateLimiterMemory({
@@ -10,41 +11,28 @@ const rateLimiter = new RateLimiterMemory({
   duration: 10, // per 10 seconds per key
 });
 
-export function registerChatHandlers(io: Server, socket: Socket): void {
-
-
+export function registerChatHandlers(
+  io: Server<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, SocketData>,
+  socket: Socket<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, SocketData>,
+): void {
   socket.on("chat:send", async (payload: unknown, ack: unknown) => {
     const sendAck = typeof ack === "function" ? ack : null;
 
     try {
-      // 1. Validate payload
+      // 1. Validate payload shape (message only — identity comes from socket.data)
       const parsed = chatSendSchema.safeParse(payload);
       if (!parsed.success) {
         socket.emit("chat:error", { message: "Invalid message payload." });
         sendAck?.({ ok: false });
         return;
       }
-      const { message, guestId, guestName } = parsed.data;
+      const { message } = parsed.data;
 
-      // 2. Resolve authenticated identity (optional)
-      let userId: string | null = null;
-      let resolvedGuestId: string = guestId ?? socket.id;
-      let resolvedGuestName: string = guestName ?? "Guest";
+      // 2. Read trusted identity from socket.data (set by resolveSocketIdentity middleware)
+      const { userId, guestId, guestName } = socket.data;
 
-      try {
-        const headers = new Headers(
-          socket.handshake.headers as Record<string, string>,
-        );
-        const session = await auth.api.getSession({ headers });
-        if (session?.user) {
-          userId = session.user.id;
-        }
-      } catch {
-        // No session — treat as guest
-      }
-
-      // 3. Rate limit (keyed by userId for auth, guestId for guests)
-      const rateLimitKey = userId ?? resolvedGuestId;
+      // 3. Rate limit keyed by server-verified identity
+      const rateLimitKey = userId ?? guestId ?? socket.id;
       await rateLimiter.consume(rateLimitKey);
 
       // 4. Persist to DB
@@ -52,8 +40,8 @@ export function registerChatHandlers(io: Server, socket: Socket): void {
         data: {
           message,
           userId: userId ?? undefined,
-          guestId: userId ? undefined : resolvedGuestId,
-          guestName: userId ? undefined : resolvedGuestName,
+          guestId: userId ? undefined : (guestId ?? undefined),
+          guestName: userId ? undefined : (guestName ?? undefined),
         },
         include: {
           user: {
@@ -68,7 +56,7 @@ export function registerChatHandlers(io: Server, socket: Socket): void {
         },
       });
 
-      // 5. Broadcast persisted message to ALL connected clients
+      // 5. Broadcast to all connected clients (same shape as before)
       io.emit("chat:new", {
         id: saved.id,
         message: saved.message,
@@ -89,7 +77,6 @@ export function registerChatHandlers(io: Server, socket: Socket): void {
       // 6. Acknowledge sender
       sendAck?.({ ok: true, id: saved.id });
     } catch (err: unknown) {
-      // Rate limit exceeded
       const rateLimitErr = err as { remainingPoints?: number };
       if (rateLimitErr?.remainingPoints === 0) {
         socket.emit("chat:error", {

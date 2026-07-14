@@ -58,7 +58,7 @@ export function ChatMessageBubble({ msg, isOwn, onRetry }: Props) {
       {/* Avatar */}
       <Avatar className="size-10 shrink-0 mt-0.5">
         {avatarSrc && <AvatarImage src={avatarSrc} alt={senderName} />}
-        <AvatarFallback className="text-xs bg-blue-500 text-white text-xl">
+        <AvatarFallback className="text-xs bg-primary/40 text-white text-xl">
           {getInitials(senderName)}
         </AvatarFallback>
       </Avatar>
@@ -75,7 +75,19 @@ export function ChatMessageBubble({ msg, isOwn, onRetry }: Props) {
             "flex items-center gap-1.5 w-full justify-between ",
           )}
         >
-          <span className={cn("text-[0.82rem] sm:text-[0.9rem] lg:text-sm font-bold line-clamp-1", isOwn ? "text-primary" : "text-white")}>{senderName}{" "}{" "} {isOwn ? "(you)" : ""}</span>
+
+          <div className="flex  gap-4">
+
+            <span className={cn("text-[0.82rem] sm:text-[0.9rem] lg:text-sm font-bold line-clamp-1")}>@{senderName}</span>
+
+
+            {isOwn &&
+
+              <span className="text-[10px] text-slate-400/60  font-medium font-inter">
+                YOU
+              </span>
+            }
+          </div>
 
 
 
@@ -88,7 +100,7 @@ export function ChatMessageBubble({ msg, isOwn, onRetry }: Props) {
 
         {/* Message text */}
         {msg.pending ? (
-          <Skeleton className="h-8 w-40 rounded-xl" />
+          <Skeleton className="h-8 w-40 " />
         ) : (
           <p
             className={cn(

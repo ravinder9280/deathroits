@@ -1,4 +1,5 @@
 import { fromNodeHeaders, toNodeHandler } from "better-auth/node";
+import cookieParser from "cookie-parser";
 import cors from "cors";
 import express from "express";
 import morgan from "morgan";
@@ -10,6 +11,7 @@ import { AppError } from "./utils/app-error";
 const app: express.Express = express();
 
 app.use(morgan("tiny"));
+app.use(cookieParser());
 app.use(
   cors({
     credentials: true,

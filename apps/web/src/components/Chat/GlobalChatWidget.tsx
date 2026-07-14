@@ -90,7 +90,7 @@ export function GlobalChatWidget() {
       <Sheet open={open}  onOpenChange={setOpen}>
         <SheetContent
           side="right"
-          className="flex flex-col p-0 w-full sm:max-w-md lg:max-w-lg  z-100 gap-0"
+          className="flex flex-col p-0 w-full sm:max-w-md lg:max-w-lg  z-100 gap-0 "
         >
           {/* Header */}
           <SheetHeader className="flex flex-row items-center justify-between px-4 py-3 border-b shrink-0">

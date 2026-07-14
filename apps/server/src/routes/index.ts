@@ -1,6 +1,7 @@
 import { Router } from "express";
 
 import chatRouter from "./chat.route";
+import guestRouter from "./guest.route";
 import tournamentRouter from "./tournament.route";
 
 const router = Router();
@@ -11,5 +12,6 @@ router.get("/", function (_req, res) {
 
 router.use("/tournament", tournamentRouter);
 router.use("/chat", chatRouter);
+router.use("/guest", guestRouter);
 
 export default router;

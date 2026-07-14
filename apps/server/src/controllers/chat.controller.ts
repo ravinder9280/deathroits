@@ -38,7 +38,7 @@ export const getChatHistory = async (
         ? {
             id: m.user.id,
             name: m.user.name,
-            username: m.user.displayUsername ?? m.user.username,
+            username: m.user.displayUsername?.toLowerCase() ?? m.user.username?.toLowerCase(),
             image: m.user.image,
           }
         : null,
