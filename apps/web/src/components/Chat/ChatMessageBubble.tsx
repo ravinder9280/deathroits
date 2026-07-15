@@ -52,7 +52,7 @@ export function ChatMessageBubble({ msg, isOwn, onRetry }: Props) {
   return (
     <div
       className={cn(
-        "group relative flex items-start gap-2.5 sm:gap-3 py-2.5 sm:py-3 lg:py-3.5 px-3 sm:px-4 lg:px-5 border-b border-neutral-300 dark:border-neutral-800/80 bg-neutral-200 dark:bg-neutral-800/30  last:border-0 transition hover:bg-paper-soft/20",
+        "group relative flex items-start gap-2.5 sm:gap-3 py-2.5 sm:py-3 lg:py-3.5 px-3 sm:px-4 lg:px-5  transition hover:bg-paper-soft/20",
       )}
     >
       {/* Avatar */}
@@ -102,14 +102,17 @@ export function ChatMessageBubble({ msg, isOwn, onRetry }: Props) {
         {msg.pending ? (
           <Skeleton className="h-8 w-40 " />
         ) : (
+          <div className=" max-w-lg rounded-2xl">
+
           <p
             className={cn(
               "text-[0.88rem] sm:text-[0.95rem] lg:text-base text-white/60 leading-snug mt-0.5 break-words whitespace-pre-wrap select-none",
               msg.failed && "opacity-60 ",
             )}
-          >
+            >
             {msg.message}
           </p>
+            </div>
         )}
 
         {/* Failed / Retry */}

@@ -26,6 +26,7 @@ interface GuestIdentity {
 export function useGlobalChat() {
   const { data: session } = useSession();
   const [messages, setMessages] = useState<ChatMessageWithState[]>([]);
+  const [onlineCount, setOnlineCount] = useState(0);
   const socketRef = useRef<Socket | null>(null);
   const initializedRef = useRef(false);
 
@@ -90,6 +91,10 @@ export function useGlobalChat() {
 
     socket.on("connect_error", (err) => {
       console.warn("[chat] socket connect_error:", err.message);
+    });
+
+    socket.on("chat:online_count", (count: number) => {
+      setOnlineCount(count);
     });
 
     socket.on("chat:new", (msg: ChatMessage) => {
@@ -189,5 +194,6 @@ export function useGlobalChat() {
     isLoadingHistory,
     refetchHistory,
     isPendingHistory,
+    onlineCount,
   };
 }

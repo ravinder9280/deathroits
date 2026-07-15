@@ -1,6 +1,4 @@
 import "@monorepo/ui/globals.css";
-import Navbar from "@/components/Home/Navbar";
-import { GlobalChatWidget } from "@/components/Chat/GlobalChatWidget";
 import { Toaster } from 'sonner';
 import type { Metadata } from "next";
 import { JetBrains_Mono, Space_Grotesk } from "next/font/google";
@@ -65,7 +63,6 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem >
           <QueryProvider>
             {children}
-            <GlobalChatWidget />
           </QueryProvider>
         </ThemeProvider>
       </body>

@@ -38,6 +38,8 @@ const Footer = () => {
                                     { label: 'Leaderboard', href: '/leaderboard' },
                                     { label: 'Live Matches', href: '/live' },
                                     { label: "Organizer", href: "/organizer" },
+                                    { label: "Chat", href: "/chat" },
+
                                     { label: 'Download App', href: '/download' },
                                 ].map((item) => (
                                     <li key={item.href}>

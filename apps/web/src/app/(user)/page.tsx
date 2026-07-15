@@ -7,8 +7,8 @@ import Hero from "@/components/Home/Hero";
 import Trust from "@/components/Home/Trust";
 import Whatsapp from "@/components/Home/Whatsapp";
 import Work from "@/components/Home/Work";
-import Link from "next/link";
 import { GamesMarquee } from "@/components/ui/GamesMarquee";
+import Link from "next/link";
 
 export default function Page() {
   return (
@@ -72,6 +72,7 @@ export default function Page() {
           Join WhatsApp
         </span>
       </Link>
+
     </main>
   );
 }

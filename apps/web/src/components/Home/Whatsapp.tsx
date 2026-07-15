@@ -20,7 +20,7 @@ const Whatsapp = () => {
                     <p className='text-white/70 text-[16px] md:text-[18px] max-w-[600px] mx-auto mb-9 leading-[1.6]'>
                         Connect with fellow gamers and esports enthusiasts! Share your match highlights, get tips from top players, suggest features, and be part of the Deathroit family.
                     </p>
-                    <Button asChild className='bg-[#25d366] shadow-[0px_4px_20px_rgba(37,211,102,0.4)] h-16 rounded-[50px] max-w-[350px] w-full text-[18px] font-bold'>
+                    <Button asChild className='bg-[#25d366] hover:bg-[#25d366]/80 shadow-[0px_4px_20px_rgba(37,211,102,0.4)] h-16 rounded-[50px] max-w-[350px] w-full text-[18px] font-bold'>
                         <Link
                             href="https://chat.whatsapp.com/K2HaU8ZGSSPGO96EiXaAA2"
 

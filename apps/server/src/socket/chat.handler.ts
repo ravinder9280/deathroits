@@ -11,10 +11,52 @@ const rateLimiter = new RateLimiterMemory({
   duration: 10, // per 10 seconds per key
 });
 
+/**
+ * In-memory reference count map: userKey → number of open socket connections.
+ * userKey = userId for logged-in users, guestId for guests.
+ * onlineRefs.size == total unique online users.
+ */
+const onlineRefs = new Map<string, number>();
+
+function getUniqueKey(socket: Socket<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, SocketData>): string | null {
+  return socket.data.userId ?? socket.data.guestId ?? null;
+}
+
+function broadcastOnlineCount(
+  io: Server<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, SocketData>,
+): void {
+  io.emit("chat:online_count", onlineRefs.size);
+}
+
 export function registerChatHandlers(
   io: Server<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, SocketData>,
   socket: Socket<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, SocketData>,
 ): void {
+  // ── Online presence tracking ────────────────────────────────────────────
+  const userKey = getUniqueKey(socket);
+
+  if (userKey) {
+    const prev = onlineRefs.get(userKey) ?? 0;
+    onlineRefs.set(userKey, prev + 1);
+    // Broadcast updated count to everyone (including the new socket)
+    broadcastOnlineCount(io);
+  }
+
+  // Send the current count immediately to just this new socket
+  // (so they see it even if another event beats them to it)
+  socket.emit("chat:online_count", onlineRefs.size);
+
+  socket.on("disconnect", () => {
+    if (!userKey) return;
+    const remaining = (onlineRefs.get(userKey) ?? 1) - 1;
+    if (remaining <= 0) {
+      onlineRefs.delete(userKey);
+    } else {
+      onlineRefs.set(userKey, remaining);
+    }
+    broadcastOnlineCount(io);
+  });
+
   socket.on("chat:send", async (payload: unknown, ack: unknown) => {
     const sendAck = typeof ack === "function" ? ack : null;
 
