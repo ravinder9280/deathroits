@@ -1,14 +1,20 @@
 'use client'
 import { ChatPanel } from '@/components/Chat/ChatPanel';
-import { useGlobalChat } from '@/hooks/useGlobalChat';
+import { useGlobalChat, type OnlineUser } from '@/hooks/useGlobalChat';
+import { Avatar, AvatarFallback, AvatarImage } from '@monorepo/ui/components/avatar';
 import { Button } from '@monorepo/ui/components/button';
+import { Input } from '@monorepo/ui/components/input';
+import { ScrollArea } from '@monorepo/ui/components/scroll-area';
 import {
   Sheet,
+  SheetClose,
   SheetContent,
+  SheetHeader,
+  SheetTitle,
   SheetTrigger,
 } from '@monorepo/ui/components/sheet';
 import { Skeleton } from '@monorepo/ui/components/skeleton';
-import { ArrowLeft, Users } from 'lucide-react';
+import { ArrowLeft, Search, Users, X } from 'lucide-react';
 import React from 'react'
 
 const SKELETON_ROWS = [
@@ -56,12 +62,74 @@ function ChatPanelSkeleton() {
   );
 }
 
-const GlobalChatPage = () => {
-  const { messages, sendMessage, retryMessage, currentUser, guestId, isLoadingHistory, isPendingHistory, onlineCount } =
-    useGlobalChat();
+function getInitials(name: string): string {
+  return name
+    .split(' ')
+    .map((w) => w[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase();
+}
+
+/** Reusable member list — used in both desktop aside and mobile sheet */
+function MemberList({ users }: { users: OnlineUser[] }) {
+  if (users.length === 0) {
+    return (
+      <p className="px-4 py-6 text-center text-xs text-muted-foreground/60">
+        No one online yet
+      </p>
+    );
+  }
 
   return (
-    <main className="flex h-screen flex-col pt-14 overflow-hidden">
+    <ScrollArea className="flex-1 min-h-0 px-3 py-4">
+      <div className="relative ">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+        <Input
+          id="tournament-search"
+          name="search"
+          placeholder="Search players"
+          className="pl-10 bg-zinc-900 border border-white/10 h-8 text-xs "
+        />
+
+
+      </div>
+      <ul className="space-y-4 mt-4">
+        {users.map((u, i) => (
+          <li
+            key={i}
+            className="flex items-center gap-2.5 rounded-md   hover:bg-white/5 transition-colors"
+          >
+            {/* Avatar with green presence dot */}
+            <div className="relative shrink-0">
+              <Avatar className="size-6">
+                {u.image && <AvatarImage src={u.image} alt={u.name} />}
+                <AvatarFallback className="text-[11px] bg-primary/30 text-white">
+                  {getInitials(u.name)}
+                </AvatarFallback>
+              </Avatar>
+              <span className="absolute -bottom-0.5 -right-0.5 size-2.5 rounded-full bg-green-400 ring-[1.5px] ring-background" />
+            </div>
+
+            {/* Name + guest badge */}
+            <div className="flex flex-col min-w-0">
+              <span className="text-sm font-medium text-foreground/80 truncate">
+                {u.name}
+              </span>
+
+            </div>
+          </li>
+        ))}
+      </ul>
+    </ScrollArea>
+  );
+}
+
+const GlobalChatPage = () => {
+  const { messages, sendMessage, retryMessage, currentUser, guestId, isLoadingHistory, isPendingHistory, onlineCount, onlineUsers } = useGlobalChat();
+
+  return (
+    <main className="flex h-[100dvh] flex-col pt-14 overflow-hidden">
       <div className="flex min-w-0 flex-1 min-h-0 overflow-hidden">
 
         {/* ── Left sidebar ── */}
@@ -97,8 +165,21 @@ const GlobalChatPage = () => {
                     <Users className="w-4 h-4" />
                   </Button>
                 </SheetTrigger>
-                <SheetContent side="right" className='z-125'>
-                  {/* Members list goes here */}
+                <SheetContent side="right" className="z-[125] flex flex-col p-0 gap-0">
+                  <SheetTitle className="flex items-center gap-2 text-sm uppercase tracking-[0.14em] text-muted-foreground/80 font-medium px-4 py-3 border-b border-white/10 justify-between">
+                    <div className='flex items-center gap-2'>
+                      <Users className="w-3.5 h-3.5" />
+                      <span>
+
+                      Members · {onlineCount}
+                      </span>
+                    </div>
+                    <SheetClose>
+                      <X className='text-foreground size-4'/>
+                    </SheetClose>
+                  </SheetTitle>
+
+                  <MemberList users={onlineUsers} />
                 </SheetContent>
               </Sheet>
             </div>
@@ -119,15 +200,14 @@ const GlobalChatPage = () => {
         </div>
 
         {/* ── Right sidebar (desktop) ── */}
-        <aside className="hidden w-72 shrink-0 border-l border-white/10 lg:block">
-          <div className="flex h-full flex-col">
-            <div className="flex shrink-0 items-center min-h-12 gap-2 border-b border-white/10 px-4 py-3">
-              <Users className="text-muted-foreground/80 w-3.5 h-3.5" />
-              <h3 className="font-medium text-sm uppercase tracking-[0.14em] text-muted-foreground/80">
-                Members
-              </h3>
-            </div>
+        <aside className="hidden w-64 shrink-0 border-l border-white/10 lg:flex lg:flex-col">
+          <div className="flex shrink-0 items-center min-h-12 gap-2 border-b border-white/10 px-4 py-3">
+            <Users className="text-muted-foreground/80 w-3.5 h-3.5" />
+            <h3 className="font-medium text-sm uppercase tracking-[0.14em] text-muted-foreground/80">
+              Members · {onlineCount}
+            </h3>
           </div>
+          <MemberList users={onlineUsers} />
         </aside>
 
       </div>

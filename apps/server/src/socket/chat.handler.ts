@@ -11,21 +11,37 @@ const rateLimiter = new RateLimiterMemory({
   duration: 10, // per 10 seconds per key
 });
 
+/** Shape of each entry stored in onlineRefs */
+interface OnlineEntry {
+  count: number;       // number of open socket tabs for this identity
+  name: string;        // display name (username for auth, guestName for guests)
+  image: string | null;
+  isGuest: boolean;
+}
+
 /**
- * In-memory reference count map: userKey → number of open socket connections.
+ * In-memory reference count map: userKey → OnlineEntry.
  * userKey = userId for logged-in users, guestId for guests.
  * onlineRefs.size == total unique online users.
  */
-const onlineRefs = new Map<string, number>();
+const onlineRefs = new Map<string, OnlineEntry>();
 
-function getUniqueKey(socket: Socket<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, SocketData>): string | null {
+function getUniqueKey(
+  socket: Socket<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, SocketData>,
+): string | null {
   return socket.data.userId ?? socket.data.guestId ?? null;
 }
 
-function broadcastOnlineCount(
+/** Broadcasts the full online user list to every connected socket. */
+function broadcastOnlineUsers(
   io: Server<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, SocketData>,
 ): void {
-  io.emit("chat:online_count", onlineRefs.size);
+  const users = Array.from(onlineRefs.values()).map(({ name, image, isGuest }) => ({
+    name,
+    image,
+    isGuest,
+  }));
+  io.emit("chat:online_users", users);
 }
 
 export function registerChatHandlers(
@@ -36,25 +52,47 @@ export function registerChatHandlers(
   const userKey = getUniqueKey(socket);
 
   if (userKey) {
-    const prev = onlineRefs.get(userKey) ?? 0;
-    onlineRefs.set(userKey, prev + 1);
-    // Broadcast updated count to everyone (including the new socket)
-    broadcastOnlineCount(io);
+    const existing = onlineRefs.get(userKey);
+    if (existing) {
+      // Same user opened another tab — increment ref count, keep profile data
+      existing.count++;
+    } else {
+      // First connection for this identity — store full profile
+      onlineRefs.set(userKey, {
+        count: 1,
+        name:
+          socket.data.user?.username ??
+          socket.data.user?.name ??
+          socket.data.guestName ??
+          "Unknown",
+        image: socket.data.user?.image ?? null,
+        isGuest: !socket.data.userId,
+      });
+    }
+    // Broadcast updated list to everyone (including the joining socket)
+    broadcastOnlineUsers(io);
   }
 
-  // Send the current count immediately to just this new socket
-  // (so they see it even if another event beats them to it)
-  socket.emit("chat:online_count", onlineRefs.size);
+  // Also send snapshot directly to the new socket in case
+  // it missed the broadcast above due to race conditions
+  {
+    const users = Array.from(onlineRefs.values()).map(({ name, image, isGuest }) => ({
+      name,
+      image,
+      isGuest,
+    }));
+    socket.emit("chat:online_users", users);
+  }
 
   socket.on("disconnect", () => {
     if (!userKey) return;
-    const remaining = (onlineRefs.get(userKey) ?? 1) - 1;
-    if (remaining <= 0) {
+    const entry = onlineRefs.get(userKey);
+    if (!entry) return;
+    entry.count--;
+    if (entry.count <= 0) {
       onlineRefs.delete(userKey);
-    } else {
-      onlineRefs.set(userKey, remaining);
     }
-    broadcastOnlineCount(io);
+    broadcastOnlineUsers(io);
   });
 
   socket.on("chat:send", async (payload: unknown, ack: unknown) => {

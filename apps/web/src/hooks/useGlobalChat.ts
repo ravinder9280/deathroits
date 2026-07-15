@@ -18,6 +18,12 @@ export type ChatMessageWithState = ChatMessage & {
   tempId?: string;
 };
 
+export interface OnlineUser {
+  name: string;
+  image: string | null;
+  isGuest: boolean;
+}
+
 interface GuestIdentity {
   guestId: string;
   guestName: string;
@@ -26,7 +32,7 @@ interface GuestIdentity {
 export function useGlobalChat() {
   const { data: session } = useSession();
   const [messages, setMessages] = useState<ChatMessageWithState[]>([]);
-  const [onlineCount, setOnlineCount] = useState(0);
+  const [onlineUsers, setOnlineUsers] = useState<OnlineUser[]>([]);
   const socketRef = useRef<Socket | null>(null);
   const initializedRef = useRef(false);
 
@@ -93,8 +99,8 @@ export function useGlobalChat() {
       console.warn("[chat] socket connect_error:", err.message);
     });
 
-    socket.on("chat:online_count", (count: number) => {
-      setOnlineCount(count);
+    socket.on("chat:online_users", (users: OnlineUser[]) => {
+      setOnlineUsers(users);
     });
 
     socket.on("chat:new", (msg: ChatMessage) => {
@@ -194,6 +200,7 @@ export function useGlobalChat() {
     isLoadingHistory,
     refetchHistory,
     isPendingHistory,
-    onlineCount,
+    onlineUsers,
+    onlineCount: onlineUsers.length,
   };
 }
