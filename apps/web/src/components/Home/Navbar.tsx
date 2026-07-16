@@ -3,7 +3,7 @@
 import { Button } from "@monorepo/ui/components/button";
 import { Sheet, SheetClose, SheetContent, SheetTrigger } from "@monorepo/ui/components/sheet";
 import { cn } from "@monorepo/utils/styles";
-import { Building, CalendarPlus, Ellipsis, Home, icons, Menu, ShieldUser, Trophy, X ,} from "lucide-react";
+import { Building, CalendarPlus, Ellipsis, Home, icons, Menu, MessageSquareMore, ShieldUser, Trophy, X ,} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -39,6 +39,11 @@ const NavbarItems = [
     label: "Organizer",
     link: "/organizer",
     icon:ShieldUser
+  },
+    {
+    label: "Chat",
+    link: "/chat",
+    icon:MessageSquareMore
   },
 ];
 

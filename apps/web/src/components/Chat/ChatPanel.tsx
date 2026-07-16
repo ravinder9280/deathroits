@@ -1,7 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-
+import type { EmojiClickData } from "emoji-picker-react";
+import EmojiPicker, { Theme } from 'emoji-picker-react';
 import { Button } from "@monorepo/ui/components/button";
 import { Textarea } from "@monorepo/ui/components/textarea";
 import { ArrowDown, SendHorizonalIcon, Smile } from "lucide-react";
@@ -28,8 +29,10 @@ export function ChatPanel({
 }: ChatPanelProps) {
   const [input, setInput] = useState("");
   const [showScrollBtn, setShowScrollBtn] = useState(false);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const emojiPickerRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = useCallback(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -50,6 +53,23 @@ export function ChatPanel({
       scrollToBottom();
     }
   }, [messages, scrollToBottom]);
+
+  // Close emoji picker when clicking outside
+  useEffect(() => {
+    if (!showEmojiPicker) return;
+    function handleClickOutside(e: MouseEvent) {
+      if (emojiPickerRef.current && !emojiPickerRef.current.contains(e.target as Node)) {
+        setShowEmojiPicker(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [showEmojiPicker]);
+
+  function handleEmojiClick(emojiData: EmojiClickData) {
+    setInput((prev) => prev + emojiData.emoji);
+    setShowEmojiPicker(false);
+  }
 
   function handleSend() {
     const trimmed = input.trim();
@@ -132,14 +152,31 @@ export function ChatPanel({
             rows={1}
             maxLength={500}
           />
-          <Button
-            size="icon"
-            variant={'ghost'}
-           
-            
-          >
-            <Smile className=""/>
-          </Button>
+
+          {/* Emoji picker popover */}
+          <div ref={emojiPickerRef} className="relative">
+            <Button
+              size="icon"
+              variant="ghost"
+              className="text-muted-foreground"
+              aria-label="Open emoji picker"
+              onClick={() => setShowEmojiPicker((prev) => !prev)}
+            >
+              <Smile className="h-5 w-5" />
+            </Button>
+
+            {showEmojiPicker && (
+              <div className="absolute bottom-full right-0 mb-2 z-50">
+                <EmojiPicker
+                  className="bg-background"
+                  theme={Theme.DARK}
+                  onEmojiClick={handleEmojiClick}
+                  lazyLoadEmojis
+                />
+              </div>
+            )}
+          </div>
+
           <Button
             size="icon"
             onClick={handleSend}

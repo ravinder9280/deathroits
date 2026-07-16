@@ -106,7 +106,7 @@ export function ChatMessageBubble({ msg, isOwn, onRetry }: Props) {
 
           <p
             className={cn(
-              "text-[0.88rem] sm:text-[0.95rem] lg:text-base text-white/60 leading-snug mt-0.5 break-words whitespace-pre-wrap select-none",
+              "text-[0.88rem] sm:text-[0.95rem] lg:text-base text-white/60 leading-snug mt-0.5 break-words whitespace-pre-wrap ",
               msg.failed && "opacity-60 ",
             )}
             >
