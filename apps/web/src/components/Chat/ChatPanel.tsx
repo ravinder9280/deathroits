@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { Button } from "@monorepo/ui/components/button";
 import { Textarea } from "@monorepo/ui/components/textarea";
-import { SendHorizonalIcon, Smile } from "lucide-react";
+import { ArrowDown, SendHorizonalIcon, Smile } from "lucide-react";
 
 import type { ChatMessageWithState } from "@/hooks/useGlobalChat";
 import type { User } from "better-auth";
@@ -27,12 +27,29 @@ export function ChatPanel({
   guestId,
 }: ChatPanelProps) {
   const [input, setInput] = useState("");
+  const [showScrollBtn, setShowScrollBtn] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  // Auto-scroll to bottom on new messages
-  useEffect(() => {
+  const scrollToBottom = useCallback(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  }, []);
+
+  const handleScroll = useCallback(() => {
+    const el = scrollContainerRef.current;
+    if (!el) return;
+    const distanceFromBottom = el.scrollHeight - el.scrollTop - el.clientHeight;
+    setShowScrollBtn(distanceFromBottom > 100);
+  }, []);
+
+  useEffect(() => {
+    const el = scrollContainerRef.current;
+    if (!el) return;
+    const distanceFromBottom = el.scrollHeight - el.scrollTop - el.clientHeight;
+    if (distanceFromBottom <= 120) {
+      scrollToBottom();
+    }
+  }, [messages, scrollToBottom]);
 
   function handleSend() {
     const trimmed = input.trim();
@@ -51,30 +68,56 @@ export function ChatPanel({
   return (
     <div className="flex h-full w-full min-w-0 flex-col overflow-hidden">
 
-      {/* ── Scrollable messages area ── */}
-      <div className="flex-1 overflow-y-auto min-h-0 px-1">
-        {messages.length === 0 && (
-          <p className="text-center text-sm text-muted-foreground py-8 px-4">
-            No messages yet. Say hi! 👋
-          </p>
+      <div className="relative flex-1 min-h-0">
+        <div
+          ref={scrollContainerRef}
+          onScroll={handleScroll}
+          className="h-full overflow-y-auto px-1"
+        >
+          {messages.length === 0 && (
+            <p className="text-center text-sm text-muted-foreground py-8 px-4">
+              No messages yet. Say hi! 👋
+            </p>
+          )}
+
+          {messages.map((msg) => {
+            const isOwn =
+              (currentUser && msg.userId === currentUser.id) ||
+              (!currentUser && !!guestId && msg.guestId === guestId) ||
+              (!currentUser && !!msg.pending); // fallback for optimistic messages before server echo
+
+            return (
+              <ChatMessageBubble
+                key={msg.id}
+                msg={msg}
+                isOwn={!!isOwn}
+                onRetry={retryMessage}
+              />
+            );
+          })}
+
+          <div ref={bottomRef} />
+        </div>
+
+        {showScrollBtn && (
+          <button
+            onClick={scrollToBottom}
+            aria-label="Scroll to latest message"
+            className="
+              absolute bottom-3 left-1/2 -translate-x-1/2
+              flex items-center justify-center
+              h-8 w-8 rounded-full
+              bg-zinc-800 border border-white/10
+              text-white shadow-lg
+              hover:bg-zinc-700 active:scale-95
+              transition-all duration-150
+              z-10
+              cursor-pointer
+            "
+          >
+            <ArrowDown className="h-4 w-4" />
+          </button>
         )}
-
-        {messages.map((msg) => {
-          const isOwn =
-            (currentUser && msg.userId === currentUser.id) ||
-            (!currentUser && !!guestId && msg.guestId === guestId) ||
-            (!currentUser && !!msg.pending); // fallback for optimistic messages before server echo
-
-          return (
-            <ChatMessageBubble
-              key={msg.id}
-              msg={msg}
-              isOwn={!!isOwn}
-              onRetry={retryMessage}
-            />
-          );
-        })}
-        <div ref={bottomRef} />
       </div>
 
       {/* ── Fixed-to-bottom input group ── */}

@@ -89,7 +89,7 @@ function MemberList({ users }: { users: OnlineUser[] }) {
           id="tournament-search"
           name="search"
           placeholder="Search players"
-          className="pl-10 bg-zinc-900 border border-white/10 h-8 text-xs "
+          className="pl-10 bg-zinc-900 border border-white/10 h-8 text-xs ring-0 focus-visible:ring-0 focus-visible:outline-none "
         />
 
 
@@ -171,7 +171,7 @@ const GlobalChatPage = () => {
                       <Users className="w-3.5 h-3.5" />
                       <span>
 
-                      Members · {onlineCount}
+                      PLAYERS - {onlineCount}
                       </span>
                     </div>
                     <SheetClose>
@@ -204,7 +204,7 @@ const GlobalChatPage = () => {
           <div className="flex shrink-0 items-center min-h-12 gap-2 border-b border-white/10 px-4 py-3">
             <Users className="text-muted-foreground/80 w-3.5 h-3.5" />
             <h3 className="font-medium text-sm uppercase tracking-[0.14em] text-muted-foreground/80">
-              Members · {onlineCount}
+              PLAYERS - {onlineCount}
             </h3>
           </div>
           <MemberList users={onlineUsers} />
