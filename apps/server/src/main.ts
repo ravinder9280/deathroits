@@ -28,7 +28,6 @@ const init = async (): Promise<void> => {
     },
   });
 
-  // Resolve identity once per connection before any handlers run
   io.use(resolveSocketIdentity);
 
   io.on("connection", (socket) => {
