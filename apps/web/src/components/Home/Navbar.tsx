@@ -3,10 +3,10 @@
 import { Button } from "@monorepo/ui/components/button";
 import { Sheet, SheetClose, SheetContent, SheetTrigger } from "@monorepo/ui/components/sheet";
 import { cn } from "@monorepo/utils/styles";
-import { Building, CalendarPlus, Ellipsis, Home, icons, Menu, MessageSquareMore, ShieldUser, Trophy, X ,} from "lucide-react";
+import { Building, CalendarPlus, Ellipsis, Home, icons, Menu, MessageSquareMore, ShieldUser, Trophy, X, } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 
 import { useSession } from "@/lib/auth-client";
@@ -38,12 +38,12 @@ const NavbarItems = [
   {
     label: "Organizer",
     link: "/organizer",
-    icon:ShieldUser
+    icon: ShieldUser
   },
-    {
+  {
     label: "Chat",
     link: "/chat",
-    icon:MessageSquareMore
+    icon: MessageSquareMore
   },
 ];
 
@@ -66,7 +66,7 @@ const Navbar = () => {
 
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
 
 
   return (
@@ -81,23 +81,25 @@ const Navbar = () => {
       <div className="container mx-auto px-4 md:px-6 ">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Sheet open={open} onOpenChange={setOpen}>
-
-              <SheetTrigger asChild>
-                {!open ? (
-                  <Button className="md:hidden" size="icon" variant="ghost">
-                    <Menu className="size-5" />
-                    <span className="sr-only">Open navigation menu</span>
-                  </Button>
+            <Sheet open={open} onOpenChange={setOpen} modal={false}>
+              <button
+                ref={menuButtonRef}
+                className="p-2 md:hidden flex items-center justify-center text-white hover:bg-neutral-800/50 rounded-md transition"
+                onClick={() => setOpen((prev) => !prev)}
+              >
+                {open ? (
+                  <X className="size-[22px]" strokeWidth={2} />
                 ) : (
-                  <Button className="md:hidden" size="icon" variant="ghost">
-                    <X className="size-5" />
-                    <span className="sr-only">Close navigation menu</span>
-                  </Button>
+                  <Menu className="size-[22px]" strokeWidth={2} />
                 )}
-              </SheetTrigger>
-
-              <SheetContent side={'left'} className=" bg-background"  >
+                <span className="sr-only">{open ? "Close" : "Open"} navigation menu</span>
+              </button>
+              <SheetContent side={'left'} className=" bg-background"  onInteractOutside={(e) => {
+          if (menuButtonRef.current?.contains(e.target as Node | null)) {
+            e.preventDefault();
+          }
+        }} >
+          
 
 
                 <div className="flex flex-col gap-6 text-lg font-medium mt-14">

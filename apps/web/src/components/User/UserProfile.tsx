@@ -38,7 +38,7 @@ if(isPending){
 }
 
   return (
-    <DropdownMenu open={open} onOpenChange={setOpen}>
+    <DropdownMenu open={open} onOpenChange={setOpen} >
       <DropdownMenuTrigger className="ring-transparent cursor-pointer outline-none  ">
         <Avatar className={`size-${size} ring-transparent border border-white/40 `}>
         
@@ -59,7 +59,7 @@ if(isPending){
               </AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-[180px] z-100" align="end">
+      <DropdownMenuContent className="w-[180px] z-[125]" align="end">
         <DropdownMenuLabel className="text-muted-foreground  truncate " >Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem
