@@ -35,7 +35,7 @@ export default function MyTournamentsPage() {
   } = useMyTournaments(status);
 
   return (
-    <main className="min-h-screen py-24 px-4">
+    <main className=" min-h-screen pt-20 pb-3 md:pb-6 px-3 md:px-6">
       <div className="container max-w-8xl  mx-auto">
         <div className="flex gap-2 text-2xl md:text-3xl font-bold mb-6 items-center">
 

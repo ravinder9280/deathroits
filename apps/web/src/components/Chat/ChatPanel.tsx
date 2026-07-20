@@ -52,9 +52,10 @@ export function ChatPanel({
     if (distanceFromBottom <= 120) {
       scrollToBottom();
     }
+
   }, [messages, scrollToBottom]);
 
-  // Close emoji picker when clicking outside
+
   useEffect(() => {
     if (!showEmojiPicker) return;
     function handleClickOutside(e: MouseEvent) {

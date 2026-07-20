@@ -7,6 +7,7 @@ import { RefreshCwIcon } from "lucide-react";
 
 import type { ChatMessageWithState } from "@/hooks/useGlobalChat";
 import { formatDistanceToNow, formatDistanceToNowStrict } from "date-fns";
+import Link from "next/link";
 
 interface Props {
   msg: ChatMessageWithState;
@@ -56,11 +57,14 @@ export function ChatMessageBubble({ msg, isOwn, onRetry }: Props) {
       )}
     >
       {/* Avatar */}
-      <Avatar className="size-10 shrink-0 mt-0.5">
+
+      <Avatar className="size-10 shrink-0 mt-0.5" asChild>
+      <Link href={`/u/${msg.user?.username}`} >
         {avatarSrc && <AvatarImage src={avatarSrc} alt={senderName} />}
         <AvatarFallback className="text-xs bg-primary/40 text-white text-xl">
           {getInitials(senderName)}
         </AvatarFallback>
+        </Link>
       </Avatar>
 
       {/* Bubble */}

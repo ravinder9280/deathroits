@@ -14,7 +14,7 @@ import { GAME_LABELS } from "@monorepo/utils";
 const TournamentCard = ({ t }: { t: TournamentCardType }) => {
     return (
         <Card
-            className="p-0 overflow-hidden    gap-0 h-full hover:shadow-lg"
+            className="p-0 overflow-hidden    gap-0 h-full hover:shadow-lg "
             key={t.id}
 
         >

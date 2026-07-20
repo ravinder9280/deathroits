@@ -15,6 +15,7 @@ import {
 } from '@monorepo/ui/components/sheet';
 import { Skeleton } from '@monorepo/ui/components/skeleton';
 import { ArrowLeft, Search, Users, X } from 'lucide-react';
+import Link from 'next/link';
 import React from 'react'
 
 const SKELETON_ROWS = [
@@ -134,9 +135,11 @@ const GlobalChatPage = () => {
 
         {/* ── Left sidebar ── */}
         <div className="hidden px-4 py-3 w-[200px] border-r border-white/10 shrink-0 lg:block">
-          <Button variant="outline">
+          <Button variant="outline" asChild>
+            <Link href="/">
             <ArrowLeft />
             Go Home
+            </Link>
           </Button>
         </div>
 
