@@ -5,11 +5,14 @@ import {
   Users,
   Calendar,
   ArrowRight,
+  Clock,
+  User,
 } from "lucide-react";
-
+import { statusConfig } from "@/app/(user)/tournaments/_components/StatusBadge";
 import { Badge } from "@monorepo/ui/components/badge";
 import { Button } from "@monorepo/ui/components/button";
 import { Card } from "@monorepo/ui/components/card";
+import type { TournamentStatus } from "@monorepo/types";
 
 export interface MyTournament {
   id: string;
@@ -45,79 +48,85 @@ export default function MyTournamentsCard({ tournament }: MyTournamentsCardProps
             {formatDistanceToNow(new Date(tournament.startTime), { addSuffix: true })}
           </Badge>
         </div>
-        <div>
-          <p className="text-sm text-muted-foreground">
-            IGN: {tournament.ign}
-          </p>
-          <p className="text-sm text-muted-foreground">
-            UID: {tournament.gameUid}
-          </p>
+        <div className=" flex items-center gap-2 bg-background p-3 rounded-md">
+
+          <div className="p-2 rounded-sm   bg-primary/10 text-primary border border-primary/80">
+
+            <User size={20} />
+          </div>
+          <div className="">
+
+            <p className="text-sm text-muted-foreground">
+              IGN:  {""} <span className="text-foreground tracking-wider">
+                {tournament.ign}
+              </span>
+            </p>
+            <p className="text-sm text-muted-foreground">
+              UID: {""} <span className="text-foreground tracking-wider">
+                {tournament.gameUid}
+              </span>
+            </p>
+          </div>
         </div>
 
         {/* Stats */}
         <div className="relative flex flex-col gap-y-1.5 w-full ">
-         
+
 
           <div className="flex items-center gap-2 w-full min-w-0 text-sm leading-normal">
             <span className="shrink-0 flex items-center gap-1 text-neutral-400">
-            <Users
-              size={16}
-              className="text-muted-foreground"
-            />
-            Players
+              <Users
+                size={16}
+                className="text-muted-foreground"
+              />
+              Players
             </span>
             <span className="flex-1 min-w-3 border-b border-dotted border-neutral-700/80 translate-y-px">
 
             </span>
 
-            <span className="shrink-0 tabular-nums  whitespace-nowrap">
-              {tournament.joinedPlayersCount}/
-              <span className="text-neutral-400">
-                {tournament.maxPlayers}
-                </span>
-
+            <span className="shrink-0 tabular-nums text-neutral-200 whitespace-nowrap">
+              {tournament.joinedPlayersCount} / {tournament.maxPlayers}
             </span>
           </div>
 
           <div className="flex items-center gap-2 w-full min-w-0 text-sm leading-normal">
             <span className="shrink-0 flex items-center gap-1 text-neutral-400">
-            <Trophy
-              size={16}
-              className="text-muted-foreground"
-            />
-            Prize Pool
+              <Trophy
+                size={16}
+                className="text-muted-foreground"
+              />
+              Prize Pool
             </span>
             <span className="flex-1 min-w-3 border-b border-dotted border-neutral-700/80 translate-y-px">
 
             </span>
 
-            <span className="shrink-0 tabular-nums text-green-400 whitespace-nowrap">
+            <span className="shrink-0 tabular-nums text-neutral-200 whitespace-nowrap">
               ₹{tournament.prizePool}
 
             </span>
           </div>
-           <div className="flex items-center gap-2 w-full min-w-0 text-sm leading-normal">
+          <div className="flex items-center gap-2 w-full min-w-0 text-sm leading-normal">
             <span className="shrink-0 flex items-center gap-1 text-neutral-400">
-            <Users
-              size={16}
-              className="text-muted-foreground"
-            />
-            Players
+              <Clock
+                size={16}
+                className="text-muted-foreground"
+              />
+              Status
             </span>
             <span className="flex-1 min-w-3 border-b border-dotted border-neutral-700/80 translate-y-px">
 
             </span>
 
-            <span className="shrink-0 tabular-nums  whitespace-nowrap">
-              {tournament.joinedPlayersCount}/
-              <span className="text-neutral-400">
-                {tournament.maxPlayers}
-                </span>
+            <span className="shrink-0 tabular-nums text-neutral-200  whitespace-nowrap">
+
+              {(statusConfig[tournament.tournamentStatus as TournamentStatus]?.label) ?? tournament.tournamentStatus?.replace(/_/g, " ") ?? "—"}
 
             </span>
           </div>
 
-         
+
         </div>
 
         {/* Footer */}

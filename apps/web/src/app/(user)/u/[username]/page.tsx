@@ -1,9 +1,9 @@
 import { Button } from '@monorepo/ui/components/button'
 import { Award, Calendar, Crown, Dumbbell, Trophy } from 'lucide-react'
 import Image from 'next/image'
-import React from 'react'
 
-const UserProfilePage = ({ params }: { params: { username: string } }) => {
+const UserProfilePage = async ({ params }: { params: Promise<{ username: string }> }) => {
+  const { username } = await params;
   return (
     <main className=" min-h-screen pt-20 pb-3 md:pb-6 px-3 md:px-6">
 
@@ -24,7 +24,7 @@ const UserProfilePage = ({ params }: { params: { username: string } }) => {
             </div>
 
             <div className='min-w-0'>
-              <h1 className='text-xl sm:text-2xl md:text-3xl font-semibold text-white flex items-center gap-2 flex-wrap leading-tight truncate'>{params.username}</h1>
+              <h1 className='text-xl sm:text-2xl md:text-3xl font-semibold text-white flex items-center gap-2 flex-wrap leading-tight truncate'>{username}</h1>
               <span className='text-muted-foreground text-sm'>
                 Ravinder Kumar
               </span>

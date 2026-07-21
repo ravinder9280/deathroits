@@ -19,7 +19,7 @@ type StatusConfig = {
   className?: string;
 };
 
-const statusConfig: Record<string, StatusConfig> = {
+export const statusConfig: Record<string, StatusConfig> = {
   [TournamentStatus.DRAFT]: {
     label: "Draft",
     variant: "outline",
