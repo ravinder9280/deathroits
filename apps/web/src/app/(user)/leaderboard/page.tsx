@@ -275,6 +275,7 @@ const LeaderboardPage = () => {
 
         <div className="space-y-2 sm:space-y-3 mb-4">
           {topPlayers.map((player) => (
+            
             <div
               key={player.rank}
               className={`relative border  rounded p-3 sm:p-4 hover:bg-[#0E0F10] hover:border-neutral-700/50 transition-all cursor-pointer overflow-hidden ${player.rank === 1
@@ -293,8 +294,8 @@ const LeaderboardPage = () => {
                 <div className="flex-1 min-w-0">
 
 
-                  <div className="font-semibold text-sm sm:text-base md:text-lg truncate transition-colors flex items-center gap-1.5 sm:gap-2">{player.name}</div>
-                  <div className="text-muted-foreground text-xs">{player.team} · {player.game}</div>
+                  <div className="font-semibold text-sm sm:text-base md:text-lg truncate transition-colors flex items-center gap-1.5 sm:gap-2">{player.team}</div>
+                  <div className="text-neutral-400 text-xs">@{player.name} </div>
                 </div>
                 <div className='flex items-center gap-4 xl:gap-6 text-sm'>
 

@@ -14,19 +14,19 @@ const TournamentNavItems = [
         label: "Tournaments",
         subLabel:"All Tournaments",
         icon: Trophy,
-        href: "/organizer/tournaments",
+        href: "/organizer/dashboard/tournaments",
     },
      {
         label: "Calendar",
         subLabel:"Schedule & Events",
         icon: Calendar,
-        href: "/organizer/calendar",
+        href: "/organizer/dashboard/calendar",
     },
      {
         label: "Participants",
         subLabel:"Manage Participants",
         icon: Users,
-        href: "/organizer/participants",
+        href: "/organizer/dashboard/participants",
     },
 
 ]
@@ -48,7 +48,7 @@ const OrganizerSidebar = () => {
                     </Link>
 
                     <Button className=" w-full mt-3  " size={'lg'} asChild>
-                        <Link href="/organizer/tournaments/new">
+                        <Link href="/organizer/dashboard/tournaments/new">
                             <Plus size={20} />
                             New Tournament
                         </Link>
@@ -60,15 +60,15 @@ const OrganizerSidebar = () => {
                         <p className=" text-muted-foreground pl-2 mb-1   ">
                             OVERVIEW
                         </p>
-                        <Link href='/organizer' className={cn(
+                        <Link href='/organizer/dashboard' className={cn(
                             "w-full flex gap-3 items-center justify-start px-2 py-2 rounded-md hover:bg-accent/60 ",
-                            pathname === "/organizer" && " bg-accent"
+                            pathname === "/organizer/dashboard" && " bg-accent"
                         )}>
                             <LayoutDashboard className='size-5' />
 
                             <div className='flex flex-col'>
                                 Dashboard
-                                <span className={`text-sm ${pathname === "/organizer" ? "hidden" : "text-muted-foreground"}`}>
+                                <span className={`text-sm ${pathname === "/organizer/dashboard" ? "hidden" : "text-muted-foreground"}`}>
                                     Main overview
                                 </span>
                             </div>

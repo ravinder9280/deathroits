@@ -1,9 +1,4 @@
-import OrganizerSidebar from "@/components/Sidebar/OrganizerSidebar"
-
-
-
-
-
+import OrganizerSidebar from "@/components/Sidebar/OrganizerSidebar";
 
 const OrganizerLayout = ({ children }: { children: React.ReactNode }) => {
     return (

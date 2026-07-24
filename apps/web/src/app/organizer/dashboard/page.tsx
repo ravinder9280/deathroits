@@ -3,11 +3,11 @@ import { useOrganizerTournaments } from '@/hooks/useOrganizerTournaments'
 import { useOrganizerDashboard } from '@/hooks/useOrganizerDashboard'
 import type { AttentionAlert, DashboardStats, RecentRegistration } from '@monorepo/types'
 import type { TournamentCard as TournamentCardType } from '@monorepo/types'
-import { DashboardHeader } from './_components/DashboardHeader'
-import { StatsSection } from './_components/StatsSection'
-import { RecentTournamentsSection } from './_components/RecentTournamentsSection'
-import { NeedsAttentionSection } from './_components/NeedsAttentionSection'
-import { RecentRegistrationsSection } from './_components/RecentRegistrationsSection'
+import { DashboardHeader } from '../_components/DashboardHeader'
+import { StatsSection } from '../_components/StatsSection'
+import { RecentTournamentsSection } from '../_components/RecentTournamentsSection'
+import { NeedsAttentionSection } from '../_components/NeedsAttentionSection'
+import { RecentRegistrationsSection } from '../_components/RecentRegistrationsSection'
 
 
 function RevenuePlaceholder() {
