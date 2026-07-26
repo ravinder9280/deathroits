@@ -183,7 +183,7 @@ export default function OrganizerLandingPage() {
                     </div>
 
 
-                    <GamesMarquee />
+                    <GamesMarquee className="bg-transparent" />
                     </div>
 
                 </section>
@@ -273,20 +273,20 @@ export default function OrganizerLandingPage() {
                             {testimonials.map((t) => (
                                 <div
                                     key={t.name}
-                                    className="rounded-xl border border-neutral-700/50 bg-neutral-800/50 p-6 flex flex-col gap-4"
+                                    className="group rounded-xl border border-neutral-700/50 bg-neutral-800/50 p-8 flex flex-col gap-4 hover:border-primary/50 hover:shadow-md hover:shadow-primary/5 transition-all duration-200"
                                 >
                                     <div className="flex gap-0.5">
                                         {Array.from({ length: t.stars }).map((_, i) => (
                                             <Star key={i} className="size-4 fill-amber-400 text-amber-400" />
                                         ))}
                                     </div>
-                                    <p className="text-sm text-muted-foreground leading-relaxed">
+                                    <p className="text-sm text-white/80 leading-relaxed">
                                         &ldquo;{t.quote}&rdquo;
                                     </p>
-                                    <Separator />
+                                    <Separator className='bg-neutral-700/50' />
                                     <div>
                                         <p className="font-semibold text-sm">{t.name}</p>
-                                        <p className="text-xs text-muted-foreground">{t.game}</p>
+                                        <p className="text-xs text-white/60">{t.game}</p>
                                     </div>
                                 </div>
                             ))}

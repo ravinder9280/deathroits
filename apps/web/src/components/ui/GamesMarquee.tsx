@@ -1,4 +1,5 @@
 import { Marquee } from "@/components/ui/marquee"
+import { cn } from "@monorepo/utils"
 import { Target, Flame, Shield, Trophy, Sword, Crown } from "lucide-react"
 
 const gamingLogos = [
@@ -30,11 +31,15 @@ const gamingLogos = [
  
 ]
 
-export function GamesMarquee() {
+export function GamesMarquee({
+  className
+}: {
+  className?: string
+}) {
 
   return (
       
-        <Marquee className="bg-custom-dark" >
+        <Marquee className={cn("bg-custom-dark", className)} >
           {gamingLogos.map((game, index) => {
             const Icon = game.icon
             return (
