@@ -4,6 +4,7 @@ import FAQ from "@/components/Home/FAQ";
 import Footer from "@/components/Home/Footer";
 import Games from "@/components/Home/Games";
 import Hero from "@/components/Home/Hero";
+import Organizers from "@/components/Home/Organizers";
 import Trust from "@/components/Home/Trust";
 import Whatsapp from "@/components/Home/Whatsapp";
 import Work from "@/components/Home/Work";
@@ -40,6 +41,7 @@ export default function Page() {
       <Games />
       <Choose />
       <Work />
+      <Organizers />
       <FAQ />
       <Whatsapp />
       <Contact />
