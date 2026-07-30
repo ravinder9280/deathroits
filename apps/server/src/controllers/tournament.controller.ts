@@ -779,7 +779,6 @@ export const getOrganizerDashboard = asyncHandler(
             }
         }
 
-        // ── Recent Registrations ─────────────────────────────────────────────
         const recentRegistrations = recentEntries.map((e) => ({
             entryId: e.id,
             userId: e.user.id,
@@ -795,3 +794,70 @@ export const getOrganizerDashboard = asyncHandler(
         res.json({ stats, attentionAlerts, recentRegistrations });
     },
 );
+
+// ─── Leaderboard ──────────────────────────────────────────────────────────────
+
+export const getLeaderboard = asyncHandler(
+    async (_req: Request, res: Response) => {
+        // 1. Aggregate wins + earnings from paid payouts, grouped by user
+        const payoutGroups = await prisma.prizePayout.groupBy({
+            by: ["userId"],
+            where: { status: "PAID" },
+            _count: { id: true },
+            _sum: { amount: true },
+            orderBy: { _sum: { amount: "desc" } },
+        });
+
+        if (payoutGroups.length === 0) {
+            res.json({ players: [] });
+            return;
+        }
+
+        const userIds = payoutGroups.map((p) => p.userId);
+
+        // 2. Fetch user details for those user IDs
+        const users = await prisma.user.findMany({
+            where: { id: { in: userIds } },
+            select: {
+                id: true,
+                name: true,
+                username: true,
+                image: true,
+            },
+        });
+
+        // 3. Aggregate total verified kills per user
+        const killGroups = await prisma.matchSubmission.groupBy({
+            by: ["userId"],
+            where: {
+                status: "APPROVED",
+                userId: { in: userIds },
+            },
+            _sum: { verifiedKills: true },
+        });
+
+        // 4. Build lookup maps for fast merging
+        const userMap = new Map(users.map((u) => [u.id, u]));
+        const killMap = new Map(
+            killGroups.map((k) => [k.userId, k._sum.verifiedKills ?? 0])
+        );
+
+        // 5. Merge and rank
+        const players = payoutGroups.map((p, index) => {
+            const user = userMap.get(p.userId);
+            return {
+                rank: index + 1,
+                userId: p.userId,
+                name: user?.name ?? "Unknown",
+                username: user?.username ?? null,
+                image: user?.image ?? null,
+                wins: p._count.id,
+                totalKills: killMap.get(p.userId) ?? 0,
+                earnings: p._sum.amount ?? 0,
+            };
+        });
+
+        res.json({ players });
+    },
+);
+

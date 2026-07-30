@@ -9,6 +9,7 @@ import {
   createTournament,
   getOrganizerTournaments,
   getOrganizerDashboard,
+  getLeaderboard,
 } from "../controllers/tournament.controller";
 
 import {
@@ -23,6 +24,7 @@ const router = Router();
 // Public
 // router.get("/", listTournament);
 router.get("/search", searchTournaments);
+router.get("/leaderboard", getLeaderboard);   // ← must be before /:id
 router.get("/me", requireAuth, getMyTournaments);
 router.get("/:id", getTournamentById);
 router.get("/:id/entry", getTournamentEntry);
