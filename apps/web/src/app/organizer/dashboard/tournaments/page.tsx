@@ -176,7 +176,7 @@ const OrganizerTournamentsPage = () => {
             </p>
           </div>
           <Button asChild>
-            <Link href="/organizer/tournaments/new">
+            <Link href="/organizer/dashboard/tournaments/new">
               <Plus size={20} />
               Create Tournament
             </Link>
@@ -386,7 +386,7 @@ const OrganizerTournamentsPage = () => {
               </Button>
             ) : (
               <Button asChild>
-                <Link href="/organizer/tournaments/new">
+                <Link href="/organizer/dashboard/tournaments/new">
                   <Plus size={16} className="mr-1" />
                   Create your first tournament
                 </Link>

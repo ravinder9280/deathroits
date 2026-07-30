@@ -19,6 +19,7 @@ import {
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { GamesMarquee } from '@/components/ui/GamesMarquee';
+import Footer from '@/components/Home/Footer';
 
 const features = [
     {
@@ -104,7 +105,7 @@ export default function OrganizerLandingPage() {
         }
     };
 
-    return (
+    return (<>
         <div className="overflow-x-hidden">
             {/* ── Hero ── */}
             {/* <div
@@ -121,69 +122,74 @@ export default function OrganizerLandingPage() {
                 <section className="relative  bg-linear-to-b  from-bg-primary/10 via-violet-500/8 to-cyan-500/8   overflow-hidden">
                     {/* Background glow blobs */}
 
-                    <div className='pt-34 pb-20 px-3 sm:px-6 lg:px-8 container mx-auto '>
+                    <div className='pt-24 md:pt-34 pb-10 md:pb-20 px-3 sm:px-6 lg:px-8 container mx-auto '>
 
 
-                    <div className='grid grid-cols-1 md:grid-cols-2  gap-8 mb-16'>
-                        <div className='flex  items-center '>
-    
+                        <div className='grid grid-cols-1 md:grid-cols-2  gap-8 mb-16'>
+                            <div className='flex  items-center '>
 
-                        <div className="max-w-[642px]   " >
-                            {/* <Badge
+
+                                <div className="max-w-[642px]   " >
+                                    {/* <Badge
                         variant="secondary"
                         className="mb-6 px-4 py-1.5 text-sm font-medium rounded-full"
                     >
                         🏆 Now accepting organizer applications
                     </Badge> */}
 
-                            <h1 className=" text-5xl  font-bold mb-6 leading-[1.2]  ">
-                                The most flexible solution for your esports
-                                {' '}
-                                <span className="text-primary">events.</span>
-                            </h1>
+                                    <h1 className=" text-5xl  font-bold mb-6 leading-[1.2]  ">
+                                        Build Legendary Esports
+                                        <br />
+                                        Tournaments.
+                                        We&apos;ll Handle the
+                                        {' '}
+                                        <span className="text-primary text-gradient">
+                                            Platform.
+                                        </span>
+                                    </h1>
 
-                            <p className=" md:text-xl text-zinc-800 dark:text-zinc-300 font-medium leading-[1.6] ">
-                                Take your competitions to the next level with a platform that adapts to your events, simplifies your operations, and highlights your brand
-                            </p>
+                                    <p className=" md:text-xl text-zinc-800 dark:text-zinc-300 font-medium leading-[1.6] ">
+                                        Launch tournaments in minutes, engage players with real-time updates, manage participants effortlessly, and grow your competitive gaming brand.
+                                    </p>
 
-                            <div className="flex  flex-col items-center md:flex-row   mt-8 gap-3 md:gap-6">
-                                <Button
-                                    id="become-organizer-cta"
-                                    size="xl"
-                                    className="w-full md:w-auto font-semibold"
-                                    onClick={handleCTA}
-                                    disabled={isPending}
-                                >
-                                    Start Organizing
-                                </Button>
-                                <Button
-                                    variant="outline"
-                                    size="xl"
-                                    className="w-full md:w-auto font-semibold"
-                                    asChild
-                                >
-                                    <Link href="/contact">
-                                    Contact Us
-                                    </Link>
-                                </Button>
+                                    <div className="flex  flex-col items-center md:flex-row   mt-8 gap-3 md:gap-6">
+                                        <Button
+                                            id="become-organizer-cta"
+                                            size="xl"
+                                            className="w-full md:w-auto font-semibold"
+                                            onClick={handleCTA}
+                                            disabled={isPending}
+                                        >
+                                            Start Organizing
+                                        </Button>
+                                        <Button
+                                            variant="outline"
+                                            size="xl"
+                                            className="w-full md:w-auto font-semibold"
+                                            asChild
+                                        >
+                                            <Link href="/contact">
+                                                Contact Us
+                                            </Link>
+                                        </Button>
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+                            <div className="flex items-center justify-end "  >
+                                <div className='max-w-[642px] rounded-xl'>
+
+                                    <img src="/dashboard.webp" alt="" className='rounded-xl' />
+                                </div>
                             </div>
 
 
                         </div>
-                            
-                        </div>
-                        <div className="flex items-center justify-end "  >
-                        <div className='max-w-[642px] rounded-xl'>
-
-                            <img src="/dashboard.webp" alt="" className='rounded-xl' />
-                        </div>
-                        </div>
 
 
-                    </div>
-
-
-                    <GamesMarquee className="bg-transparent" />
+                        <GamesMarquee className="bg-transparent" />
                     </div>
 
                 </section>
@@ -196,7 +202,7 @@ export default function OrganizerLandingPage() {
                                 Everything you need to run world-class {" "}
                                 <span className='text-primary'>
 
-                                 tournaments
+                                    tournaments
                                 </span>
                             </h2>
                             <p className="text-muted-foreground text-lg max-w-xl mx-auto">
@@ -215,7 +221,7 @@ export default function OrganizerLandingPage() {
                                     </div>
                                     <div>
                                         <h3 className="text-xl font-semibold  mb-3">{f.title}</h3>
-                                        <p className="text-white/60 text-sm leading-relaxed">{f.description}</p>
+                                        <p className="text-white/60 text-sm md:text-base leading-relaxed">{f.description}</p>
                                     </div>
                                 </div>
                             ))}
@@ -231,7 +237,7 @@ export default function OrganizerLandingPage() {
                                 How it{" "}
                                 <span className='text-primary'>
                                     works
-                                    </span> 
+                                </span>
                             </h2>
                             <p className="text-muted-foreground text-lg  mx-auto">
                                 Get from application to live tournament in four simple steps.
@@ -241,7 +247,7 @@ export default function OrganizerLandingPage() {
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative">
                             {steps.map((step, i) => (
                                 <div key={step.number} className="flex flex-col gap-3 text-center items-center">
-                                    <div className="relative flex items-center justify-center size-14 rounded-full border-2 border-primary/30 bg-primary/10 text-primary font-bold text-lg">
+                                    <div className="relative flex items-center justify-center size-16 rounded-full border-2 border-primary/30 bg-primary/10 text-primary font-bold text-lg">
                                         {step.number}
                                     </div>
                                     {i < steps.length - 1 && (
@@ -249,8 +255,8 @@ export default function OrganizerLandingPage() {
                                             style={{ left: `calc(${(i + 1) * 25}% - 10px)` }}
                                         />
                                     )}
-                                    <h3 className="font-semibold text-base">{step.title}</h3>
-                                    <p className="text-muted-foreground text-sm">{step.description}</p>
+                                    <h3 className="font-semibold text-lg">{step.title}</h3>
+                                    <p className="text-muted-foreground ">{step.description}</p>
                                 </div>
                             ))}
                         </div>
@@ -262,10 +268,10 @@ export default function OrganizerLandingPage() {
                     <div className="container mx-auto w-full">
                         <div className="text-center mb-14">
                             <h2 className="text-3xl lg:text-4xl font-bold mb-4 uppercase tracking-[-0.05em] leading-[0.95] ">
-                                What organizers{" "}
+                                What our organizers{" "}
                                 <span className='text-primary'>
                                     say
-                                    </span> 
+                                </span>
                             </h2>
                         </div>
 
@@ -280,13 +286,13 @@ export default function OrganizerLandingPage() {
                                             <Star key={i} className="size-4 fill-amber-400 text-amber-400" />
                                         ))}
                                     </div>
-                                    <p className="text-sm text-white/80 leading-relaxed">
+                                    <p className=" text-white/80 leading-relaxed">
                                         &ldquo;{t.quote}&rdquo;
                                     </p>
                                     <Separator className='bg-neutral-700/50' />
                                     <div>
-                                        <p className="font-semibold text-sm">{t.name}</p>
-                                        <p className="text-xs text-white/60">{t.game}</p>
+                                        <p className="font-semibold ">{t.name}</p>
+                                        <p className="text-sm text-white/60">{t.game}</p>
                                     </div>
                                 </div>
                             ))}
@@ -321,7 +327,7 @@ export default function OrganizerLandingPage() {
                                 size="xl"
                                 className="font-semibold bg-black hover:bg-black/80 text-white hover:text-white/80  "
                                 onClick={handleCTA}
-                                
+
                                 disabled={isPending}
                             >
                                 {isOrganizer ? 'Open Dashboard' : "Apply Now — It's Free"}
@@ -345,6 +351,9 @@ export default function OrganizerLandingPage() {
                 </section>
             </div>
         </div>
+        <Footer/>
+    </>
+
 
     );
 }

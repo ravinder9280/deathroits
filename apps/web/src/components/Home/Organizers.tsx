@@ -49,7 +49,7 @@ const Organizers = () => {
   return (
     <section className="py-20 md:py-28 px-5 bg-custom-dark relative overflow-hidden">
       {/* Ambient glow accents */}
-    
+
 
       <div className="container mx-auto max-w-[1200px] relative z-10">
         {/* Section header */}
@@ -100,37 +100,38 @@ const Organizers = () => {
 
         {/* CTA banner */}
         <FadeIn direction="up">
-          <div className="relative rounded-3xl border border-primary/20 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent p-6 md:p-12 flex flex-col md:flex-row items-center justify-between gap-16 overflow-hidden">
+          <div className="relative rounded-3xl border border-primary/20 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent p-6 md:p-12 overflow-hidden">
             {/* Decorative ring */}
             <div className="pointer-events-none absolute -left-20 -bottom-20 w-[300px] h-[300px] rounded-full border border-primary/10" />
             <div className="pointer-events-none absolute -left-10 -bottom-10 w-[200px] h-[200px] rounded-full border border-primary/15" />
+            <div className=" flex flex-col items-center gap-6 max-w-2xl mx-auto text-center">
 
-            <div className="max-w-xl">
-              <h3 className="text-[28px] md:text-[36px] font-extrabold text-white leading-[1.1] mb-3">
+              <h3 className=" text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-on-primary leading-tight">
                 Ready to host your first tournament?
               </h3>
-              <p className="text-muted-foreground text-[15px] md:text-[17px] leading-[1.6]">
+              <p className="text-muted-foreground text-lg leading-relaxed max-w-lg">
                 Apply to become a verified organizer today. It's free, fast, and
                 your community is waiting.
               </p>
-            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 shrink-0">
-              <Button size="xl" asChild>
-                <Link href="/organizer">
-                  Become an Organizer
-                  <ArrowRight className="size-4" />
-                </Link>
-              </Button>
-              <Button size="xl" variant="outline" className="border-white/20" asChild>
-                <Link href="/organizer">
-                  Learn More
-                </Link>
-              </Button>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 shrink-0">
+                <Button size="xl" asChild>
+                  <Link href="/organizer">
+                    Become an Organizer
+                    <ArrowRight className="size-4" />
+                  </Link>
+                </Button>
+                <Button size="xl" variant="outline" className="border-white/20" asChild>
+                  <Link href="/organizer">
+                    Learn More
+                  </Link>
+                </Button>
+              </div>
             </div>
           </div>
         </FadeIn>
       </div>
+
     </section>
   );
 };

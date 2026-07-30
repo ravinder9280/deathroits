@@ -88,32 +88,44 @@ export default function OrganizerApplyPage() {
     }
 
     return (
-        <div className="min-h-[calc(100vh-56px)] pt-16 pb-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-            {/* Background */}
-            <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-                <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-[700px] h-[400px] rounded-full bg-primary/8 blur-[100px]" />
-            </div>
+        <div className="min-h-[calc(100vh-56px)] pt-34 pb-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+
 
             <div className="max-w-5xl mx-auto">
-                {/* Back link */}
-                <Button
-                    variant="ghost"
-                    size="sm"
-                    className="mb-6 -ml-2 text-muted-foreground"
-                    asChild
-                >
-                    <Link href="/organizer">
-                        <ArrowLeft data-icon="inline-start" />
-                        Back to Organizer Info
-                    </Link>
-                </Button>
+                <div className='py-5'>
 
+                    <h2 className='font-bold text-lg mb-4'>
+                        Stats till now
+                    </h2>
+
+
+
+                    {/* Stats row */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                        {[
+                            { icon: Users, label: '200+ Organizers', sub: 'Active today' },
+                            { icon: Trophy, label: '1,200+ Events', sub: 'Hosted on platform' },
+                            { icon: Calendar, label: '48 hrs', sub: 'Avg approval time' },
+                        ].map((s) => (
+                            <div
+                                key={s.label}
+                                className="group rounded-xl border border-neutral-700/50 bg-neutral-800/50 p-8 flex flex-col items-center gap-1 hover:border-primary/50 hover:shadow-md hover:shadow-primary/5 transition-all duration-200"
+                            >
+                                <s.icon className="size-10 text-primary mb-1" />
+                                <p className="font-semibold text-xl ">{s.label}</p>
+                                <p className="text-muted-foreground ">{s.sub}</p>
+                            </div>
+                        ))}
+                    </div>
+
+                </div>
                 {/* Header */}
                 <div className="mb-8">
                     <Badge variant="secondary" className="mb-3 rounded-full px-3 py-1 text-xs">
                         <Clock className="size-3 mr-1" />
                         Usually approved within 24 hrs
                     </Badge>
+
                     <h1 className="text-3xl sm:text-4xl font-bold tracking-tight mb-2">
                         Organizer Application
                     </h1>
@@ -123,31 +135,14 @@ export default function OrganizerApplyPage() {
                     </p>
                 </div>
 
-                {/* Stats row */}
-                <div className="grid grid-cols-3 gap-3 mb-8">
-                    {[
-                        { icon: Users, label: '200+ Organizers', sub: 'Active today' },
-                        { icon: Trophy, label: '1,200+ Events', sub: 'Hosted on platform' },
-                        { icon: Calendar, label: '48 hrs', sub: 'Avg approval time' },
-                    ].map((s) => (
-                        <div
-                            key={s.label}
-                            className="rounded-xl border bg-card p-4 flex flex-col items-center text-center gap-1"
-                        >
-                            <s.icon className="size-5 text-primary mb-1" />
-                            <p className="font-semibold text-sm">{s.label}</p>
-                            <p className="text-muted-foreground text-xs">{s.sub}</p>
-                        </div>
-                    ))}
-                </div>
 
-                <Separator className="mb-8" />
+
 
                 {/* Form */}
-                <form onSubmit={handleSubmit} className="flex flex-col gap-7">
+                <form onSubmit={handleSubmit} className="flex flex-col gap-8 md:gap-16">
                     {/* Personal Info */}
                     <section className="flex flex-col gap-5">
-                        <h2 className="text-lg font-semibold">Personal Information</h2>
+                        <h2 className="text-xl font-bold">Personal Information</h2>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div className="flex flex-col gap-1.5">
@@ -204,11 +199,10 @@ export default function OrganizerApplyPage() {
                         </div>
                     </section>
 
-                    <Separator />
 
                     {/* Tournament Intent */}
                     <section className="flex flex-col gap-5">
-                        <h2 className="text-lg font-semibold">Tournament Details</h2>
+                        <h2 className="text-xl font-bold">Tournament Details</h2>
 
                         <div className="flex flex-col gap-1.5">
                             <label htmlFor="apply-org-name" className="text-sm font-medium">
@@ -235,11 +229,10 @@ export default function OrganizerApplyPage() {
                                         type="button"
                                         id={`game-${game.replace(/\s+/g, '-').toLowerCase()}`}
                                         onClick={() => toggleGame(game)}
-                                        className={`px-3 py-1.5 rounded-full text-sm border font-medium transition-colors ${
-                                            selectedGames.includes(game)
+                                        className={`px-3 py-1.5 rounded-full text-sm border font-medium transition-colors ${selectedGames.includes(game)
                                                 ? 'bg-primary text-primary-foreground border-primary'
                                                 : 'border-border hover:border-primary/60 hover:bg-primary/5'
-                                        }`}
+                                            }`}
                                     >
                                         {game}
                                     </button>
@@ -265,11 +258,10 @@ export default function OrganizerApplyPage() {
                                         type="button"
                                         id={`exp-${opt.replace(/\s+/g, '-').toLowerCase()}`}
                                         onClick={() => setExperience(opt)}
-                                        className={`px-3 py-1.5 rounded-full text-sm border font-medium transition-colors ${
-                                            experience === opt
+                                        className={`px-3 py-1.5 rounded-full text-sm border font-medium transition-colors ${experience === opt
                                                 ? 'bg-primary text-primary-foreground border-primary'
                                                 : 'border-border hover:border-primary/60 hover:bg-primary/5'
-                                        }`}
+                                            }`}
                                     >
                                         {opt}
                                     </button>
@@ -290,11 +282,10 @@ export default function OrganizerApplyPage() {
                         </div>
                     </section>
 
-                    <Separator />
 
                     {/* About */}
                     <section className="flex flex-col gap-5">
-                        <h2 className="text-lg font-semibold">Tell us about your vision</h2>
+                        <h2 className="text-xl font-bold">Tell us about your vision</h2>
 
                         <div className="flex flex-col gap-1.5">
                             <label htmlFor="apply-bio" className="text-sm font-medium">

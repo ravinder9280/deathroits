@@ -1,369 +1,219 @@
+"use client";
+
 import { Input } from '@monorepo/ui/components/input';
-import { IndianRupee, Search, Skull, Trophy } from 'lucide-react';
-import React from 'react'
-const topPlayers = [
-  {
-    rank: 1,
-    name: "Zetroit",
-    team: "Team Inferno",
-    game: "Free Fire",
-    wins: 48,
-    earnings: "24,500",
-    avatar: "https://i.pinimg.com/1200x/82/ed/3c/82ed3ca0ee9ae0ada18d34cf132e71f0.jpg",
-    badge: "#1",
-    totalKills: 55,
-  },
-  {
-    rank: 2,
-    name: "NightCrawlerX",
-    team: "Apex Wolves",
-    game: "BGMI",
-    wins: 41,
-    earnings: "18,000",
-    avatar: "https://i.pinimg.com/736x/b1/8e/b8/b18eb8baabc8faa09da442cb29045680.jpg",
-    badge: "#2",
-    totalKills: 49,
-  },
-  {
-    rank: 3,
-    name: "BlazeFury",
-    team: "Solo Rising",
-    game: "Valorant",
-    wins: 36,
-    earnings: "12,000",
-    avatar: "https://i.pinimg.com/736x/44/ae/73/44ae7337bde014fc535d1cfbaa8d7584.jpg",
-    badge: "#3",
-    totalKills: 43,
-  },
-  {
-    rank: 4,
-    name: "VenomTactic",
-    team: "Ghost Legion",
-    game: "Free Fire",
-    wins: 33,
-    earnings: "10,500",
-    avatar: "https://i.pravatar.cc/150?img=4",
-    badge: "#4",
-    totalKills: 40,
-  },
-  {
-    rank: 5,
-    name: "SkyRipper",
-    team: "Apex Wolves",
-    game: "BGMI",
-    wins: 31,
-    earnings: "9,800",
-    avatar: "https://i.pinimg.com/736x/f7/6a/2d/f76a2dc5e1f48b8f133decbf60b0f43c.jpg",
-    badge: "#5",
-    totalKills: 37,
-  },
-  {
-    rank: 6,
-    name: "IronPulse",
-    team: "Team Inferno",
-    game: "Valorant",
-    wins: 29,
-    earnings: "9,200",
-    avatar: "https://i.pravatar.cc/150?img=6",
-    badge: "#6",
-    totalKills: 35,
-  },
-  {
-    rank: 7,
-    name: "PhantomRaze",
-    team: "Solo Rising",
-    game: "Free Fire",
-    wins: 27,
-    earnings: "8,700",
-    avatar: "https://i.pravatar.cc/150?img=7",
-    badge: "#7",
-    totalKills: 32,
-  },
-  {
-    rank: 8,
-    name: "ToxicViper",
-    team: "Ghost Legion",
-    game: "BGMI",
-    wins: 26,
-    earnings: "8,300",
-    avatar: "https://i.pravatar.cc/150?img=8",
-    badge: "#8",
-    totalKills: 31,
-  },
-  {
-    rank: 9,
-    name: "CrimsonFang",
-    team: "Apex Wolves",
-    game: "Valorant",
-    wins: 24,
-    earnings: "7,900",
-    avatar: "https://i.pravatar.cc/150?img=9",
-    badge: "#9",
-    totalKills: 29,
-  },
-  {
-    rank: 10,
-    name: "FrostBiteX",
-    team: "Team Inferno",
-    game: "Free Fire",
-    wins: 23,
-    earnings: "7,400",
-    avatar: "https://i.pravatar.cc/150?img=10",
-    badge: "#10",
-    totalKills: 27,
-  },
-  {
-    rank: 11,
-    name: "RogueSpecter",
-    team: "Solo Rising",
-    game: "BGMI",
-    wins: 22,
-    earnings: "7,000",
-    avatar: "https://i.pravatar.cc/150?img=11",
-    badge: "#11",
-    totalKills: 26,
-  },
-  {
-    rank: 12,
-    name: "SilentHunter",
-    team: "Ghost Legion",
-    game: "Valorant",
-    wins: 21,
-    earnings: "6,600",
-    avatar: "https://i.pravatar.cc/150?img=12",
-    badge: "#12",
-    totalKills: 25,
-  },
-  {
-    rank: 13,
-    name: "AshDevourer",
-    team: "Apex Wolves",
-    game: "Free Fire",
-    wins: 20,
-    earnings: "6,200",
-    avatar: "https://i.pravatar.cc/150?img=13",
-    badge: "#13",
-    totalKills: 24,
-  },
-  {
-    rank: 14,
-    name: "ZeroGravity",
-    team: "Team Inferno",
-    game: "BGMI",
-    wins: 19,
-    earnings: "5,900",
-    avatar: "https://i.pravatar.cc/150?img=14",
-    badge: "#14",
-    totalKills: 22,
-  },
-  {
-    rank: 15,
-    name: "VortexKing",
-    team: "Solo Rising",
-    game: "Valorant",
-    wins: 18,
-    earnings: "5,500",
-    avatar: "https://i.pravatar.cc/150?img=15",
-    badge: "#15",
-    totalKills: 21,
-  },
-  {
-    rank: 16,
-    name: "GrimReaperZ",
-    team: "Ghost Legion",
-    game: "Free Fire",
-    wins: 17,
-    earnings: "5,100",
-    avatar: "https://i.pravatar.cc/150?img=16",
-    badge: "#16",
-    totalKills: 20,
-  },
-  {
-    rank: 17,
-    name: "LunarEclipse",
-    team: "Apex Wolves",
-    game: "BGMI",
-    wins: 16,
-    earnings: "4,800",
-    avatar: "https://i.pinimg.com/736x/33/49/67/3349672539732cb2e2d9a9d213e2141c.jpg",
-    badge: "#17",
-    totalKills: 19,
-  },
-  {
-    rank: 18,
-    name: "SteelPhantom",
-    team: "Team Inferno",
-    game: "Valorant",
-    wins: 15,
-    earnings: "4,400",
-    avatar: "https://i.pravatar.cc/150?img=18",
-    badge: "#18",
-    totalKills: 18,
-  },
-  {
-    rank: 19,
-    name: "DarkNovaX",
-    team: "Solo Rising",
-    game: "Free Fire",
-    wins: 14,
-    earnings: "4,000",
-    avatar: "https://i.pravatar.cc/150?img=19",
-    badge: "#19",
-    totalKills: 17,
-  },
-  {
-    rank: 20,
-    name: "EchoRaider",
-    team: "Ghost Legion",
-    game: "BGMI",
-    wins: 13,
-    earnings: "3,700",
-    avatar: "https://i.pravatar.cc/150?img=20",
-    badge: "#20",
-    totalKills: 16,
-  },
-];
+import { Skeleton } from '@monorepo/ui/components/skeleton';
+import { IndianRupee, Search, Skull, Trophy, User } from 'lucide-react';
+import React, { useState } from 'react';
+import { useLeaderboard } from '@/hooks/useLeaderboard';
+import type { LeaderboardPlayer } from '@monorepo/types';
+import { Avatar, AvatarFallback, AvatarImage } from '@monorepo/ui/components/avatar';
+
+// ─── Skeleton loader for a single row ────────────────────────────────────────
+
+function PlayerRowSkeleton() {
+  return (
+    <div className="relative border border-white/10 rounded p-3 sm:p-4 overflow-hidden">
+      <div className="flex items-center gap-2 sm:gap-4">
+        <Skeleton className="w-8 sm:w-12 h-6 shrink-0" />
+        <Skeleton className="w-10 h-10 sm:w-14 sm:h-14 rounded shrink-0" />
+        <div className="flex-1 space-y-2">
+          <Skeleton className="h-4 w-36" />
+          <Skeleton className="h-3 w-24" />
+        </div>
+        <div className="flex items-center gap-4 xl:gap-6">
+          <Skeleton className="h-10 w-12" />
+          <Skeleton className="h-10 w-12 hidden md:block" />
+          <Skeleton className="h-10 w-16 hidden md:block" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Single player row ────────────────────────────────────────────────────────
+
+function PlayerRow({ player }: { player: LeaderboardPlayer }) {
+  const isTop = player.rank === 1;
+
+  const badge = `#${player.rank}`;
+
+  // Fallback avatar: use UI Avatars with the player's name
+  const avatarSrc = player.image
+    ? player.image
+    : `https://ui-avatars.com/api/?name=${encodeURIComponent(player.name)}&background=27272a&color=fff&size=64`;
+
+  return (
+    <div
+      className={`relative border rounded p-3 sm:p-4 hover:bg-[#0E0F10] hover:border-neutral-700/50 transition-all cursor-pointer overflow-hidden ${
+        isTop ? 'bg-primary/10 border-primary/40' : 'border-white/10'
+      }`}
+    >
+      <div className="relative flex items-center gap-2 sm:gap-4">
+
+        {/* Rank badge */}
+        <div className="text-lg sm:text-2xl font-bold w-8 sm:w-12 text-center shrink-0 text-white/80">
+          {badge}
+        </div>
+
+        {/* Avatar */}
+        <Avatar className="relative flex items-center justify-center w-10 h-10 sm:w-14 sm:h-14 rounded border-neutral-800/50 overflow-hidden bg-linear-to-br from-zinc-700 to-zinc-900 shrink-0">
+          <AvatarImage src={avatarSrc} className="object-cover w-full h-full" alt={player.name} />
+
+          <AvatarFallback className='rounded-none'>
+            <User className='size-8 text-muted-foreground' />
+          </AvatarFallback>
+        </Avatar>
+
+        {/* Name + username */}
+        <div className="flex-1 min-w-0">
+          <div className="font-semibold text-sm sm:text-base md:text-lg truncate transition-colors flex items-center gap-1.5 sm:gap-2">
+            {player.name}
+          </div>
+          {player.username && (
+            <div className="text-neutral-400 text-xs">@{player.username}</div>
+          )}
+        </div>
+
+        {/* Stats */}
+        <div className="flex items-center gap-4 xl:gap-6 text-sm">
+
+          {/* Wins */}
+          <div className="text-center">
+            <div className="flex items-center gap-1 text-primary mb-1">
+              <Trophy className="size-4 text-primary" />
+              <span className="font-bold leading-[20px]">{player.wins}</span>
+            </div>
+            <div className="text-muted-foreground text-xs">Wins</div>
+          </div>
+
+          {/* Kills */}
+          <div className="text-center hidden md:block">
+            <div className="flex items-center gap-1 text-red-400 mb-1">
+              <Skull className="size-4" />
+              <span className="font-bold leading-[20px]">{player.totalKills}</span>
+            </div>
+            <div className="text-muted-foreground text-xs">Kills</div>
+          </div>
+
+          {/* Earnings */}
+          <div className="text-center hidden md:block">
+            <div className="flex items-center gap-1 text-green-400 mb-1">
+              <IndianRupee className="size-4" />
+              <span className="font-bold leading-[20px]">
+                {player.earnings.toLocaleString('en-IN')}
+              </span>
+            </div>
+            <div className="text-muted-foreground text-xs">Earnings</div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Page ─────────────────────────────────────────────────────────────────────
 
 const LeaderboardPage = () => {
+  const [search, setSearch] = useState('');
+  const { data, isLoading, isError } = useLeaderboard();
+
+  const players = data?.players ?? [];
+
+  const filtered = search.trim()
+    ? players.filter(
+        (p) =>
+          p.name.toLowerCase().includes(search.toLowerCase()) ||
+          p.username?.toLowerCase().includes(search.toLowerCase()),
+      )
+    : players;
+
+  const topPlayer = players[0];
+
   return (
-    <main className=" min-h-screen pt-20 pb-3 md:pb-6 px-3 md:px-6">
+    <main className="min-h-screen pt-20 pb-3 md:pb-6 px-3 md:px-6">
       <div className="container mx-auto max-w-7xl">
-        <div className='flex flex-col gap-4 sm:gap-5 w-full mb-6 sm:mb-8'>
 
-
-          <div className='flex flex-col gap-3 sm:gap-4'>
-
-            <div className=" flex items-center gap-2 sm:gap-3">
-              <Trophy className='w-6 h-6 sm:w-8 sm:h-8   text-primary' />
+        {/* Header */}
+        <div className="flex flex-col gap-4 sm:gap-5 w-full mb-6 sm:mb-8">
+          <div className="flex flex-col gap-3 sm:gap-4">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <Trophy className="w-6 h-6 sm:w-8 sm:h-8 text-primary" />
               <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold">
                 Leaderboard
               </h1>
             </div>
+
             <div className="relative w-full sm:max-w-88">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
               <Input
-                id="tournament-search"
+                id="leaderboard-search"
                 name="search"
                 placeholder="Search Players..."
-                className="pl-10 border border-white/10 h-10 "
-                style={{ 'borderImage': 'conic-gradient(rgb(212, 212, 212) 0deg, rgb(23, 23, 23) 90deg, rgb(212, 212, 212) 180deg, rgb(23, 23, 23) 270deg, rgb(212, 212, 212) 360deg) 1' }}
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="pl-10 border border-white/10 h-10"
+                style={{
+                  borderImage:
+                    'conic-gradient(rgb(212, 212, 212) 0deg, rgb(23, 23, 23) 90deg, rgb(212, 212, 212) 180deg, rgb(23, 23, 23) 270deg, rgb(212, 212, 212) 360deg) 1',
+                }}
               />
-
             </div>
           </div>
         </div>
-        <div className='flex items-center gap-3 mb-4'>
-          <p className='text-sm sm:text-base text-white/90'>
-            <span className='font-bold text-primary'>
-              🎉 Congratulations to {" "}
-              {topPlayers?.[0]?.name ?? ""}
 
-            </span>
-            {" "}for winning the monthly tournament With
-            <span className='font-semibold text-primary'>
-              {" "}
-              {topPlayers?.[0]?.wins ?? ""}
+        {/* Congrats banner */}
+        {!isLoading && topPlayer && (
+          <div className="flex items-center gap-3 mb-4">
+            <p className="text-sm sm:text-base text-white/90">
+              <span className="font-bold text-primary">
+                🎉 Congratulations to {topPlayer.name}
+              </span>
+              {' '}for leading the leaderboard with{' '}
+              <span className="font-semibold text-primary">{topPlayer.wins} wins</span>
+              {' '}and{' '}
+              <span className="font-semibold text-green-400">
+                ₹{topPlayer.earnings.toLocaleString('en-IN')} earned
+              </span>
+            </p>
+          </div>
+        )}
 
-            </span>
-            {" "}
-              Wins
-           
+        {/* Error state */}
+        {isError && (
+          <div className="text-center py-20 text-muted-foreground">
+            Failed to load leaderboard. Please try again later.
+          </div>
+        )}
 
-          </p>
+        {/* Loading skeletons */}
+        {isLoading && (
+          <div className="space-y-2 sm:space-y-3 mb-4">
+            {Array.from({ length: 10 }).map((_, i) => (
+              <PlayerRowSkeleton key={i} />
+            ))}
+          </div>
+        )}
 
-        </div>
+        {/* Empty state */}
+        {!isLoading && !isError && filtered.length === 0 && (
+          <div className="text-center py-20 text-muted-foreground">
+            {search ? 'No players match your search.' : 'No leaderboard data yet.'}
+          </div>
+        )}
 
-        <div className="space-y-2 sm:space-y-3 mb-4">
-          {topPlayers.map((player) => (
-            
-            <div
-              key={player.rank}
-              className={`relative border  rounded p-3 sm:p-4 hover:bg-[#0E0F10] hover:border-neutral-700/50 transition-all cursor-pointer overflow-hidden ${player.rank === 1
-                ? "bg-primary/10 border-primary/40"
-                : ""
-                }`}
-
-            >
-              <div className='relative flex items-center gap-2 sm:gap-4'>
-
-                <div className="text-lg sm:text-2xl font-bold w-8 sm:w-12 text-center shrink-0 text-white/80">{player.badge}</div>
-                <div className='relative  flex items-center justify-center w-10 h-10 sm:w-14 sm:h-14 rounded border-neutral-800/50 overflow-hidden bg-linear-to-br from-zinc-700 to-zinc-900 shrink-0'>
-
-                  <img src={player.avatar} className='object-cover' alt="" />
-                </div>
-                <div className="flex-1 min-w-0">
-
-
-                  <div className="font-semibold text-sm sm:text-base md:text-lg truncate transition-colors flex items-center gap-1.5 sm:gap-2">{player.team}</div>
-                  <div className="text-neutral-400 text-xs">@{player.name} </div>
-                </div>
-                <div className='flex items-center gap-4 xl:gap-6 text-sm'>
-
-
-                {/* Info */}
-
-                <div className='text-center'>
-                  <div className='flex items-center gap-1 text-primary mb-1'>
-                    <Trophy className='size-4 text-primary' />
-                    <span className='font-bold leading-[20px]'>
-                      {player.wins}
-
-                    </span>
-
-                  </div>
-                  <div className='text-muted-foreground text-xs'>
-                    Wins
-
-                  </div>
-
-                </div>
-                <div className='text-center hidden md:block'>
-                  <div className='flex items-center gap-1 text-red-400 mb-1'>
-                    <Skull className='size-4 ' />
-                    <span className='font-bold  leading-[20px]'>
-                      {player.totalKills}
-
-                    </span>
-
-                  </div>
-                  <div className='text-muted-foreground text-xs'>
-                    Kills
-
-                  </div>
-
-                </div>
-                <div className='text-center hidden md:block'>
-                  <div className='flex items-center gap-1 text-green-400 mb-1'>
-                    <IndianRupee className='size-4 ' />
-                    <span className='font-bold leading-[20px]'>
-                      {player.earnings}
-
-                    </span>
-
-                  </div>
-                  <div className='text-muted-foreground text-xs'>
-                    Earnings
-
-                  </div>
-
-                </div>
-                </div>
-
-                {/* <div className="text-center ">
-                  <div className="text-green-400 font-extrabold text-xs md:text-[15px]">{player.earnings}</div>
-                  <div className="text-muted-foreground text-xs md:text-[12px]">{player.wins} wins</div>
-                </div> */}
-              </div>
-            </div>
-          ))}
-        </div>
+        {/* Player rows */}
+        {!isLoading && !isError && filtered.length > 0 && (
+          <div className="space-y-2 sm:space-y-3 mb-4">
+            {filtered.map((player) => (
+              <PlayerRow key={player.userId} player={player} />
+            ))}
+          </div>
+        )}
 
       </div>
-
-
     </main>
+  );
+};
 
-  )
-}
-
-export default LeaderboardPage
+export default LeaderboardPage;

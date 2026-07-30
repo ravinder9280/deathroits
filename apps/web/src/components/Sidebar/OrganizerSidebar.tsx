@@ -9,7 +9,7 @@ import React from 'react'
 import UserProfile from '../User/UserProfile'
 import { useSession } from '@/lib/auth-client'
 
-const TournamentNavItems = [
+ export const organizerTournamentNavItems = [
     {
         label: "Tournaments",
         subLabel:"All Tournaments",
@@ -87,7 +87,7 @@ const OrganizerSidebar = () => {
 
                     <div className='flex flex-col gap-2'>
 
-                        {TournamentNavItems.map((item, index) => (
+                        {organizerTournamentNavItems.map((item, index) => (
                             <Link key={index} href={item.href} className={cn(
                                 "w-full flex gap-3 items-center justify-start px-2 py-2 rounded-md hover:bg-accent/60 ",
                                 pathname === item.href && " bg-accent"
