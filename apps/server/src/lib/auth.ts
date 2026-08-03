@@ -11,7 +11,7 @@ export const authOptions = {
   baseURL: {
     allowedHosts: ["http://localhost:3000", "localhost:3001", "https://deathroit.vercel.app", "https://deathroit.ravindertech.me", "https://api.deathroit.ravindertech.me"],
 
-  }, // Express server URL
+  }, 
 
   database: prismaAdapter(prisma, { provider: "postgresql" }),
   emailAndPassword: { enabled: true },
@@ -21,7 +21,6 @@ export const authOptions = {
       async sendVerificationOTP({ email, otp, type }) {
         await sendOtpEmail({ to: email, otp, type });
       },
-      // OTP is valid for 10 minutes
       otpLength: 6,
       expiresIn: 600,
     }),
@@ -78,8 +77,8 @@ export const authOptions = {
             return {
               data: {
                 ...user,
-                username: generated,          // normalized/lowercase form
-                displayUsername: generated,   // what's shown to the user
+                username: generated,          
+                displayUsername: generated,   
               },
             }
           }

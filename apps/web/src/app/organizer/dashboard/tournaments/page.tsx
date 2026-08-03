@@ -104,7 +104,7 @@ const OrganizerTournamentsPage = () => {
           params.set(key, value);
         }
       }
-      router.push(`/organizer/tournaments?${params.toString()}`, {
+      router.push(`/organizer/dashboard/tournaments?${params.toString()}`, {
         scroll: false,
       });
     },
@@ -153,7 +153,7 @@ const OrganizerTournamentsPage = () => {
   );
   const handleClearFilters = useCallback(() => {
     setSearchVal("");
-    router.push("/organizer/tournaments", { scroll: false });
+    router.push("/organizer/dashboard/tournaments", { scroll: false });
   }, [router]);
 
   const hasActiveFilters = query || type || game || status;

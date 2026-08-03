@@ -21,18 +21,12 @@ function parseCookies(header: string | undefined): Record<string, string> {
   );
 }
 
-/**
- * Socket.IO middleware that resolves identity exactly once per connection.
- * Populates socket.data with either a verified logged-in user or a
- * verified guest (from the signed guest_token cookie).
- * Rejects the connection with NO_IDENTITY if neither is found.
- */
+
 export async function resolveSocketIdentity(
   socket: Socket<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, SocketData>,
   next: (err?: ExtendedError) => void,
 ): Promise<void> {
   try {
-    // ── 1. Logged-in session (wins over guest) ──────────────────────
     const headers = new Headers(
       socket.handshake.headers as Record<string, string>,
     );
@@ -55,7 +49,6 @@ export async function resolveSocketIdentity(
       return next();
     }
 
-    // ── 2. Guest token cookie ───────────────────────────────────────
     const cookies = parseCookies(socket.handshake.headers.cookie);
     const rawToken = cookies["guest_token"];
 
@@ -72,7 +65,6 @@ export async function resolveSocketIdentity(
       return next();
     }
 
-    // ── 3. Neither — reject ─────────────────────────────────────────
     return next(new Error("NO_IDENTITY"));
   } catch {
     return next(new Error("NO_IDENTITY"));

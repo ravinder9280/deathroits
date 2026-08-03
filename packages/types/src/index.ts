@@ -14,5 +14,7 @@ export * from "./relations/tournament";
 export * from "./ui/tournament";
 export * from "./ui/tournament-detail";
 export * from "./ui/organizer-dashboard";
+
 export * from "./ui/leaderboard";
+export * from "./ui/participants";
 

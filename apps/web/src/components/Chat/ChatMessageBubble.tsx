@@ -56,7 +56,6 @@ export function ChatMessageBubble({ msg, isOwn, onRetry }: Props) {
         "group relative flex items-start gap-2.5 sm:gap-3 py-2.5 sm:py-3 lg:py-3.5 px-3 sm:px-4 lg:px-5  transition hover:bg-paper-soft/20",
       )}
     >
-      {/* Avatar */}
 
       <Avatar className="size-10 shrink-0 mt-0.5" asChild>
       <Link href={`/u/${msg.user?.username}`} >
@@ -67,13 +66,11 @@ export function ChatMessageBubble({ msg, isOwn, onRetry }: Props) {
         </Link>
       </Avatar>
 
-      {/* Bubble */}
       <div
         className={cn(
           "flex flex-1 min-w-0 flex-col gap-0.5 max-w-[90%]",
         )}
       >
-        {/* Name + Time */}
         <div
           className={cn(
             "flex items-center gap-1.5 w-full justify-between ",
@@ -102,7 +99,6 @@ export function ChatMessageBubble({ msg, isOwn, onRetry }: Props) {
           </span>
         </div>
 
-        {/* Message text */}
         {msg.pending ? (
           <Skeleton className="h-8 w-40 " />
         ) : (
@@ -119,7 +115,6 @@ export function ChatMessageBubble({ msg, isOwn, onRetry }: Props) {
             </div>
         )}
 
-        {/* Failed / Retry */}
         {msg.failed && (
           <button
             onClick={() => onRetry(msg)}

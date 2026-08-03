@@ -861,3 +861,131 @@ export const getLeaderboard = asyncHandler(
     },
 );
 
+// ─── Organizer Participants ───────────────────────────────────────────────────
+
+const getParticipantsSchema = z.object({
+    search: z.string().optional().default(""),
+    tournamentId: z.string().optional(),
+    entryStatus: z.enum(["PENDING_PAYMENT", "CONFIRMED", "CANCELLED", "REFUNDED"]).optional(),
+    game: z.enum(GAME_KEYS).optional(),
+    page: z.coerce.number().int().min(1).default(1),
+    limit: z.coerce.number().int().min(1).max(100).default(15),
+});
+
+export const getOrganizerParticipants = asyncHandler(
+    async (req: Request, res: Response) => {
+        const userId = req.user?.id;
+        if (!userId) throw new AppError(401, "Unauthorized");
+
+        const parsed = getParticipantsSchema.safeParse(req.query);
+        if (!parsed.success) {
+            res.status(400).json({
+                error: "Invalid query parameters",
+                details: parsed.error.flatten().fieldErrors,
+            });
+            return;
+        }
+
+        const { search, tournamentId, entryStatus, game, page, limit } = parsed.data;
+
+        // Build the where clause for TournamentEntry
+        const where: any = {
+            tournament: { organizerId: userId },
+        };
+
+        if (entryStatus) {
+            where.status = entryStatus;
+        }
+
+        if (tournamentId) {
+            where.tournamentId = tournamentId;
+        }
+
+        if (game) {
+            where.tournament = { ...where.tournament, game };
+        }
+
+        if (search && search.trim().length > 0) {
+            const trimmed = search.trim();
+            where.OR = [
+                { ign: { contains: trimmed, mode: "insensitive" } },
+                { user: { name: { contains: trimmed, mode: "insensitive" } } },
+                { user: { username: { contains: trimmed, mode: "insensitive" } } },
+                { user: { displayUsername: { contains: trimmed, mode: "insensitive" } } },
+                { user: { email: { contains: trimmed, mode: "insensitive" } } },
+            ];
+        }
+
+        const totalCount = await prisma.tournamentEntry.count({ where });
+        const totalPages = Math.max(1, Math.ceil(totalCount / limit));
+        const safePage = Math.min(page, totalPages);
+        const skip = (safePage - 1) * limit;
+
+        const entries = await prisma.tournamentEntry.findMany({
+            where,
+            orderBy: { joinedAt: "desc" },
+            skip,
+            take: limit,
+            select: {
+                id: true,
+                ign: true,
+                gameUid: true,
+                status: true,
+                joinedAt: true,
+                user: {
+                    select: {
+                        id: true,
+                        name: true,
+                        email: true,
+                        image: true,
+                        username: true,
+                        displayUsername: true,
+                    },
+                },
+                tournament: {
+                    select: {
+                        id: true,
+                        title: true,
+                        game: true,
+                        status: true,
+                    },
+                },
+            },
+        });
+
+        const data = entries.map((e) => ({
+            entryId: e.id,
+            userId: e.user.id,
+            userName: e.user.name,
+            displayUsername: e.user.displayUsername ?? null,
+            userImage: e.user.image ?? null,
+            email: e.user.email,
+            ign: e.ign,
+            gameUid: e.gameUid,
+            joinedAt: e.joinedAt,
+            entryStatus: e.status,
+            tournamentId: e.tournament.id,
+            tournamentTitle: e.tournament.title,
+            tournamentGame: e.tournament.game,
+            tournamentStatus: e.tournament.status,
+        }));
+
+        res.json({
+            data,
+            pagination: {
+                currentPage: safePage,
+                totalPages,
+                totalCount,
+                limit,
+                hasNextPage: safePage < totalPages,
+                hasPreviousPage: safePage > 1,
+            },
+            filters: {
+                search: search || null,
+                tournamentId: tournamentId ?? null,
+                entryStatus: entryStatus ?? null,
+                game: game ?? null,
+            },
+        });
+    }
+);

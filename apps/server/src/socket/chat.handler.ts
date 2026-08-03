@@ -7,23 +7,18 @@ import type { SocketData } from "../types/socket.types";
 import { chatSendSchema } from "./chat.schema";
 
 const rateLimiter = new RateLimiterMemory({
-  points: 5,    // 5 messages
-  duration: 10, // per 10 seconds per key
+  points: 5,    
+  duration: 10, 
 });
 
-/** Shape of each entry stored in onlineRefs */
 interface OnlineEntry {
-  count: number;       // number of open socket tabs for this identity
-  name: string;        // display name (username for auth, guestName for guests)
+  count: number;       
+  name: string;       
   image: string | null;
   isGuest: boolean;
 }
 
-/**
- * In-memory reference count map: userKey → OnlineEntry.
- * userKey = userId for logged-in users, guestId for guests.
- * onlineRefs.size == total unique online users.
- */
+
 const onlineRefs = new Map<string, OnlineEntry>();
 
 function getUniqueKey(
@@ -32,7 +27,6 @@ function getUniqueKey(
   return socket.data.userId ?? socket.data.guestId ?? null;
 }
 
-/** Broadcasts the full online user list to every connected socket. */
 function broadcastOnlineUsers(
   io: Server<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, SocketData>,
 ): void {
@@ -48,16 +42,13 @@ export function registerChatHandlers(
   io: Server<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, SocketData>,
   socket: Socket<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, SocketData>,
 ): void {
-  // ── Online presence tracking ────────────────────────────────────────────
   const userKey = getUniqueKey(socket);
 
   if (userKey) {
     const existing = onlineRefs.get(userKey);
     if (existing) {
-      // Same user opened another tab — increment ref count, keep profile data
       existing.count++;
     } else {
-      // First connection for this identity — store full profile
       onlineRefs.set(userKey, {
         count: 1,
         name:
@@ -69,12 +60,9 @@ export function registerChatHandlers(
         isGuest: !socket.data.userId,
       });
     }
-    // Broadcast updated list to everyone (including the joining socket)
     broadcastOnlineUsers(io);
   }
 
-  // Also send snapshot directly to the new socket in case
-  // it missed the broadcast above due to race conditions
   {
     const users = Array.from(onlineRefs.values()).map(({ name, image, isGuest }) => ({
       name,
@@ -99,7 +87,6 @@ export function registerChatHandlers(
     const sendAck = typeof ack === "function" ? ack : null;
 
     try {
-      // 1. Validate payload shape (message only — identity comes from socket.data)
       const parsed = chatSendSchema.safeParse(payload);
       if (!parsed.success) {
         socket.emit("chat:error", { message: "Invalid message payload." });
@@ -108,14 +95,11 @@ export function registerChatHandlers(
       }
       const { message } = parsed.data;
 
-      // 2. Read trusted identity from socket.data (set by resolveSocketIdentity middleware)
       const { userId, guestId, guestName } = socket.data;
 
-      // 3. Rate limit keyed by server-verified identity
       const rateLimitKey = userId ?? guestId ?? socket.id;
       await rateLimiter.consume(rateLimitKey);
 
-      // 4. Persist to DB
       const saved = await prisma.chatMessage.create({
         data: {
           message,
@@ -136,7 +120,6 @@ export function registerChatHandlers(
         },
       });
 
-      // 5. Broadcast to all connected clients (same shape as before)
       io.emit("chat:new", {
         id: saved.id,
         message: saved.message,

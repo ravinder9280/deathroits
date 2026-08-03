@@ -27,7 +27,6 @@ export const requireOrganizer = async (
   res: Response,
   next: NextFunction,
 ) => {
-  // Must be called after requireAuth — req.user is already populated
   const role = req.user?.role;
   if (role !== "ORGANIZER" && role !== "ADMIN") {
     return res.status(403).json({ error: "Forbidden: Organizer role required" });

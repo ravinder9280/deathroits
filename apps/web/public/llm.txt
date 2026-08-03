@@ -1,0 +1,49 @@
+# Deathroit — Where Champions Are Made, Legends Compete
+
+## Overview
+Deathroit (https://deathroit.ravindertech.me) is a competitive esports tournament platform built for gamers, organizers, and growing esports communities. Players can join custom tournaments, compete against top players, track live leaderboards, and prove their squad is the best.
+
+## Core Features
+- **Tournaments**: Browse, join, and compete in custom esports tournaments across multiple games (BGMI, Free Fire, Call of Duty, Minecraft, and more).
+- **Leaderboard**: Track real-time rankings, kills, wins, and total prize earnings for all players.
+- **Organizer Platform**: Independent organizers can apply to host their own tournaments, manage participants, and distribute prizes.
+- **Player Profiles**: Public player profiles showing stats, tournament history, and achievements.
+- **Live Chat**: In-tournament chat for real-time communication between participants.
+
+## Target Audience
+- Competitive gamers looking for structured tournaments
+- Esports organizers seeking a platform to host events
+- Communities around mobile and PC gaming titles
+
+## Supported Games
+- BGMI (Battlegrounds Mobile India)
+- Free Fire
+- Call of Duty
+- Minecraft
+
+## Key URLs
+- Homepage: https://deathroit.ravindertech.me
+- Tournaments: https://deathroit.ravindertech.me/tournaments
+- Leaderboard: https://deathroit.ravindertech.me/leaderboard
+- Organizer Landing: https://deathroit.ravindertech.me/organizer
+- Organizer Apply: https://deathroit.ravindertech.me/organizer/apply
+- Contact: https://deathroit.ravindertech.me/contact
+
+## Technical Stack
+- Frontend: Next.js (App Router), React, TypeScript, Tailwind CSS
+- Backend: Node.js, Express, Prisma ORM, PostgreSQL
+- Auth: Session-based authentication
+
+## Data & Privacy
+- User authentication is required to join tournaments or access profile pages.
+- Organizer dashboards are private and not indexed.
+- Public pages include the homepage, tournament listings, leaderboard, and contact.
+
+## Sitemap
+https://deathroit.ravindertech.me/sitemap.xml
+
+## Contact
+https://deathroit.ravindertech.me/contact
+
+---
+Last updated: 2026-08-03

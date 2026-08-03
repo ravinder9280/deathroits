@@ -34,7 +34,7 @@ app.get("/api/me", async (req, res) => {
 });
 
 app.get("/", (req, res) => {
-  res.send("server running v1.1");
+  res.send("API server running");
 });
 
 app.use("/v1", routes);
