@@ -1,5 +1,7 @@
 "use client";
 
+import React from "react";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@monorepo/ui/components/avatar";
 import { Skeleton } from "@monorepo/ui/components/skeleton";
 import { cn } from "@monorepo/utils/styles";
@@ -24,6 +26,39 @@ function getInitials(name: string): string {
     .join("")
     .slice(0, 2)
     .toUpperCase();
+}
+
+/** Parse message text and highlight @mentions */
+function renderMessageWithMentions(text: string): React.ReactNode {
+  // Match @username (alphanumeric, underscores, dots, hyphens)
+  const mentionRegex = /@([\w.\-]+)/g;
+  const parts: React.ReactNode[] = [];
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+
+  while ((match = mentionRegex.exec(text)) !== null) {
+    // Add text before the mention
+    if (match.index > lastIndex) {
+      parts.push(text.slice(lastIndex, match.index));
+    }
+    // Add the highlighted mention
+    parts.push(
+      <span
+        key={match.index}
+        className="inline-block font-semibold text-violet-400 bg-violet-500/10 rounded px-0.5 -mx-0.5  hover:bg-violet-500/20 transition-colors"
+      >
+        @{match[1]}
+      </span>,
+    );
+    lastIndex = match.index + match[0].length;
+  }
+
+  // Add remaining text
+  if (lastIndex < text.length) {
+    parts.push(text.slice(lastIndex));
+  }
+
+  return parts.length > 0 ? parts : text;
 }
 
 export function ChatMessageBubble({ msg, isOwn, onRetry }: Props) {
@@ -110,7 +145,7 @@ export function ChatMessageBubble({ msg, isOwn, onRetry }: Props) {
               msg.failed && "opacity-60 ",
             )}
             >
-            {msg.message}
+            {renderMessageWithMentions(msg.message)}
           </p>
             </div>
         )}

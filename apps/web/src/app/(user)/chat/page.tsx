@@ -203,6 +203,7 @@ const GlobalChatPage = () => {
               guestId={guestId}
               typingUsers={typingUsers}
               sendTyping={sendTyping}
+              onlineUsers={onlineUsers}
             />
           )}
           

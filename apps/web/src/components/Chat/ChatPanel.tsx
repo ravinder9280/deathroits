@@ -7,7 +7,7 @@ import { Button } from "@monorepo/ui/components/button";
 import { Textarea } from "@monorepo/ui/components/textarea";
 import { ArrowDown, SendHorizonalIcon, Smile } from "lucide-react";
 
-import type { ChatMessageWithState } from "@/hooks/useGlobalChat";
+import type { ChatMessageWithState, OnlineUser } from "@/hooks/useGlobalChat";
 import type { User } from "better-auth";
 import type { ChatTypingUser } from "@monorepo/types";
 
@@ -23,6 +23,7 @@ interface ChatPanelProps {
   guestId: string | null;
   typingUsers: ChatTypingUser[];
   sendTyping: (isTyping: boolean) => void;
+  onlineUsers: OnlineUser[];
 }
 
 export function ChatPanel({
@@ -33,6 +34,7 @@ export function ChatPanel({
   guestId,
   typingUsers,
   sendTyping,
+  onlineUsers,
 }: ChatPanelProps) {
   const [input, setInput] = useState("");
   const [showScrollBtn, setShowScrollBtn] = useState(false);
@@ -40,8 +42,86 @@ export function ChatPanel({
   const bottomRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const emojiPickerRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const mentionDropdownRef = useRef<HTMLDivElement>(null);
   const isTypingRef = useRef(false);
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // ── Mention state ──
+  const [mentionQuery, setMentionQuery] = useState<string | null>(null);
+  const [mentionIndex, setMentionIndex] = useState(0);
+  const [mentionStartPos, setMentionStartPos] = useState(0);
+
+  const currentName = currentUser?.name?.toLowerCase() ?? null;
+
+  const filteredMentionUsers = mentionQuery !== null
+    ? onlineUsers.filter((u) => {
+        // Exclude the current user from the dropdown
+        if (currentName && u.name.toLowerCase() === currentName) return false;
+        return u.name.toLowerCase().includes(mentionQuery.toLowerCase());
+      })
+    : [];
+
+  // Close mention dropdown when clicking outside
+  useEffect(() => {
+    if (mentionQuery === null) return;
+    function handleClickOutside(e: MouseEvent) {
+      if (
+        mentionDropdownRef.current &&
+        !mentionDropdownRef.current.contains(e.target as Node)
+      ) {
+        setMentionQuery(null);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [mentionQuery]);
+
+  /** Detect "@" trigger from input changes */
+  function detectMention(value: string, cursorPos: number) {
+    // Walk backwards from cursor to find "@"
+    let i = cursorPos - 1;
+    while (i >= 0) {
+      const ch = value[i];
+      if (ch === "@") {
+        // Check that @ is at start of input or preceded by a space/newline
+        if (i === 0 || /\s/.test(value[i - 1]!)) {
+          const query = value.slice(i + 1, cursorPos);
+          // Only trigger if query has no spaces (single-word mention)
+          if (!/\s/.test(query)) {
+            setMentionQuery(query);
+            setMentionStartPos(i);
+            setMentionIndex(0);
+            return;
+          }
+        }
+        break;
+      }
+      if (/\s/.test(ch!)) break;
+      i--;
+    }
+    setMentionQuery(null);
+  }
+
+  function insertMention(user: OnlineUser) {
+    const before = input.slice(0, mentionStartPos);
+    const after = input.slice(
+      textareaRef.current?.selectionStart ?? input.length,
+    );
+    const newValue = `${before}@${user.name} ${after}`;
+    setInput(newValue);
+    setMentionQuery(null);
+
+    // Refocus textarea and place cursor after the inserted mention
+    requestAnimationFrame(() => {
+      const el = textareaRef.current;
+      if (el) {
+        const pos = before.length + user.name.length + 2; // +2 for "@" + space
+        el.focus();
+        el.setSelectionRange(pos, pos);
+      }
+    });
+  }
 
   const scrollToBottom = useCallback(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -84,6 +164,7 @@ export function ChatPanel({
   function handleSend() {
     const trimmed = input.trim();
     if (!trimmed) return;
+    setMentionQuery(null);
     scrollToBottom();
     sendMessage(trimmed);
     setInput("");
@@ -98,7 +179,10 @@ export function ChatPanel({
   }
 
   function handleInputChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
-    setInput(e.target.value);
+    const value = e.target.value;
+    const cursorPos = e.target.selectionStart ?? value.length;
+    setInput(value);
+    detectMention(value, cursorPos);
     
     if (!isTypingRef.current) {
       isTypingRef.current = true;
@@ -116,6 +200,34 @@ export function ChatPanel({
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
+    // Handle mention dropdown navigation
+    if (mentionQuery !== null && filteredMentionUsers.length > 0) {
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        setMentionIndex((prev) =>
+          prev < filteredMentionUsers.length - 1 ? prev + 1 : 0,
+        );
+        return;
+      }
+      if (e.key === "ArrowUp") {
+        e.preventDefault();
+        setMentionIndex((prev) =>
+          prev > 0 ? prev - 1 : filteredMentionUsers.length - 1,
+        );
+        return;
+      }
+      if (e.key === "Enter" || e.key === "Tab") {
+        e.preventDefault();
+        insertMention(filteredMentionUsers[mentionIndex]!);
+        return;
+      }
+      if (e.key === "Escape") {
+        e.preventDefault();
+        setMentionQuery(null);
+        return;
+      }
+    }
+
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSend();
@@ -211,11 +323,56 @@ export function ChatPanel({
 
 
         <div className="relative flex items-center gap-2 rounded-xs bg-zinc-900 p-1.5 border border-white/10">
+
+          {/* ── Mention dropdown ── */}
+          {mentionQuery !== null &&  (
+            <div
+              ref={mentionDropdownRef}
+              className="absolute bottom-full left-0 right-0 mb-1.5 z-50 max-h-48 w-64 overflow-y-auto rounded-md border border bg-popover backdrop-blur-md shadow-2xl"
+            >
+              {
+                filteredMentionUsers.length > 0 ?
+
+              <ul>
+                {filteredMentionUsers.map((u, i) => (
+                  <li
+                    key={u.name + i}
+                    onMouseDown={(e) => {
+                      e.preventDefault(); // keep textarea focused
+                      insertMention(u);
+                    }}
+                    className={`flex items-center gap-2.5 px-3 py-2 cursor-pointer transition-colors ${
+                      i === mentionIndex
+                        ? "bg-violet-600/20 text-foreground"
+                        : "text-foreground/70 hover:bg-white/5"
+                    }`}
+                  >
+                    <Avatar className="size-6 shrink-0">
+                      {u.image && <AvatarImage src={u.image} alt={u.name} />}
+                      <AvatarFallback className="text-[10px] bg-primary/30 text-white">
+                        {u.name.slice(0, 2).toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                    <span className="text-sm font-medium truncate">@{u.name}</span>
+                    {u.isGuest && (
+                      <span className="ml-auto text-[10px] text-muted-foreground/50 font-medium">GUEST</span>
+                    )}
+                  </li>
+                ))}
+              </ul>:<div className="p-4 ">
+                No users found.
+              </div>
+              }
+              
+            </div>
+          )}
+
           <textarea
+            ref={textareaRef}
             value={input}
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
-            placeholder="Type a message"
+            placeholder="Type Message, @mention"
             className="flex h-[40px] w-full resize-none bg-transparent px-3 py-2.5 text-sm outline-none  disabled:cursor-not-allowed disabled:opacity-50"
             rows={1}
             maxLength={500}

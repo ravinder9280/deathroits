@@ -4,25 +4,22 @@ import React from 'react'
 
 
 const socialMedia = [
-    {
-        name: "Discord",
-        href: "#",
-        icon: Facebook,
-    },
-    {
-        name: "Instagram",
-        href: "#",
-        icon: Instagram,
-    },
+
+
     {
         name: "Twitter",
-        href: "#",
+        href: "https://x.com/Ravinder387573",
         icon: Twitter,
     },
     {
         name: "Linkedin",
-        href: "#",
+        href: "https://www.linkedin.com/in/ravinder92809",
         icon: Linkedin,
+    },
+    {
+        name: "Instagram",
+        href: "https://www.instagram.com/ravindersync",
+        icon: Instagram,
     }
 
 ];
@@ -44,7 +41,7 @@ const Footer = () => {
                         <p className='text-neutral-400 text-sm leading-relaxed max-w-sm'>
                             The ultimate esports tournament platform. Compete, win, and rise through the ranks — free to play, built for grinders.
                         </p>
-                       
+
                     </div>
 
                     <div className='grid grid-cols-3 md:col-span-2 gap-10 w-full'>
@@ -77,23 +74,14 @@ const Footer = () => {
                                 Support
                             </h4>
                             <ul className='flex flex-col gap-3'>
-                                {[
-                                    { label: 'Contact', href: '/contact' },
-                                    { label: 'Discord', href: 'https://discord.gg/XwBwXwXwXw' },
-                                    { label: 'Instagram', href: 'https://discord.gg/XwBwXwXwXw' },
-                                    { label: 'Twitter', href: 'https://discord.gg/XwBwXwXwXw' },
-                                    { label: 'Linkedin', href: 'https://discord.gg/XwBwXwXwXw' },
-                                    
-
-
-                                ].map((item) => (
-                                        <Link
+                                {socialMedia.map((item) => (
+                                    <Link
                                         key={item.href}
-                                            href={item.href}
-                                            className='hover:underline  text-neutral-300 transition-colors duration-300 ease-out hover:text-primary'
-                                        >
-                                            {item.label}
-                                        </Link>
+                                        href={item.href}
+                                        className='hover:underline  text-neutral-300 transition-colors duration-300 ease-out hover:text-primary'
+                                    >
+                                        {item.name}
+                                    </Link>
                                 ))}
                             </ul>
                         </div>
@@ -103,20 +91,20 @@ const Footer = () => {
                             </h4>
                             <ul className='flex flex-col gap-3'>
                                 {[
-                                    { label: 'llm.txt', href: '/llm.txt' }, 
+                                    { label: 'llm.txt', href: '/llm.txt' },
                                     { label: 'robots.txt', href: '/robots.txt' },
                                     { label: 'sitemap.xml', href: '/sitemap.xml' },
-                                    
+
 
 
                                 ].map((item) => (
-                                        <Link
+                                    <Link
                                         key={item.href}
-                                            href={item.href}
-                                            className='hover:underline  text-neutral-300 transition-colors duration-300 ease-out hover:text-primary'
-                                        >
-                                            {item.label}
-                                        </Link>
+                                        href={item.href}
+                                        className='hover:underline  text-neutral-300 transition-colors duration-300 ease-out hover:text-primary'
+                                    >
+                                        {item.label}
+                                    </Link>
                                 ))}
                             </ul>
                         </div>
@@ -144,10 +132,10 @@ const Footer = () => {
                             </Link>
                         ))}
                     </div>
-                     <p className='  text-xs font-medium  text-neutral-500 tracking-wide'>
-                            © 2026 Deathroit. All rights reserved.
-                            Designed & Developed by <span className='text-primary font-semibold'>Ravinder</span>
-                        </p>
+                    <p className='  text-xs font-medium  text-neutral-500 tracking-wide'>
+                        © 2026 Deathroit. All rights reserved.
+                        Designed & Developed by <span className='text-primary font-semibold'>Ravinder</span>
+                    </p>
                 </div>
 
 
