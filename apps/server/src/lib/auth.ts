@@ -9,9 +9,9 @@ const isProduction = process.env.BETTER_AUTH_URL === 'https://api.deathroit.ravi
 
 export const authOptions = {
   baseURL: {
-    allowedHosts: ["http://localhost:3000", "localhost:3001", "https://deathroit.vercel.app", "https://deathroit.ravindertech.me", "https://api.deathroit.ravindertech.me","https://deathroit.onrender.com"],
+    allowedHosts: ["http://localhost:3000", "localhost:3001", "https://deathroit.vercel.app", "https://deathroit.ravindertech.me", "https://api.deathroit.ravindertech.me", "https://api.deathroit.ravindertech.me"],
 
-  }, 
+  },
 
   database: prismaAdapter(prisma, { provider: "postgresql" }),
   emailAndPassword: { enabled: true },
@@ -37,7 +37,7 @@ export const authOptions = {
       prompt: "select_account",
       mapProfileToUser: (profile) => {
         return {
-          role: "PLAYER", 
+          role: "PLAYER",
         };
       },
     },
@@ -68,7 +68,7 @@ export const authOptions = {
   user: {
     additionalFields: userAdditionalFields,
   },
-   databaseHooks: {
+  databaseHooks: {
     user: {
       create: {
         before: async (user) => {
@@ -77,8 +77,8 @@ export const authOptions = {
             return {
               data: {
                 ...user,
-                username: generated,          
-                displayUsername: generated,   
+                username: generated,
+                displayUsername: generated,
               },
             }
           }
