@@ -9,7 +9,7 @@ const isProduction = process.env.BETTER_AUTH_URL === 'https://api.deathroit.ravi
 
 export const authOptions = {
   baseURL: {
-    allowedHosts: ["http://localhost:3000", "localhost:3001", "https://deathroit.vercel.app", "https://deathroit.ravindertech.me", "https://api.deathroit.ravindertech.me"],
+    allowedHosts: ["http://localhost:3000", "localhost:3001", "https://deathroit.vercel.app", "https://deathroit.ravindertech.me", "https://api.deathroit.ravindertech.me","https://deathroit.onrender.com"],
 
   }, 
 

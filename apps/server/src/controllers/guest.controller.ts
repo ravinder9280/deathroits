@@ -53,8 +53,9 @@ export function getGuestIdentity(req: Request, res: Response): void {
         res.json({ guestId: payload.guestId, guestName: payload.guestName });
         return;
       }
-    } catch {
-      // Invalid / expired — fall through to mint new
+      console.log("[GuestController]: Invalid guest token payload");
+    } catch (error) {
+      console.error("[GuestController]: Error verifying guest token:", error);
     }
   }
 
