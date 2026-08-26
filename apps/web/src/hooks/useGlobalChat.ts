@@ -7,7 +7,8 @@ import axios from "axios";
 import { io, type Socket } from "socket.io-client";
 
 import { useSession } from "@/lib/auth-client";
-import type { ChatMessage } from "@monorepo/types";
+import type { ChatMessage, ChatTypingUser, ChatUserTypingEvent } from "@monorepo/types";
+import { toast } from "sonner";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL!;
 const API_ORIGIN = process.env.NEXT_PUBLIC_API_ORIGIN!;
@@ -33,16 +34,13 @@ export function useGlobalChat() {
   const { data: session } = useSession();
   const [messages, setMessages] = useState<ChatMessageWithState[]>([]);
   const [onlineUsers, setOnlineUsers] = useState<OnlineUser[]>([]);
+  const [typingUsers, setTypingUsers] = useState<ChatTypingUser[]>([]);
   const socketRef = useRef<Socket | null>(null);
   const initializedRef = useRef(false);
 
-  // Server-issued guest identity (display only — not used as auth credential)
   const [guestIdentity, setGuestIdentity] = useState<GuestIdentity | null>(null);
   const [identityReady, setIdentityReady] = useState(false);
 
-  // ─── 1. Fetch server-issued guest identity (Step A) ───────────────
-  // Always called so the guest_token cookie is set before the socket
-  // handshake. For logged-in users the cookie is simply unused.
   useEffect(() => {
     axios
       .get<GuestIdentity>(`${API_BASE}/guest/identity`, {
@@ -53,12 +51,10 @@ export function useGlobalChat() {
         setIdentityReady(true);
       })
       .catch(() => {
-        // Allow logged-in users to proceed even if guest endpoint fails
         setIdentityReady(true);
       });
   }, []);
 
-  // ─── 2. Load message history ───────────────────────────────────────
   const {
     data: history,
     isLoading: isLoadingHistory,
@@ -83,9 +79,6 @@ export function useGlobalChat() {
     }
   }, [history]);
 
-  // ─── 3. Socket connection (Step B) — after identity cookie is set ──
-  // Depends on session?.user?.id so the socket ALWAYS reconnects on
-  // login or logout, re-running resolveSocketIdentity at the new handshake.
   useEffect(() => {
     if (!identityReady) return;
 
@@ -97,10 +90,24 @@ export function useGlobalChat() {
 
     socket.on("connect_error", (err) => {
       console.warn("[chat] socket connect_error:", err.message);
+      toast.error("Failed to connect to chat");
     });
 
     socket.on("chat:online_users", (users: OnlineUser[]) => {
       setOnlineUsers(users);
+    });
+
+    socket.on("chat:user_typing", (event: ChatUserTypingEvent) => {
+      setTypingUsers((prev) => {
+        if (event.isTyping) {
+          if (prev.some((u) => u.userId === event.userId && u.guestId === event.guestId)) {
+            return prev;
+          }
+          return [...prev, { userId: event.userId, guestId: event.guestId, name: event.name, image: event.image }];
+        } else {
+          return prev.filter((u) => !(u.userId === event.userId && u.guestId === event.guestId));
+        }
+      });
     });
 
     socket.on("chat:new", (msg: ChatMessage) => {
@@ -122,13 +129,12 @@ export function useGlobalChat() {
     return () => {
       socket.disconnect();
       socketRef.current = null;
+      setTypingUsers([]);
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [identityReady, session?.user?.id]);
 
-  // ─── 4. Send message (Step C) ─────────────────────────────────────
-  // Payload contains ONLY { message } — identity is resolved server-side
-  // from socket.data set at handshake time.
+
   const sendMessage = useCallback(
     (text: string) => {
       const socket = socketRef.current;
@@ -137,7 +143,6 @@ export function useGlobalChat() {
 
       const tempId = `temp_${Date.now()}_${Math.random()}`;
 
-      // Optimistic insert — use server-issued guestIdentity for display
       const optimistic: ChatMessageWithState = {
         id: tempId,
         tempId,
@@ -162,7 +167,6 @@ export function useGlobalChat() {
       };
       setMessages((prev) => [...prev, optimistic]);
 
-      // Only message — no identity fields
       socket.emit(
         "chat:send",
         { message: trimmed },
@@ -182,7 +186,6 @@ export function useGlobalChat() {
     [session, guestIdentity],
   );
 
-  // ─── 5. Retry failed message ───────────────────────────────────────
   const retryMessage = useCallback(
     (msg: ChatMessageWithState) => {
       setMessages((prev) => prev.filter((m) => m.id !== msg.id));
@@ -190,6 +193,12 @@ export function useGlobalChat() {
     },
     [sendMessage],
   );
+
+  const sendTyping = useCallback((isTyping: boolean) => {
+    const socket = socketRef.current;
+    if (!socket) return;
+    socket.emit("chat:typing", { isTyping });
+  }, []);
 
   return {
     messages,
@@ -202,5 +211,7 @@ export function useGlobalChat() {
     isPendingHistory,
     onlineUsers,
     onlineCount: onlineUsers.length,
+    typingUsers,
+    sendTyping,
   };
 }

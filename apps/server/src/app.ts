@@ -16,7 +16,7 @@ app.use(
   cors({
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
-    origin: ["http://localhost:3000", "https://deathroit.vercel.app","https://deathroit.ravindertech.me"],
+    origin: ["http://localhost:3000", "https://deathroit.vercel.app", "https://deathroit.ravindertech.me"],
   }),
 );
 

@@ -7,13 +7,13 @@ import type { SocketData } from "../types/socket.types";
 import { chatSendSchema } from "./chat.schema";
 
 const rateLimiter = new RateLimiterMemory({
-  points: 5,    
-  duration: 10, 
+  points: 5,
+  duration: 10,
 });
 
 interface OnlineEntry {
-  count: number;       
-  name: string;       
+  count: number;
+  name: string;
   image: string | null;
   isGuest: boolean;
 }
@@ -27,10 +27,23 @@ function getUniqueKey(
   return socket.data.userId ?? socket.data.guestId ?? null;
 }
 
+function getUserRoom(
+  socket: Socket<
+    DefaultEventsMap,
+    DefaultEventsMap,
+    DefaultEventsMap,
+    SocketData
+  >,
+): string | null {
+  const key = socket.data.userId ?? socket.data.guestId ?? null;
+
+  return key ? `user:${key}` : null;
+}
+
 function broadcastOnlineUsers(
   io: Server<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, SocketData>,
 ): void {
-  const users = Array.from(onlineRefs.values()).map(({ name, image, isGuest }) => ({
+  const users = Array.from(onlineRefs.values()).map(({ name, image, isGuest, count }) => ({
     name,
     image,
     isGuest,
@@ -42,10 +55,19 @@ export function registerChatHandlers(
   io: Server<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, SocketData>,
   socket: Socket<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, SocketData>,
 ): void {
+
+
   const userKey = getUniqueKey(socket);
 
   if (userKey) {
+    socket.join(`user:${userKey}`);
+
+    console.log(
+      `[socket] ${socket.id} joined room user:${userKey}`,
+    );
+  
     const existing = onlineRefs.get(userKey);
+  
     if (existing) {
       existing.count++;
     } else {
@@ -60,17 +82,10 @@ export function registerChatHandlers(
         isGuest: !socket.data.userId,
       });
     }
+  
     broadcastOnlineUsers(io);
   }
 
-  {
-    const users = Array.from(onlineRefs.values()).map(({ name, image, isGuest }) => ({
-      name,
-      image,
-      isGuest,
-    }));
-    socket.emit("chat:online_users", users);
-  }
 
   socket.on("disconnect", () => {
     if (!userKey) return;
@@ -126,11 +141,11 @@ export function registerChatHandlers(
         userId: saved.userId,
         user: saved.user
           ? {
-              id: saved.user.id,
-              name: saved.user.name,
-              username: saved.user.displayUsername ?? saved.user.username,
-              image: saved.user.image,
-            }
+            id: saved.user.id,
+            name: saved.user.name,
+            username: saved.user.displayUsername ?? saved.user.username,
+            image: saved.user.image,
+          }
           : null,
         guestId: saved.guestId,
         guestName: saved.guestName,
@@ -155,5 +170,24 @@ export function registerChatHandlers(
       });
       sendAck?.({ ok: false });
     }
+  });
+
+  socket.on("chat:typing", (payload: unknown) => {
+    if (!payload || typeof payload !== "object") return;
+    const { isTyping } = payload as { isTyping: boolean };
+    
+    if (typeof isTyping !== "boolean") return;
+
+    const { userId, guestId, user, guestName } = socket.data;
+    const name = user?.username ?? user?.name ?? guestName ?? "Unknown";
+    const image = user?.image ?? null;
+
+    socket.broadcast.emit("chat:user_typing", {
+      isTyping,
+      userId: userId ?? null,
+      guestId: userId ? null : (guestId ?? null),
+      name,
+      image,
+    });
   });
 }

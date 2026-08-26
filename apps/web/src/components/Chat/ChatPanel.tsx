@@ -9,8 +9,11 @@ import { ArrowDown, SendHorizonalIcon, Smile } from "lucide-react";
 
 import type { ChatMessageWithState } from "@/hooks/useGlobalChat";
 import type { User } from "better-auth";
+import type { ChatTypingUser } from "@monorepo/types";
 
 import { ChatMessageBubble } from "./ChatMessageBubble";
+import ShinyText from "../animations/Shiny-text";
+import { Avatar, AvatarFallback, AvatarImage } from "@monorepo/ui/components/avatar";
 
 interface ChatPanelProps {
   messages: ChatMessageWithState[];
@@ -18,6 +21,8 @@ interface ChatPanelProps {
   retryMessage: (msg: ChatMessageWithState) => void;
   currentUser: User | null;
   guestId: string | null;
+  typingUsers: ChatTypingUser[];
+  sendTyping: (isTyping: boolean) => void;
 }
 
 export function ChatPanel({
@@ -26,6 +31,8 @@ export function ChatPanel({
   retryMessage,
   currentUser,
   guestId,
+  typingUsers,
+  sendTyping,
 }: ChatPanelProps) {
   const [input, setInput] = useState("");
   const [showScrollBtn, setShowScrollBtn] = useState(false);
@@ -33,6 +40,8 @@ export function ChatPanel({
   const bottomRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const emojiPickerRef = useRef<HTMLDivElement>(null);
+  const isTypingRef = useRef(false);
+  const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const scrollToBottom = useCallback(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -75,8 +84,35 @@ export function ChatPanel({
   function handleSend() {
     const trimmed = input.trim();
     if (!trimmed) return;
+    scrollToBottom();
     sendMessage(trimmed);
     setInput("");
+
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
+    }
+    if (isTypingRef.current) {
+      isTypingRef.current = false;
+      sendTyping(false);
+    }
+  }
+
+  function handleInputChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
+    setInput(e.target.value);
+    
+    if (!isTypingRef.current) {
+      isTypingRef.current = true;
+      sendTyping(true);
+    }
+    
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
+    }
+    
+    typingTimeoutRef.current = setTimeout(() => {
+      isTypingRef.current = false;
+      sendTyping(false);
+    }, 1500);
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
@@ -93,7 +129,7 @@ export function ChatPanel({
         <div
           ref={scrollContainerRef}
           onScroll={handleScroll}
-          className="h-full overflow-y-auto px-1"
+          className="h-full overflow-y-auto lg:py-3.5 px-3 sm:px-4 lg:px-5"
         >
           {messages.length === 0 && (
             <p className="text-center text-sm text-muted-foreground py-8 px-4">
@@ -117,8 +153,11 @@ export function ChatPanel({
             );
           })}
 
+          
           <div ref={bottomRef} />
+          
         </div>
+
 
         {showScrollBtn && (
           <button
@@ -140,13 +179,41 @@ export function ChatPanel({
           </button>
         )}
       </div>
+            {typingUsers.length > 0 && (
+            <div className="flex items-center gap-2.5 sm:gap-3 py-2 bg-transparent">
+              <div className="flex -space-x-2">
+                {typingUsers.slice(0, 3).map((u, i) => (
+                  <Avatar key={i} className="size-5 shrink-0 border-[1.5px] border-background relative z-[1]">
+                    {u.image ? (
+                      <AvatarImage src={u.image} alt={u.name} />
+                    ) : null}
+                    <AvatarFallback className="text-[9px] bg-primary/30 text-white">
+                      {u.name.charAt(0).toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                ))}
+                {typingUsers.length > 3 && (
+                  <div className="flex items-center justify-center size-5 rounded-full bg-muted text-[9px] border-[1.5px] border-background shrink-0 relative z-[2] text-muted-foreground">
+                    +{typingUsers.length - 3}
+                  </div>
+                )}
+              </div>
+              
+              <ShinyText 
+                className="text-sm" 
+                text={`${typingUsers.map(u => u.name).join(", ")} ${typingUsers.length > 1 ? "are" : "is"} typing...`} 
+              />
+            </div>
+          )}
 
       {/* ── Fixed-to-bottom input group ── */}
       <div className="shrink-0 border-t border-white/10  bg-background p-3 md:p-4">
+
+
         <div className="relative flex items-center gap-2 rounded-xs bg-zinc-900 p-1.5 border border-white/10">
           <textarea
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={handleInputChange}
             onKeyDown={handleKeyDown}
             placeholder="Type a message"
             className="flex h-[40px] w-full resize-none bg-transparent px-3 py-2.5 text-sm outline-none  disabled:cursor-not-allowed disabled:opacity-50"

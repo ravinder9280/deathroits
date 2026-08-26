@@ -83,7 +83,9 @@ function MemberList({ users }: { users: OnlineUser[] }) {
   }
 
   return (
-    <ScrollArea className="flex-1 min-h-0 px-3 py-4">
+    <ScrollArea className="flex-1 min-h-0 px-0 py-4">
+      <div className='px-3'>
+
       <div className="relative ">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
         <Input
@@ -95,21 +97,22 @@ function MemberList({ users }: { users: OnlineUser[] }) {
 
 
       </div>
-      <ul className="space-y-4 mt-4">
+      </div>
+      <ul className=" mt-4">
         {users.map((u, i) => (
           <li
             key={i}
-            className="flex items-center gap-2.5 rounded-md   hover:bg-white/5 transition-colors"
+            className="flex items-center gap-2.5    hover:bg-white/5 transition-colors px-3 py-2"
           >
             {/* Avatar with green presence dot */}
-            <div className="relative shrink-0">
+            <div className="relative shrink-0 ">
               <Avatar className="size-6">
                 {u.image && <AvatarImage src={u.image} alt={u.name} />}
                 <AvatarFallback className="text-[11px] bg-primary/30 text-white">
                   {getInitials(u.name)}
                 </AvatarFallback>
               </Avatar>
-              <span className="absolute -bottom-0.5 -right-0.5 size-2.5 rounded-full bg-green-400 ring-[1.5px] ring-background" />
+              <span className="absolute -bottom-0.5 -right-0.5 size-2 rounded-full bg-green-400 " />
             </div>
 
             {/* Name + guest badge */}
@@ -127,7 +130,7 @@ function MemberList({ users }: { users: OnlineUser[] }) {
 }
 
 const GlobalChatPage = () => {
-  const { messages, sendMessage, retryMessage, currentUser, guestId, isLoadingHistory, isPendingHistory, onlineCount, onlineUsers } = useGlobalChat();
+  const { messages, sendMessage, retryMessage, currentUser, guestId, isLoadingHistory, isPendingHistory, onlineCount, onlineUsers, typingUsers, sendTyping } = useGlobalChat();
 
   return (
     <main className="flex h-[100dvh] flex-col pt-14 overflow-hidden">
@@ -153,7 +156,7 @@ const GlobalChatPage = () => {
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-1">
                 <span className="relative flex size-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
+                  <span className=" absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
                   <span className="relative inline-flex rounded-full size-2 bg-green-400" />
                 </span>
                 <span className="text-sm uppercase text-muted-foreground/80">
@@ -198,8 +201,11 @@ const GlobalChatPage = () => {
               retryMessage={retryMessage}
               currentUser={currentUser}
               guestId={guestId}
+              typingUsers={typingUsers}
+              sendTyping={sendTyping}
             />
           )}
+          
         </div>
 
         {/* ── Right sidebar (desktop) ── */}
