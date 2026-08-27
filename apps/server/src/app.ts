@@ -36,6 +36,17 @@ app.get("/api/me", async (req, res) => {
 app.get("/", (req, res) => {
   res.send("API server running");
 });
+app.get("/keep-alive", (req, res) => {
+  console.log("keep-alive");
+  res.send("keep-alive is running");
+});
+
+setInterval(() => {
+  fetch("https://api.deathroit.ravindertech.me/keep-alive").then((res) => console.log("Ping yourself!")).catch((err) => console.error(err));
+}, 1000 * 60 * 5);
+
+
+
 
 app.use("/v1", routes);
 
