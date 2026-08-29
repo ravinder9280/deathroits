@@ -5,6 +5,7 @@ import type { EmojiClickData } from "emoji-picker-react";
 import EmojiPicker, { Theme } from 'emoji-picker-react';
 import { Button } from "@monorepo/ui/components/button";
 import { Textarea } from "@monorepo/ui/components/textarea";
+import { Popover, PopoverAnchor, PopoverContent } from "@monorepo/ui/components/popover";
 import { ArrowDown, SendHorizonalIcon, Smile } from "lucide-react";
 
 import type { ChatMessageWithState, OnlineUser } from "@/hooks/useGlobalChat";
@@ -43,7 +44,6 @@ export function ChatPanel({
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const emojiPickerRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const mentionDropdownRef = useRef<HTMLDivElement>(null);
   const isTypingRef = useRef(false);
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -62,20 +62,7 @@ export function ChatPanel({
       })
     : [];
 
-  // Close mention dropdown when clicking outside
-  useEffect(() => {
-    if (mentionQuery === null) return;
-    function handleClickOutside(e: MouseEvent) {
-      if (
-        mentionDropdownRef.current &&
-        !mentionDropdownRef.current.contains(e.target as Node)
-      ) {
-        setMentionQuery(null);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [mentionQuery]);
+
 
   /** Detect "@" trigger from input changes */
   function detectMention(value: string, cursorPos: number) {
@@ -322,17 +309,19 @@ export function ChatPanel({
       <div className="shrink-0 border-t border-white/10  bg-background p-3 md:p-4">
 
 
+        <Popover open={mentionQuery !== null} onOpenChange={(open) => { if (!open) setMentionQuery(null); }}>
         <div className="relative flex items-center gap-2 rounded-xs bg-zinc-900 p-1.5 border border-white/10">
 
           {/* ── Mention dropdown ── */}
-          {mentionQuery !== null &&  (
-            <div
-              ref={mentionDropdownRef}
-              className="absolute bottom-full left-0 right-0 mb-1.5 z-50 max-h-48 w-64 overflow-y-auto rounded-md border border bg-popover backdrop-blur-md shadow-2xl"
-            >
-              {
-                filteredMentionUsers.length > 0 ?
-
+          <PopoverContent
+            side="top"
+            align="start"
+            sideOffset={8}
+            className="max-h-48 w-64 overflow-y-auto p-0"
+            onOpenAutoFocus={(e) => e.preventDefault()}
+            onCloseAutoFocus={(e) => e.preventDefault()}
+          >
+            {filteredMentionUsers.length > 0 ? (
               <ul>
                 {filteredMentionUsers.map((u, i) => (
                   <li
@@ -359,14 +348,13 @@ export function ChatPanel({
                     )}
                   </li>
                 ))}
-              </ul>:<div className="p-4 ">
-                No users found.
-              </div>
-              }
-              
-            </div>
-          )}
+              </ul>
+            ) : (
+              <div className="p-4">No users found.</div>
+            )}
+          </PopoverContent>
 
+          <PopoverAnchor asChild>
           <textarea
             ref={textareaRef}
             value={input}
@@ -377,6 +365,7 @@ export function ChatPanel({
             rows={1}
             maxLength={500}
           />
+          </PopoverAnchor>
 
           {/* Emoji picker popover */}
           <div ref={emojiPickerRef} className="relative">
@@ -411,6 +400,7 @@ export function ChatPanel({
             <SendHorizonalIcon data-icon />
           </Button>
         </div>
+        </Popover>
 
         {/* Guest hint */}
         {!currentUser && (

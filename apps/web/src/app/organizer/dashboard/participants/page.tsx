@@ -41,6 +41,7 @@ import { formatDistanceToNow, format } from 'date-fns'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useDebounce } from '@/hooks/useDebounce'
+import { Badge } from '@monorepo/ui/components/badge'
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -115,7 +116,7 @@ function ParticipantTableRow({ participant }: { participant: ParticipantEntry })
     return (
         <TableRow className='group'>
             {/* Avatar */}
-            <TableCell className='py-3 px-4 w-12'>
+            <TableCell className=''>
                 <Avatar className='size-9 ring-2 ring-border/50 group-hover:ring-primary/30 transition-all duration-200'>
                     <AvatarImage src={participant.userImage ?? ''} alt={displayName} />
                     <AvatarFallback className='bg-primary/10 text-primary text-xs font-bold'>
@@ -131,23 +132,21 @@ function ParticipantTableRow({ participant }: { participant: ParticipantEntry })
             </TableCell>
 
             {/* Player */}
-            <TableCell className='py-3 px-4 max-w-[180px]'>
-                <p className='text-sm font-semibold truncate group-hover:text-primary transition-colors'>
-                    @{displayName}
-                </p>
-                <p className='text-xs text-muted-foreground truncate mt-0.5'>
-                    {participant.email}
-                </p>
+            <TableCell className=' max-w-[180px] font-medium'>
+
+                @{displayName}
+
             </TableCell>
 
             {/* IGN */}
-            <TableCell className='py-3 px-4 '>
-                <p className='text-sm font-mono font-medium'>{participant.ign}</p>
-                <p className='text-xs text-muted-foreground mt-0.5 font-mono'>{participant.gameUid}</p>
+            <TableCell className=' '>
+
+                <p className=' font-medium'>{participant.ign}</p>
+                <p className='text-sm text-muted-foreground mt-0.5 '>{participant.gameUid}</p>
             </TableCell>
 
             {/* Tournament */}
-            <TableCell className='py-3 px-4  max-w-[180px]'>
+            <TableCell className='  max-w-[180px]'>
                 <div className='flex items-center gap-1.5'>
                     <Link
                         href={`/tournaments/${participant.tournamentId}`}
@@ -156,34 +155,35 @@ function ParticipantTableRow({ participant }: { participant: ParticipantEntry })
                         {participant.tournamentTitle}
                     </Link>
                 </div>
-                <p className='text-xs text-muted-foreground mt-0.5 capitalize'>
+                <p className='text-sm text-muted-foreground mt-0.5 capitalize'>
                     {participant.tournamentStatus.replace(/_/g, ' ').toLowerCase()}
                 </p>
             </TableCell>
 
             {/* Status */}
-            <TableCell className='py-3 px-4'>
-                <span
-                    className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border whitespace-nowrap ${statusConfig.color}`}
-                >
+            <TableCell className=''>
+
+                <Badge>
                     {statusConfig.label}
-                </span>
+
+
+                </Badge>
             </TableCell>
 
             {/* Joined */}
-            <TableCell className='py-3 px-4 '>
-                <p className='text-xs text-muted-foreground'>
+            <TableCell className=' '>
+                <p className=''>
                     {formatDistanceToNow(new Date(participant.joinedAt), { addSuffix: true })}
                 </p>
-                <p className='text-xs text-muted-foreground/60 mt-0.5'>
+                <p className='text-sm text-muted-foreground mt-0.5'>
                     {format(new Date(participant.joinedAt), 'MMM d, yyyy')}
                 </p>
             </TableCell>
             <TableCell className='py-3 px-4  text-right'>
                 <Button size={'icon'} variant={'ghost'}>
-                <MoreHorizontal/>
+                    <MoreHorizontal />
                 </Button>
-               
+
             </TableCell>
         </TableRow>
     )
@@ -399,30 +399,44 @@ export default function ParticipantsPage() {
                 </div>
 
                 {/* ── Filters ────────────────────────────────────────────────── */}
-                <div className='flex flex-col sm:flex-row gap-3'>
-                    <div className='relative flex-1'>
-                        <Search className='absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground pointer-events-none' />
-                        <Input
-                            id='participants-search'
-                            placeholder='Search by name, IGN, email…'
-                            className='pl-9 pr-9'
-                            value={searchInput}
-                            onChange={(e) => handleSearch(e.target.value)}
-                            aria-label='Search participants'
-                        />
-                        {searchInput && (
-                            <button
-                                className='absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors'
-                                onClick={() => handleSearch('')}
-                                aria-label='Clear search'
+                <div className="flex flex-col md:flex-row  md:items-center gap-3">
+
+                    <div className='flex-1'>
+
+                        <div className="relative min-w-[200px] max-w-lg">
+                            <Search className="absolute left-3 top-1/2 z-10 -translate-y-1/2 size-4 text-muted-foreground" />
+
+                            <div
+                                className="rounded p-[1px]"
+                                style={{
+                                    background:
+                                        "conic-gradient(rgb(212,212,212) 0deg, rgb(23,23,23) 90deg, rgb(212,212,212) 180deg, rgb(23,23,23) 270deg, rgb(212,212,212) 360deg)",
+                                }}
                             >
-                                <X className='size-4' />
-                            </button>
-                        )}
+                                <Input
+                                    id="participants-search"
+                                    placeholder="Search by name, IGN, email…"
+                                    className="h-12 rounded border-0 bg-zinc-900 pl-10"
+                                    value={searchInput}
+                                    onChange={(e) => handleSearch(e.target.value)}
+                                    aria-label="Search participants"
+                                />
+                            </div>
+
+                            {searchInput && (
+                                <button
+                                    className="absolute right-3 top-1/2 z-10 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground"
+                                    onClick={() => handleSearch("")}
+                                    aria-label="Clear search"
+                                >
+                                    <X className="size-4" />
+                                </button>
+                            )}
+                        </div>
                     </div>
 
                     <Select value={entryStatus || 'all'} onValueChange={handleStatusChange}>
-                        <SelectTrigger id='participants-status-filter' className='w-full sm:w-44 h-12'>
+                        <SelectTrigger id='participants-status-filter' className='bg-zinc-900 border border-white/10 h-12 w-auto min-w-[160px]'>
                             <Filter className='size-4 mr-2 text-muted-foreground' />
                             <SelectValue placeholder='Status' />
                         </SelectTrigger>
@@ -437,7 +451,7 @@ export default function ParticipantsPage() {
                     </Select>
 
                     <Select value={game || 'all'} onValueChange={handleGameChange}>
-                        <SelectTrigger id='participants-game-filter' className='w-full sm:w-44 h-12'>
+                        <SelectTrigger id='participants-game-filter' className='bg-zinc-900 border border-white/10 h-12 w-auto min-w-[160px]'>
                             <Gamepad2 className='size-4 mr-2 text-muted-foreground' />
                             <SelectValue placeholder='Game' />
                         </SelectTrigger>
@@ -452,40 +466,40 @@ export default function ParticipantsPage() {
                     </Select>
 
                 </div>
-                    {hasActiveFilters && (
-                        <Button
-                            variant='outline'
-                            size='sm'
-                            onClick={handleClearFilters}
-                            className='shrink-0 text-muted-foreground hover:text-foreground'
-                        >
-                            <X className='size-4 mr-1.5' />
-                            Clear
-                        </Button>
-                    )}
+                {hasActiveFilters && (
+                    <Button
+                        variant='outline'
+                        size='sm'
+                        onClick={handleClearFilters}
+                        className='shrink-0 text-muted-foreground hover:text-foreground'
+                    >
+                        <X className='size-4 mr-1.5' />
+                        Clear
+                    </Button>
+                )}
 
                 {/* ── Table Card ─────────────────────────────────────────────── */}
-                <div className='border rounded-xl overflow-hidden '>
+                <div className=' overflow-hidden border rounded-md'>
                     <Table>
                         <TableHeader>
                             <TableRow className=''>
-                                <TableHead className='py-3 px-4 w-12' />
-                                <TableHead className='py-3 px-4 text-xs font-semibold uppercase tracking-wide'>
+                                <TableHead className=' w-12' />
+                                <TableHead className=' font-medium'>
                                     Player
                                 </TableHead>
-                                <TableHead className='py-3 px-4 text-xs font-semibold uppercase tracking-wide'>
+                                <TableHead className=' font-medium'>
                                     IGN / UID
                                 </TableHead>
-                                <TableHead className='py-3 px-4 text-xs font-semibold uppercase tracking-wide'>
+                                <TableHead className=' font-medium'>
                                     Tournament
                                 </TableHead>
-                                <TableHead className='py-3 px-4 text-xs font-semibold uppercase tracking-wide'>
+                                <TableHead className=' font-medium'>
                                     Status
                                 </TableHead>
-                                <TableHead className='py-3 px-4 text-xs font-semibold uppercase tracking-wide '>
+                                <TableHead className=' font-medium '>
                                     Joined
                                 </TableHead>
-                                <TableHead className='py-3 px-4 text-xs font-semibold uppercase tracking-wide text-right'>
+                                <TableHead className=' text-right font-medium'>
 
                                     Actions
                                 </TableHead>

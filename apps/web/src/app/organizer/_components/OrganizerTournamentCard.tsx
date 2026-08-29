@@ -32,13 +32,14 @@ const OrganizerTournamentCard = ({ t }: OrganizerTournamentCardProps) => {
                             {t.title}
                         </h3>
                         <div className='flex items-center gap-2'>
-                            <StatusBadge status={t.status} />
                             <EllipsisVertical className='text-muted-foreground hover:text-white cursor-pointer size-5' />
                         </div>
                     </div>
+
                     <div className='font-bold text-muted-foreground'>
                         {GAME_LABELS[t.game as Game]}
                     </div>
+                                                <StatusBadge status={t.status} />
                 </div>
             </div>
 

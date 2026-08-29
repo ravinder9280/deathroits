@@ -1,5 +1,7 @@
+"use client"
 import React from 'react'
 import { Accordion, AccordionTrigger, AccordionContent, AccordionItem } from '@monorepo/ui/components/accordion'
+import FadeIn from '../animations/Fade-in'
 
 const faqData = [
   {
@@ -38,6 +40,7 @@ const FAQ = () => {
   return (
     <section className='py-10 px-5 md:py-[100px] md:px-6 bg-[#f6efe0]'>
       <div className='container mx-auto max-w-[800px]'>
+        <FadeIn direction='up' >
         <div className='text-center mb-10'>
           <h2 className='text-[40px] md:text-[64px] font-extrabold mb-4 uppercase tracking-[-0.08em] leading-[0.95] text-black'>
             Frequently Asked
@@ -47,6 +50,10 @@ const FAQ = () => {
             Everything you need to know about competing on Deathroit. Can't find your answer? Reach out to our support team.
           </p>
         </div>
+          </FadeIn>
+          <FadeIn direction='up' >
+
+
         <Accordion type='multiple'   className="space-y-3">
           {faqData.map((item) => (
             <AccordionItem className='rounded-2xl shadow overflow-hidden' key={item.value} value={item.value}>
@@ -55,6 +62,7 @@ const FAQ = () => {
             </AccordionItem>
           ))}
         </Accordion>
+          </FadeIn>
       </div>
     </section>
   )

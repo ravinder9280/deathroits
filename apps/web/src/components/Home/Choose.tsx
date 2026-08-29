@@ -46,64 +46,66 @@ const Leaderboard = () => {
     <section className="py-20 bg-custom-dark px-5 overflow-hidden">
       <div className="container mx-auto max-w-[1200px]">
 
+        <FadeIn direction='up' >
 
-        <div className="text-center mb-14">
-          <h2 className="text-[40px] md:text-[64px] font-extrabold mb-4 uppercase tracking-[-0.08em] leading-[0.95] text-white">
-            Top{" "}
-            <span className="text-primary">Champions</span>
-          </h2>
-          <p className="text-muted-foreground text-[16px] md:text-[18px] max-w-[600px] mx-auto leading-[1.6]">
-            The best players across India competing for glory and real cash prizes. Every match counts — your name could be next.
-          </p>
-        </div>
+          <div className="text-center mb-14">
+            <h2 className="text-[40px] md:text-[64px] font-extrabold mb-4 uppercase tracking-[-0.08em] leading-[0.95] text-white">
+              Top{" "}
+              <span className="text-primary">Champions</span>
+            </h2>
+            <p className="text-muted-foreground text-[16px] md:text-[18px] max-w-[600px] mx-auto leading-[1.6]">
+              The best players across India competing for glory and real cash prizes. Every match counts — your name could be next.
+            </p>
+          </div>
+        </FadeIn>
 
         <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-start">
           <FadeIn direction="right">
-            
-          <div className="relative rounded-2xl overflow-hidden border border-white/10">
-                <Image
-                  alt="Leaderboard champions"
-                  className="object-cover w-full h-full rounded-2xl"
-                  height={380}
-                  src={"/team.svg"}
-                  width={600}
-                  />
-              </div>
 
-                  </FadeIn>
+            <div className="relative rounded-2xl overflow-hidden border border-white/10">
+              <Image
+                alt="Leaderboard champions"
+                className="object-cover w-full h-full rounded-2xl"
+                height={380}
+                src={"/team.svg"}
+                width={600}
+              />
+            </div>
+
+          </FadeIn>
 
 
           <FadeIn direction="left">
 
 
 
-          <div>
-            <div className="space-y-3 mb-4">
-              {topPlayers.map((player) => (
-                <div
-                  key={player.rank}
-                  className={`flex flex-row   gap-4 px-5 py-4 rounded-2xl border justify-between transition-all ${player.rank === 1
+            <div>
+              <div className="space-y-3 mb-4">
+                {topPlayers.map((player) => (
+                  <div
+                    key={player.rank}
+                    className={`flex flex-row   gap-4 px-5 py-4 rounded-2xl border justify-between transition-all ${player.rank === 1
                       ? "bg-primary/10 border-primary/40"
                       : "bg-white/5 border-white/10"
-                    }`}
-                    
-                >
-                  <div className="flex items-center gap-2">
+                      }`}
 
-                    {/* Rank badge */}
-                    <div className="text-[24px] w-8 text-center flex-shrink-0">{player.badge}</div>
+                  >
+                    <div className="flex items-center gap-2">
 
-                    {/* Avatar */}
-                    <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-[20px] flex-shrink-0">
-                      {player.avatar}
+                      {/* Rank badge */}
+                      <div className="text-[24px] w-8 text-center flex-shrink-0">{player.badge}</div>
+
+                      {/* Avatar */}
+                      <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-[20px] flex-shrink-0">
+                        {player.avatar}
+                      </div>
+                      <div className="">
+                        <div className="text-white font-bold text-[15px] truncate">{player.name}</div>
+                        <div className="text-muted-foreground text-[12px]">{player.team} · {player.game}</div>
+                      </div>
                     </div>
-                    <div className="">
-                      <div className="text-white font-bold text-[15px] truncate">{player.name}</div>
-                      <div className="text-muted-foreground text-[12px]">{player.team} · {player.game}</div>
-                    </div>
-                  </div>
 
-                  {/* Info */}
+                    {/* Info */}
 
 
 
@@ -112,20 +114,20 @@ const Leaderboard = () => {
                       <div className="text-green-400 font-extrabold text-xs md:text-[15px]">{player.earnings}</div>
                       <div className="text-muted-foreground text-xs md:text-[12px]">{player.wins} wins</div>
                     </div>
-                </div>
-              ))}
+                  </div>
+                ))}
+              </div>
+
+              <Button size={'xl'} className="w-full" asChild>
+                <Link href={'/leaderboard'}>
+                  View Leaderboard
+                  <ArrowRight />
+                </Link>
+              </Button>
+
             </div>
 
-            <Button size={'xl'} className="w-full" asChild>
-              <Link href={'/leaderboard'}>
-              View Leaderboard
-              <ArrowRight />
-              </Link>
-            </Button>
-
-          </div>
-
-                    </FadeIn>
+          </FadeIn>
 
 
         </div>

@@ -2,7 +2,7 @@
 
 import { Input } from '@monorepo/ui/components/input';
 import { Skeleton } from '@monorepo/ui/components/skeleton';
-import { IndianRupee, Search, Skull, Trophy, User } from 'lucide-react';
+import { Building, IndianRupee, Search, Skull, Trophy, User } from 'lucide-react';
 import React, { useState } from 'react';
 import { useLeaderboard } from '@/hooks/useLeaderboard';
 import type { LeaderboardPlayer } from '@monorepo/types';
@@ -138,7 +138,7 @@ const LeaderboardPage = () => {
         <div className="flex flex-col gap-4 sm:gap-5 w-full mb-6 sm:mb-8">
           <div className="flex flex-col gap-3 sm:gap-4">
             <div className="flex items-center gap-2 sm:gap-3">
-              <Trophy className="w-6 h-6 sm:w-8 sm:h-8 text-primary" />
+              <Building className="w-6 h-6 sm:w-8 sm:h-8 text-primary" />
               <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold">
                 Leaderboard
               </h1>

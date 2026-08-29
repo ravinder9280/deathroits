@@ -27,6 +27,8 @@ const Work = () => {
   return (
     <section className='py-12 md:py-28 px-5 bg-[#ece3d1]'>
       <div className='container max-w-[1200px] mx-auto'>
+
+        <FadeIn direction='up' >
         <div className='text-center mb-10'>
           <h2 className='text-[40px] md:text-[64px] font-extrabold mb-4 uppercase tracking-[-0.08em] leading-[0.95] text-black'>
             Get In The{" "}
@@ -36,6 +38,7 @@ const Work = () => {
             Three simple steps to go from spectator to champion. Register, compete, and claim your winnings — all in one place.
           </p>
         </div>
+        </FadeIn>
         <FadeIn direction='up'>
 
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>

@@ -41,9 +41,9 @@ app.get("/keep-alive", (req, res) => {
   res.send("keep-alive is running");
 });
 
-setInterval(() => {
-  fetch("https://api.deathroit.ravindertech.me/keep-alive").then((res) => console.log("Ping yourself!")).catch((err) => console.error(err));
-}, 1000 * 60 * 5);
+// setInterval(() => {
+//   fetch("https://api.deathroit.ravindertech.me/keep-alive").then((res) => console.log("Ping yourself!")).catch((err) => console.error(err));
+// }, 1000 * 60 * 5);
 
 
 
